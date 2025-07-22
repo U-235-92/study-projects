@@ -16,4 +16,8 @@ public class UserAuthority {
 	@Id @GeneratedValue
 	private int id;
 	private String name;
+	
+	public UserAuthority(String name) {
+		this.name = name;
+	}
 }

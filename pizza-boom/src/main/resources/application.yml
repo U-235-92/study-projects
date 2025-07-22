@@ -8,7 +8,9 @@ server:
   port: 8558
 ---
 spring:
-  profiles: dev_h2
+  config:
+    activate:
+      on-profile: dev_h2
   datasource:
     generate-unique-name: false
     name: pizza-boom

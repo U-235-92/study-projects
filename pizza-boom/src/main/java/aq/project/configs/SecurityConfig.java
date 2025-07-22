@@ -12,7 +12,9 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.sessionManagement(cust -> cust.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-		http.authorizeHttpRequests(cust -> cust.anyRequest().denyAll());
+		http.csrf(cust -> cust.disable());
+		http.headers(cust -> cust.frameOptions(opt -> opt.sameOrigin()));
+		http.authorizeHttpRequests(cust -> cust.anyRequest().permitAll());
 		return http.build();
 	}
 }

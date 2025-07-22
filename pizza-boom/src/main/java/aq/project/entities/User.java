@@ -1,8 +1,10 @@
 package aq.project.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -20,7 +22,8 @@ public class User {
 	private String password;
 	@OneToOne
 	private UserRole userRole;
-	@OneToOne(mappedBy = "user")
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id")
 	private UserDetails userDetails;
 	
 	public User(String login, String password, UserDetails userDetails, UserRole userRole) {
