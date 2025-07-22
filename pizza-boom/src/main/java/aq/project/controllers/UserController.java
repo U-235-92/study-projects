@@ -9,24 +9,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import aq.project.entities.User;
-import aq.project.security.JPAUserDetailsService;
+import aq.project.security.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
-	private final JPAUserDetailsService userDetailsService;
+	private final UserService userService;
 	
 	@GetMapping("/all")
 	public List<User> getAllUsers() {
-		return userDetailsService.getAllUsers();
+		return userService.getAllUsers();
 	}
 	
 	@PutMapping("/update")
 	public String updateUser(@RequestBody User user) {
-		userDetailsService.updateUser(user);
+		userService.updateUser(user);
 		return String.format("User with id %d was updated", user.getId());
 	}
 }

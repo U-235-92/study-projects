@@ -30,7 +30,7 @@ public class DataConfig {
 			UserRepository userRepository
 			) {
 		return args -> {
-//			AUTORITIES MANAGEMENT
+//			AUTHORITIES MANAGEMENT
 			UserAuthority readUserAuthority = new UserAuthority("READ_USER");
 			UserAuthority updateUserAuthority = new UserAuthority("UPDATE_USER");
 			UserAuthority deleteUserAuthority = new UserAuthority("DELETE_USER");
