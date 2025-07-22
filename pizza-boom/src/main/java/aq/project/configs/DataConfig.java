@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import aq.project.entities.User;
 import aq.project.entities.UserAuthority;
@@ -26,6 +27,7 @@ public class DataConfig {
 	@Profile(value = "dev_h2")
 	@SuppressWarnings("unused")
 	ApplicationRunner preStartApplicationDataLoad(
+			PasswordEncoder passwordEncoder,
 			UserAuthorityRepository authorityRepository,
 			UserRoleRepository roleRepository,
 			UserRepository userRepository
@@ -49,8 +51,8 @@ public class DataConfig {
 			UserDetails aliceDetails = new UserDetails("alice@mail.aq");
 			UserDetails alexanderDetails = new UserDetails("alexander@mail.aq");
 //			USER MANAGEMENT
-			User alice = new User("alice", "123", aliceDetails, superAdminRole);
-			User alexander = new User("alexander", "123", alexanderDetails, customerRole);
+			User alice = new User("alice", passwordEncoder.encode("123"), aliceDetails, superAdminRole);
+			User alexander = new User("alexander", passwordEncoder.encode("123"), alexanderDetails, customerRole);
 			List<User> users = List.of(alice, alexander);
 			userRepository.saveAll(users);
 		};

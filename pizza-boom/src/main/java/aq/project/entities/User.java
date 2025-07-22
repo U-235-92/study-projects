@@ -1,6 +1,7 @@
 package aq.project.entities;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -18,18 +19,19 @@ public class User {
 
 	@Id @GeneratedValue
 	private int id;
+	@Column(name = "login", unique = true)
 	private String login;
 	private String password;
 	@OneToOne
-	private UserRole userRole;
+	private UserRole role;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
 	private UserDetails userDetails;
 	
-	public User(String login, String password, UserDetails userDetails, UserRole userRole) {
+	public User(String login, String password, UserDetails userDetails, UserRole role) {
 		this.login = login;
 		this.password = password;
 		this.userDetails = userDetails;
-		this.userRole = userRole;
+		this.role = role;
 	}
 }
