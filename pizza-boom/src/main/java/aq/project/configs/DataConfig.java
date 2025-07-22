@@ -13,10 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import aq.project.entities.User;
 import aq.project.entities.UserAuthority;
 import aq.project.entities.UserDetails;
-import aq.project.entities.UserRole;
 import aq.project.repositories.UserAuthorityRepository;
 import aq.project.repositories.UserRepository;
-import aq.project.repositories.UserRoleRepository;
 
 @Configuration
 @EntityScan(basePackages = {"aq.project.entities"})
@@ -29,7 +27,6 @@ public class DataConfig {
 	ApplicationRunner preStartApplicationDataLoad(
 			PasswordEncoder passwordEncoder,
 			UserAuthorityRepository authorityRepository,
-			UserRoleRepository roleRepository,
 			UserRepository userRepository
 			) {
 		return args -> {
@@ -40,19 +37,12 @@ public class DataConfig {
 			UserAuthority createUserAuthority = new UserAuthority("CREATE_USER");
 			List<UserAuthority> userAuthorities = List.of(readUserAuthority, updateUserAuthority, deleteUserAuthority, createUserAuthority);
 			authorityRepository.saveAll(userAuthorities);
-//			ROLE MANAGEMENT
-			UserRole superAdminRole = new UserRole("SUPER_ADMIN", List.of(readUserAuthority, updateUserAuthority, deleteUserAuthority, createUserAuthority));
-			UserRole customerRole = new UserRole("CUSTOMER", List.of(readUserAuthority, updateUserAuthority));
-			roleRepository.save(superAdminRole);
-			roleRepository.save(customerRole);
-			List<UserRole> userRoles = List.of(superAdminRole, customerRole);
-			roleRepository.saveAll(userRoles);
 //			USER DETAILS MANAGEMENT
 			UserDetails aliceDetails = new UserDetails("alice@mail.aq");
 			UserDetails alexanderDetails = new UserDetails("alexander@mail.aq");
 //			USER MANAGEMENT
-			User alice = new User("alice", passwordEncoder.encode("123"), aliceDetails, superAdminRole);
-			User alexander = new User("alexander", passwordEncoder.encode("123"), alexanderDetails, customerRole);
+			User alice = new User("alice", passwordEncoder.encode("123"), aliceDetails, List.of(readUserAuthority, updateUserAuthority, deleteUserAuthority, createUserAuthority));
+			User alexander = new User("alexander", passwordEncoder.encode("123"), alexanderDetails, List.of(readUserAuthority, updateUserAuthority));
 			List<User> users = List.of(alice, alexander);
 			userRepository.saveAll(users);
 		};

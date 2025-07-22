@@ -39,7 +39,7 @@ public class JPAUserDetailsService implements UserDetailsService {
 		UserDetails userDetails = org.springframework.security.core.userdetails.User
 				.withUsername(user.getLogin())
 				.password(user.getPassword())
-				.authorities(getAuthorities(user.getRole().getUserAuthorities()))
+				.authorities(getAuthorities(user.getAuthorities()))
 				.build();
 		return userDetails;
 	}
@@ -67,9 +67,8 @@ public class JPAUserDetailsService implements UserDetailsService {
 	public void updateUser(User user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.updateUser(user);
-		userRepository.updateUserRole(user.getRole().getId(), user.getId());
 		userRepository.deleteUserAuthorities(user.getId());
-		for(UserAuthority authority : user.getRole().getUserAuthorities()) {
+		for(UserAuthority authority : user.getAuthorities()) {
 			userRepository.insertUserAuthority(user.getId(), authority.getId());
 		}
 		userDetailsRepository.updateUserDetails(user.getUserDetails());

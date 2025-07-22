@@ -29,14 +29,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	public void updateUser(@Param("user") User user);
 	
 	@Modifying
-	@NativeQuery(value = "UPDATE users SET role_id = :role_id WHERE user_id = :user_id")
-	public void updateUserRole(@Param("role_id") int roleId, @Param("user_id") int userId);
-	
-	@Modifying
-	@NativeQuery(value = "DELETE FROM roles_authorities WHERE user_id = :user_id")
+	@NativeQuery(value = "DELETE FROM users_authorities WHERE user_id = :user_id")
 	public void deleteUserAuthorities(@Param("user_id") int userId);
 	
 	@Modifying
-	@NativeQuery(value = "INSERT INTO roles_authorities VALUES (:authority_id, :user_id)")
+	@NativeQuery(value = "INSERT INTO users_authorities VALUES (:authority_id, :user_id)")
 	public void insertUserAuthority(@Param("user_id") int userId, @Param("authority_id") int authorityId);
 }
