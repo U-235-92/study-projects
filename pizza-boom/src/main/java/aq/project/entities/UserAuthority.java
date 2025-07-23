@@ -1,5 +1,6 @@
 package aq.project.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -15,6 +16,7 @@ public class UserAuthority {
 
 	@Id @GeneratedValue
 	private int id;
+	@Column(name = "name", unique = true)
 	private String name;
 	
 	public UserAuthority(String name) {

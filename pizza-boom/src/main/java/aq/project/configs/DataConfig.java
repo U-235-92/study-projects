@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import aq.project.entities.User;
 import aq.project.entities.UserAuthority;
 import aq.project.entities.UserDetails;
-import aq.project.repositories.UserAuthorityRepository;
+import aq.project.repositories.AuthorityRepository;
 import aq.project.repositories.UserRepository;
 
 @Configuration
@@ -26,7 +26,7 @@ public class DataConfig {
 	@SuppressWarnings("unused")
 	ApplicationRunner preStartApplicationDataLoad(
 			PasswordEncoder passwordEncoder,
-			UserAuthorityRepository authorityRepository,
+			AuthorityRepository authorityRepository,
 			UserRepository userRepository
 			) {
 		return args -> {
@@ -43,7 +43,7 @@ public class DataConfig {
 			UserDetails alexanderDetails = new UserDetails("alexander@mail.aq");
 //			USER MANAGEMENT
 			User alice = new User("alice", passwordEncoder.encode("123"), aliceDetails, List.of(readUserAuthority, fullUpdateUserAuthority, deleteUserAuthority, createUserAuthority));
-			User alexander = new User("alexander", passwordEncoder.encode("123"), alexanderDetails, List.of(readUserAuthority, basicUpdateUserAuthority));
+			User alexander = new User("alexander", passwordEncoder.encode("321"), alexanderDetails, List.of(readUserAuthority, basicUpdateUserAuthority));
 			List<User> users = List.of(alice, alexander);
 			userRepository.saveAll(users);
 		};

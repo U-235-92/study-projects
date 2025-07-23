@@ -14,7 +14,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @Configuration
 @EnableAspectJAutoProxy
-@ComponentScan(basePackages = {"aq.project.aspects"})
+@ComponentScan(basePackages = {"aq.project.aspects", "aq.project.security"})
 public class CommonConfig {
 
 	@Bean(value = "customExceptionMessages")
