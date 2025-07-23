@@ -2,7 +2,6 @@ package aq.project.security;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,17 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 import aq.project.entities.User;
 import aq.project.entities.UserAuthority;
 import aq.project.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class JPAUserDetailsService implements UserDetailsService {
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 	
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		String msg = String.format("User %s does not found", username);
-		User user = userRepository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException(msg));
+		User user = userRepository
+				.findByLogin(username)
+				.orElseThrow(() -> new UsernameNotFoundException(String.format("User %s does not found", username)));
 		UserDetails userDetails = org.springframework.security.core.userdetails.User
 				.withUsername(user.getLogin())
 				.password(user.getPassword())

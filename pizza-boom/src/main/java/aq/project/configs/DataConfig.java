@@ -22,7 +22,7 @@ import aq.project.repositories.UserRepository;
 public class DataConfig {
 
 	@Bean
-	@Profile(value = "dev_h2")
+	@Profile(value = "dev_db_h2")
 	@SuppressWarnings("unused")
 	ApplicationRunner preStartApplicationDataLoad(
 			PasswordEncoder passwordEncoder,

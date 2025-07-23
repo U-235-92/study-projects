@@ -3,14 +3,14 @@ spring:
     name: pizza-boom
   profiles:
     active:
-    - dev_h2
+    - dev_db_h2
 server:
   port: 8558
 ---
 spring:
   config:
     activate:
-      on-profile: dev_h2
+      on-profile: dev_db_h2
   datasource:
     generate-unique-name: false
     name: pizza-boom
@@ -29,3 +29,8 @@ spring:
   config:
     activate:
       on-profile: prod
+---
+spring:
+  config:
+    activate:
+      on-profile: dev_db_mem

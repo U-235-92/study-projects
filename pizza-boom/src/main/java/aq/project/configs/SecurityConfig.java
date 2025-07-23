@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import aq.project.repositories.UserRepository;
+import aq.project.security.JPAAuthenticationProvider;
 import aq.project.security.JPAUserDetailsService;
 
 @Configuration
@@ -22,9 +25,8 @@ import aq.project.security.JPAUserDetailsService;
 public class SecurityConfig {
 	
 	@Bean
-	@Profile("dev_h2")
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.sessionManagement(cust -> cust.sessionCreationPolicy(SessionCreationPolicy.NEVER));
+		http.sessionManagement(cust -> cust.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.headers(cust -> cust.frameOptions(opt -> opt.sameOrigin()));
 		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/user/all").hasAuthority("READ_USER"));
 		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/user/id/*").hasAuthority("READ_USER"));
@@ -36,13 +38,22 @@ public class SecurityConfig {
 	}
 	
 	@Bean
-	@Profile("prod")
-	UserDetailsService jpaUserDetailsService() {
-		return new JPAUserDetailsService();
+	AuthenticationProvider jpaAuthenticationProvider(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
+		return new JPAAuthenticationProvider(passwordEncoder, userDetailsService);
 	}
 	
 	@Bean
-	@Profile("dev_h2")
+	UserDetailsService jpaUserDetailsService(UserRepository userRepository) {
+		return new JPAUserDetailsService(userRepository);
+	}
+	
+	@Bean
+	PasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
+	@Profile("dev_db_mem")
 	UserDetailsService inMemoryUserDetailsService(PasswordEncoder passwordEncoder) {
 		UserDetails alice = org.springframework.security.core.userdetails.User
 				.withUsername("alice")
@@ -55,10 +66,5 @@ public class SecurityConfig {
 				.authorities("READ_USER", "BASIC_UPDATE_USER")
 				.build();
 		return new InMemoryUserDetailsManager(alice, alexander);
-	}
-	
-	@Bean()
-	PasswordEncoder bCryptPasswordEncoder() {
-		return new BCryptPasswordEncoder();
 	}
 }

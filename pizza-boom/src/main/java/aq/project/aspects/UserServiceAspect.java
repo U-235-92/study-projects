@@ -47,8 +47,7 @@ public class UserServiceAspect {
 	}
 
 	@AfterThrowing(pointcut = "execution(aq.project.entities.User aq.project.services.UserService.getUserByLogin(..)) && args(login)", throwing = "exc")
-	public void handleLoginNotFoundException(NoSuchElementException exc, String login)
-			throws UserLoginNotFoundException {
+	public void handleLoginNotFoundException(NoSuchElementException exc, String login) throws UserLoginNotFoundException {
 		throw new UserLoginNotFoundException(getLoginExceptionMessage(login));
 	}
 	
