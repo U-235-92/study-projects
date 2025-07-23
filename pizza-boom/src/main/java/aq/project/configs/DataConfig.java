@@ -32,17 +32,18 @@ public class DataConfig {
 		return args -> {
 //			AUTHORITIES MANAGEMENT
 			UserAuthority readUserAuthority = new UserAuthority("READ_USER");
-			UserAuthority updateUserAuthority = new UserAuthority("UPDATE_USER");
+			UserAuthority basicUpdateUserAuthority = new UserAuthority("BASIC_UPDATE_USER");
+			UserAuthority fullUpdateUserAuthority = new UserAuthority("FULL_UPDATE_USER");
 			UserAuthority deleteUserAuthority = new UserAuthority("DELETE_USER");
 			UserAuthority createUserAuthority = new UserAuthority("CREATE_USER");
-			List<UserAuthority> userAuthorities = List.of(readUserAuthority, updateUserAuthority, deleteUserAuthority, createUserAuthority);
+			List<UserAuthority> userAuthorities = List.of(readUserAuthority, basicUpdateUserAuthority, fullUpdateUserAuthority, deleteUserAuthority, createUserAuthority);
 			authorityRepository.saveAll(userAuthorities);
 //			USER DETAILS MANAGEMENT
 			UserDetails aliceDetails = new UserDetails("alice@mail.aq");
 			UserDetails alexanderDetails = new UserDetails("alexander@mail.aq");
 //			USER MANAGEMENT
-			User alice = new User("alice", passwordEncoder.encode("123"), aliceDetails, List.of(readUserAuthority, updateUserAuthority, deleteUserAuthority, createUserAuthority));
-			User alexander = new User("alexander", passwordEncoder.encode("123"), alexanderDetails, List.of(readUserAuthority, updateUserAuthority));
+			User alice = new User("alice", passwordEncoder.encode("123"), aliceDetails, List.of(readUserAuthority, fullUpdateUserAuthority, deleteUserAuthority, createUserAuthority));
+			User alexander = new User("alexander", passwordEncoder.encode("123"), alexanderDetails, List.of(readUserAuthority, basicUpdateUserAuthority));
 			List<User> users = List.of(alice, alexander);
 			userRepository.saveAll(users);
 		};
