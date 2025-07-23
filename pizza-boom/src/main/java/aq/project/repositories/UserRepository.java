@@ -1,5 +1,7 @@
 package aq.project.repositories;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.NativeQuery;
@@ -11,7 +13,7 @@ import aq.project.entities.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
 	@Query(value = "SELECT u FROM User u WHERE u.login = :login")
-	public User findByLogin(@Param("login") String login);
+	public Optional<User> findByLogin(@Param("login") String login);
 	
 	@Modifying
 	@Query(value = "DELETE FROM User u WHERE u.login = :login")

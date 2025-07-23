@@ -24,11 +24,8 @@ public class JPAUserDetailsService implements UserDetailsService {
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepository.findByLogin(username);
-		if(user == null) {
-			StringFormattedMessage sfm = new StringFormattedMessage("User %s does not found", username);
-			throw new UsernameNotFoundException(sfm.getFormattedMessage());
-		}
+		String msg = new StringFormattedMessage("User %s does not found", username).getFormattedMessage();
+		User user = userRepository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException(msg));
 		UserDetails userDetails = org.springframework.security.core.userdetails.User
 				.withUsername(user.getLogin())
 				.password(user.getPassword())

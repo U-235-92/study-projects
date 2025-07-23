@@ -1,4 +1,4 @@
-package aq.project.security;
+package aq.project.services;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,17 +38,22 @@ public class UserService {
 	}
 
 	@Transactional
-	public void deleteUser(String username) {
-		userRepository.deleteByLogin(username);
+	public void deleteUser(String login) {
+		userRepository.deleteByLogin(login);
 	}
 
 	@Transactional
 	public void changePassword(String login, String newPassword) {
 		userRepository.updatePassword(login, passwordEncoder.encode(newPassword));
 	}
-
+	
 	@Transactional
-	public boolean userExists(String username) {
-		return userRepository.findByLogin(username) != null;
+	public User getUserById(int id) {
+		return userRepository.findById(id).get();
+	}
+	
+	@Transactional
+	public User getUserByLogin(String login) {
+		return userRepository.findByLogin(login).get();
 	}
 }

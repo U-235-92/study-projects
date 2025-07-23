@@ -28,7 +28,6 @@ public class SecurityConfig {
 	}
 	
 	@Bean
-	@Profile(value = "dev_h2")
 	UserDetailsService jpaUserDetailsService() {
 		return new JPAUserDetailsService();
 	}
