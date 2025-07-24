@@ -4,6 +4,7 @@ spring:
   profiles:
     active:
     - dev_db_h2
+    - prod
 server:
   port: 8558
 ---
@@ -33,4 +34,4 @@ spring:
 spring:
   config:
     activate:
-      on-profile: dev_db_mem
+      on-profile: dev_db_mem_app

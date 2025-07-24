@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class UserIdNotFoundException extends Exception {
-
+public class UnknownUserAuthorityException extends RuntimeException {
+	
 	private static final long serialVersionUID = 1L;
 
 	private String message;

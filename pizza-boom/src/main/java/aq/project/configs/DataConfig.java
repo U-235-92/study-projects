@@ -1,5 +1,6 @@
 package aq.project.configs;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.boot.ApplicationRunner;
@@ -13,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import aq.project.entities.User;
 import aq.project.entities.UserAuthority;
 import aq.project.entities.UserDetails;
-import aq.project.repositories.AuthorityRepository;
+import aq.project.repositories.UserAuthorityRepository;
 import aq.project.repositories.UserRepository;
 
 @Configuration
@@ -26,24 +27,35 @@ public class DataConfig {
 	@SuppressWarnings("unused")
 	ApplicationRunner preStartApplicationDataLoad(
 			PasswordEncoder passwordEncoder,
-			AuthorityRepository authorityRepository,
+			UserAuthorityRepository authorityRepository,
 			UserRepository userRepository
 			) {
 		return args -> {
 //			AUTHORITIES MANAGEMENT
-			UserAuthority readUserAuthority = new UserAuthority("READ_USER");
+//			BASIC AUTHORITIES
+			UserAuthority basicReadUserAuthority = new UserAuthority("BASIC_READ_USER");
 			UserAuthority basicUpdateUserAuthority = new UserAuthority("BASIC_UPDATE_USER");
-			UserAuthority fullUpdateUserAuthority = new UserAuthority("FULL_UPDATE_USER");
-			UserAuthority deleteUserAuthority = new UserAuthority("DELETE_USER");
-			UserAuthority createUserAuthority = new UserAuthority("CREATE_USER");
-			List<UserAuthority> userAuthorities = List.of(readUserAuthority, basicUpdateUserAuthority, fullUpdateUserAuthority, deleteUserAuthority, createUserAuthority);
-			authorityRepository.saveAll(userAuthorities);
+			UserAuthority basicDeleteUserAuthority = new UserAuthority("BASIC_DELETE_USER");
+//			EXTENDED AUTHORITIES			
+			UserAuthority extendedCreateUserAuthority = new UserAuthority("EXTENDED_CREATE_USER");
+			UserAuthority extendedReadUserAuthority = new UserAuthority("EXTENDED_READ_USER");
+			UserAuthority extendedUpdateUserAuthority = new UserAuthority("EXTENDED_UPDATE_USER");
+			UserAuthority extendedDeleteUserAuthority = new UserAuthority("EXTENDED_DELETE_USER");
+//			SAVE AUTHORITIES PROCESS
+			List<UserAuthority> basicUserAuthorities = List.of(basicReadUserAuthority, basicUpdateUserAuthority, basicDeleteUserAuthority);
+			List<UserAuthority> extendedUserAuthorities = List.of(extendedCreateUserAuthority, extendedReadUserAuthority, extendedUpdateUserAuthority, extendedDeleteUserAuthority);
+			authorityRepository.saveAll(basicUserAuthorities);
+			authorityRepository.saveAll(extendedUserAuthorities);
 //			USER DETAILS MANAGEMENT
 			UserDetails aliceDetails = new UserDetails("alice@mail.aq");
 			UserDetails alexanderDetails = new UserDetails("alexander@mail.aq");
 //			USER MANAGEMENT
-			User alice = new User("alice", passwordEncoder.encode("123"), aliceDetails, List.of(readUserAuthority, fullUpdateUserAuthority, deleteUserAuthority, createUserAuthority));
-			User alexander = new User("alexander", passwordEncoder.encode("321"), alexanderDetails, List.of(readUserAuthority, basicUpdateUserAuthority));
+			List<UserAuthority> aliceAuthorities = new ArrayList<>();
+			aliceAuthorities.addAll(extendedUserAuthorities);
+			List<UserAuthority> alexanderAuthorities = new ArrayList<>();
+			alexanderAuthorities.addAll(basicUserAuthorities);
+			User alice = new User("alice", passwordEncoder.encode("123"), aliceDetails, aliceAuthorities);
+			User alexander = new User("alexander", passwordEncoder.encode("321"), alexanderDetails, alexanderAuthorities);
 			List<User> users = List.of(alice, alexander);
 			userRepository.saveAll(users);
 		};

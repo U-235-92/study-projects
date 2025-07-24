@@ -19,51 +19,74 @@ import org.springframework.security.web.SecurityFilterChain;
 import aq.project.repositories.UserRepository;
 import aq.project.security.JPAAuthenticationProvider;
 import aq.project.security.JPAUserDetailsService;
+import aq.project.utils.UserAuthorityHolder;
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity(debug = true)
+@RequiredArgsConstructor
 public class SecurityConfig {
 	
+	private final UserAuthorityHolder userAuthorityHolder;
+	
 	@Bean
-	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	@Profile("prod")
+	SecurityFilterChain appSecurityFilterChain(HttpSecurity http) throws Exception {
+		http.securityMatcher("/user/**");
 		http.sessionManagement(cust -> cust.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-		http.headers(cust -> cust.frameOptions(opt -> opt.sameOrigin()));
-		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/user/all").hasAuthority("READ_USER"));
-		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/user/id/*").hasAuthority("READ_USER"));
-		http.authorizeHttpRequests(cust -> cust.requestMatchers("/h2-console/**").permitAll());
+		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.POST, "/user/basic/create_user").permitAll());
+		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/user/basic/read_user_by_id/*", "/user/basic/read_user_by_login/*").hasAnyAuthority("BASIC_READ_USER", "EXTENDED_READ_USER"));
+		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.PATCH, "/user/basic/update_user_by_id/*").hasAnyAuthority("BASIC_UPDATE_USER", "EXTENDED_UPDATE_USER"));
+		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.DELETE, "/user/basic/delete_user_by_id/*").hasAnyAuthority("BASIC_DELETE_USER", "EXTENDED_DELETE_USER"));
+		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.POST, "/user/extended/create_user").hasAuthority("EXTENDED_CREATE_USER"));
+		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.PATCH, "/user/extended/update_user_by_id/*").hasAuthority("EXTENDED_UPDATE_USER"));
+		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.DELETE, "/user/extended/delete_user_by_id/*").hasAuthority("EXTENDED_DELETE_USER"));
+		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/user/extended/read_user_by_id/*", "/user/extended/read_user_by_login/*", "/extended/read_all_users").hasAuthority("EXTENDED_READ_USER"));
 		http.authorizeHttpRequests(cust -> cust.anyRequest().authenticated());
 		http.httpBasic(Customizer.withDefaults());
 		http.csrf(cust -> cust.disable());
 		return http.build();
 	}
-	
+			
 	@Bean
+	@Profile("prod")
 	AuthenticationProvider jpaAuthenticationProvider(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
 		return new JPAAuthenticationProvider(passwordEncoder, userDetailsService);
 	}
 	
 	@Bean
+	@Profile("prod")
 	UserDetailsService jpaUserDetailsService(UserRepository userRepository) {
 		return new JPAUserDetailsService(userRepository);
 	}
 	
 	@Bean
+	@Profile("prod")
 	PasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	
 	@Bean
-	@Profile("dev_db_mem")
+	@Profile("dev_db_h2")
+	SecurityFilterChain h2SecurityFilterChain(HttpSecurity http) throws Exception {
+		http.securityMatcher("/h2-console/**");
+		http.headers(cust -> cust.frameOptions(opt -> opt.sameOrigin()));
+		http.authorizeHttpRequests(cust -> cust.requestMatchers("/h2-console/**").permitAll());
+		return http.build();
+	}
+	
+	@Bean
+	@Profile("dev_db_mem_app")
 	UserDetailsService inMemoryUserDetailsService(PasswordEncoder passwordEncoder) {
 		UserDetails alice = org.springframework.security.core.userdetails.User
 				.withUsername("alice")
 				.password(passwordEncoder.encode("123"))
-				.authorities("READ_USER", "FULL_UPDATE_USER", "DELETE_USER", "CREATE_USER")
+				.authorities("EXTENDED_CREATE_USER", "EXTENDED_READ_USER", "EXTENDED_UPDATE_USER", "EXTENDED_DELETE_USER")
 				.build();
 		UserDetails alexander = org.springframework.security.core.userdetails.User
 				.withUsername("alexander")
 				.password(passwordEncoder.encode("321"))
-				.authorities("READ_USER", "BASIC_UPDATE_USER")
+				.authorities("BASIC_READ_USER", "BASIC_UPDATE_USER", "BASIC_DELETE_USER")
 				.build();
 		return new InMemoryUserDetailsManager(alice, alexander);
 	}

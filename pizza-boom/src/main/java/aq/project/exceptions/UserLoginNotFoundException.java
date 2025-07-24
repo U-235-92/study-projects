@@ -1,10 +1,13 @@
 package aq.project.exceptions;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public class UserLoginNotFoundException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public UserLoginNotFoundException(String msg) {
-		super(msg);
-	}
+	private String message;
 }

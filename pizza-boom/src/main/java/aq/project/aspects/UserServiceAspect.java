@@ -23,7 +23,7 @@ public class UserServiceAspect {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-	@Qualifier(value = "customExceptionMessages")
+	@Qualifier(value = "customExceptionMessagesHolder")
 	private Properties properties;
 	
 	@Before("execution(void aq.project.services.UserService.updateUser(..)) && args(user)")
