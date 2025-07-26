@@ -4,7 +4,6 @@ spring:
   profiles:
     active:
     - dev_db_h2
-    - prod
 server:
   port: 8558
 ---
@@ -25,11 +24,6 @@ spring:
   jpa:
     show-sql: true
     database-platform: org.hibernate.dialect.H2Dialect
----
-spring:
-  config:
-    activate:
-      on-profile: prod
 ---
 spring:
   config:

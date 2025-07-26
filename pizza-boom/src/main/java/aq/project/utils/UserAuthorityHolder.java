@@ -1,24 +1,24 @@
 package aq.project.utils;
 
-import java.text.MessageFormat;
 import java.util.Optional;
-import java.util.Properties;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import aq.project.entities.UserAuthority;
-import aq.project.exceptions.UnknownUserAuthorityException;
+import aq.project.exceptions.UnknownPropertyException;
 import aq.project.repositories.UserAuthorityRepository;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@Component
 public class UserAuthorityHolder {
 
-	private final UserAuthorityRepository userAuthorityRepository;
-	private final Properties exceptionMessagesHolder;
+	@Autowired
+	private UserAuthorityRepository userAuthorityRepository;
 	
-	public String getAuthorityName(String authority) throws UnknownUserAuthorityException {
+	public String getAuthorityName(String authority) throws UnknownPropertyException {
 		Optional<UserAuthority> optAuthority = userAuthorityRepository.findAuthorityByName(authority);
 		return optAuthority
 				.map(UserAuthority::getName)
-				.orElseThrow(() -> new UnknownUserAuthorityException(MessageFormat.format(exceptionMessagesHolder.getProperty("authority.unknown-authority"), authority)));
+				.orElseThrow(() -> new UnknownPropertyException(String.format("Unknown user authority: %s", authority)));
 	}
 }

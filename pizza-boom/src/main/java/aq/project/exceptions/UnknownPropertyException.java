@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class UnknownUserAuthorityException extends RuntimeException {
-	
+public class UnknownPropertyException extends RuntimeException {
+
 	private static final long serialVersionUID = 1L;
 
 	private String message;

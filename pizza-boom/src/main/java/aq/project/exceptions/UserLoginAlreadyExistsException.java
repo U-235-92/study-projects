@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class UserIdNotFoundException extends Exception {
+public class UserLoginAlreadyExistsException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 

@@ -22,6 +22,25 @@ import aq.project.repositories.UserRepository;
 @EnableJpaRepositories(basePackages = {"aq.project.repositories"})
 public class DataConfig {
 
+//	 TODO list: (Порядок не во всех пунктах последователен)
+//	1+ Доделать DTO; 
+//	2+ Написать мапперы DTO -> Entity, Entity <- DTO; (MapStruct library);  
+//	3.1<---  Реализовать сервис UserService; 
+//	3.2 При необходимости - дополнить репозитории;
+//	4. Написать аспекты сервиса, логирования и валидации;
+//	5+ Настроить валидацию сущностей и DTO; 
+//	6+ Написать исключения ошибок валидации DTO; 
+//	7+ Внедрить @Bean валидатора; 
+//	8+ Вывести смену пароля и бан пользователя в отдельные конечные точки 
+//	9. Обновить DataConfig
+//	10+ Стоит ли сделать в качестве первичного ключа юзера его логин? 
+//	11. Вынести смену имени пользователя в отдельную конечную точку (для basic и extended)
+//	12+ Добавить хранителя имен конечных точек и файл свойств к ним 
+//	13+ Добавить обработку исключений валидности запросов и ответов в контроллер UserController 
+//	14. Следует ли включить обработку NoValidUserException в контроллер UseController?
+//	15. Что будет если вызвать свойство без {} в MessageFormatter?
+//	16+ Создай один класс-иключение для неизвестных (Unknown) свойств
+	
 	@Bean
 	@Profile(value = "dev_db_h2")
 	@SuppressWarnings("unused")
@@ -47,17 +66,17 @@ public class DataConfig {
 			authorityRepository.saveAll(basicUserAuthorities);
 			authorityRepository.saveAll(extendedUserAuthorities);
 //			USER DETAILS MANAGEMENT
-			UserDetails aliceDetails = new UserDetails("alice@mail.aq");
-			UserDetails alexanderDetails = new UserDetails("alexander@mail.aq");
+//			UserDetails aliceDetails = new UserDetails("alice@mail.aq");
+//			UserDetails alexanderDetails = new UserDetails("alexander@mail.aq");
 //			USER MANAGEMENT
-			List<UserAuthority> aliceAuthorities = new ArrayList<>();
-			aliceAuthorities.addAll(extendedUserAuthorities);
-			List<UserAuthority> alexanderAuthorities = new ArrayList<>();
-			alexanderAuthorities.addAll(basicUserAuthorities);
-			User alice = new User("alice", passwordEncoder.encode("123"), aliceDetails, aliceAuthorities);
-			User alexander = new User("alexander", passwordEncoder.encode("321"), alexanderDetails, alexanderAuthorities);
-			List<User> users = List.of(alice, alexander);
-			userRepository.saveAll(users);
+//			List<UserAuthority> aliceAuthorities = new ArrayList<>();
+//			aliceAuthorities.addAll(extendedUserAuthorities);
+//			List<UserAuthority> alexanderAuthorities = new ArrayList<>();
+//			alexanderAuthorities.addAll(basicUserAuthorities);
+//			User alice = new User("alice", passwordEncoder.encode("123"), aliceDetails, aliceAuthorities);
+//			User alexander = new User("alexander", passwordEncoder.encode("321"), alexanderDetails, alexanderAuthorities);
+//			List<User> users = List.of(alice, alexander);
+//			userRepository.saveAll(users);
 		};
 	}
 }

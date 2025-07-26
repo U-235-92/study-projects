@@ -19,6 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import aq.project.repositories.UserRepository;
 import aq.project.security.JPAAuthenticationProvider;
 import aq.project.security.JPAUserDetailsService;
+import aq.project.utils.EndpointNameHolder;
 import aq.project.utils.UserAuthorityHolder;
 import lombok.RequiredArgsConstructor;
 
@@ -26,42 +27,70 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-	
-	private final UserAuthorityHolder userAuthorityHolder;
+		
+	private final UserAuthorityHolder userAuthorityHolder; //It will be use when all the authorities will store in a no-mem DB 
+	private final EndpointNameHolder endpointNameHolder;
 	
 	@Bean
-	@Profile("prod")
 	SecurityFilterChain appSecurityFilterChain(HttpSecurity http) throws Exception {
 		http.securityMatcher("/user/**");
 		http.sessionManagement(cust -> cust.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.POST, "/user/basic/create_user").permitAll());
-		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/user/basic/read_user_by_id/*", "/user/basic/read_user_by_login/*").hasAnyAuthority("BASIC_READ_USER", "EXTENDED_READ_USER"));
-		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.PATCH, "/user/basic/update_user_by_id/*").hasAnyAuthority("BASIC_UPDATE_USER", "EXTENDED_UPDATE_USER"));
-		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.DELETE, "/user/basic/delete_user_by_id/*").hasAnyAuthority("BASIC_DELETE_USER", "EXTENDED_DELETE_USER"));
-		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.POST, "/user/extended/create_user").hasAuthority("EXTENDED_CREATE_USER"));
-		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.PATCH, "/user/extended/update_user_by_id/*").hasAuthority("EXTENDED_UPDATE_USER"));
-		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.DELETE, "/user/extended/delete_user_by_id/*").hasAuthority("EXTENDED_DELETE_USER"));
-		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/user/extended/read_user_by_id/*", "/user/extended/read_user_by_login/*", "/extended/read_all_users").hasAuthority("EXTENDED_READ_USER"));
-		http.authorizeHttpRequests(cust -> cust.anyRequest().authenticated());
+		http.authorizeHttpRequests(cust -> cust
+				.requestMatchers(HttpMethod.POST, endpointNameHolder.getEndpoint("basic.create.user"))
+				.permitAll());
+		http.authorizeHttpRequests(cust -> cust
+				.requestMatchers(HttpMethod.GET, endpointNameHolder.getEndpoint("basic.read.user") + "/*")
+				.hasAnyAuthority("BASIC_READ_USER", "EXTENDED_READ_USER")); 
+		http.authorizeHttpRequests(cust -> cust
+				.requestMatchers(HttpMethod.PATCH, 
+						endpointNameHolder.getEndpoint("basic.update.user") + "/*", 
+						endpointNameHolder.getEndpoint("basic.update.user.login") + "/*", 
+						endpointNameHolder.getEndpoint("basic.update.user.password") + "/*")
+				.hasAnyAuthority("BASIC_UPDATE_USER", "EXTENDED_UPDATE_USER"));
+		http.authorizeHttpRequests(cust -> cust
+				.requestMatchers(HttpMethod.DELETE, 
+						endpointNameHolder.getEndpoint("basic.delete.user") + "/*")
+				.hasAnyAuthority("BASIC_DELETE_USER", "EXTENDED_DELETE_USER"));
+		http.authorizeHttpRequests(cust -> cust
+				.requestMatchers(HttpMethod.POST, 
+						endpointNameHolder.getEndpoint("extended.create.user"))
+				.hasAuthority("EXTENDED_CREATE_USER"));
+		http.authorizeHttpRequests(cust -> cust
+				.requestMatchers(HttpMethod.PATCH, 
+						endpointNameHolder.getEndpoint("extended.update.user") + "/*", 
+						endpointNameHolder.getEndpoint("extended.update.user.login") + "/*", 
+						endpointNameHolder.getEndpoint("extended.update.user.password") + "/*", 
+						endpointNameHolder.getEndpoint("extended.update.user.block") + "/*", 
+						endpointNameHolder.getEndpoint("extended.update.user.unblock") + "/*")
+				.hasAuthority("EXTENDED_UPDATE_USER"));
+		http.authorizeHttpRequests(cust -> cust
+				.requestMatchers(HttpMethod.DELETE, 
+						endpointNameHolder.getEndpoint("extended.delete.user") + "/*")
+				.hasAuthority("EXTENDED_DELETE_USER"));
+		http.authorizeHttpRequests(cust -> cust
+				.requestMatchers(HttpMethod.GET, 
+						endpointNameHolder.getEndpoint("extended.read.user") + "/*", 
+						endpointNameHolder.getEndpoint("extended.read.all-users"))
+				.hasAuthority("EXTENDED_READ_USER"));
+		http.authorizeHttpRequests(cust -> cust
+				.anyRequest()
+				.authenticated());
 		http.httpBasic(Customizer.withDefaults());
 		http.csrf(cust -> cust.disable());
 		return http.build();
 	}
 			
 	@Bean
-	@Profile("prod")
 	AuthenticationProvider jpaAuthenticationProvider(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
 		return new JPAAuthenticationProvider(passwordEncoder, userDetailsService);
 	}
 	
 	@Bean
-	@Profile("prod")
 	UserDetailsService jpaUserDetailsService(UserRepository userRepository) {
 		return new JPAUserDetailsService(userRepository);
 	}
 	
 	@Bean
-	@Profile("prod")
 	PasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}

@@ -3,18 +3,18 @@ package aq.project.exceptions;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import aq.project.dto.BasicUserDataDTO;
+import aq.project.dto.BasicUserRequest;
 import jakarta.validation.ConstraintViolation;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class IncorrectUserDataException extends Exception {
+public class NoValidBasicUserRequestException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 	
 	@NonNull
-	private Set<ConstraintViolation<BasicUserDataDTO>> violations;
+	private Set<ConstraintViolation<BasicUserRequest>> violations;
 	
 	@Override
 	public String getMessage() {
