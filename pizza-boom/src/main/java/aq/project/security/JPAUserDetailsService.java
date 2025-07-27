@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import aq.project.entities.User;
-import aq.project.entities.UserAuthority;
+import aq.project.entities.Authority;
 import aq.project.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +32,7 @@ public class JPAUserDetailsService implements UserDetailsService {
 		return userDetails;
 	}
 
-	private List<SimpleGrantedAuthority> getAuthorities(List<UserAuthority> authorities) {
+	private List<SimpleGrantedAuthority> getAuthorities(List<Authority> authorities) {
 		return authorities.stream()
 				.map(authority -> new SimpleGrantedAuthority(authority.getName()))
 				.toList();

@@ -19,8 +19,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import aq.project.repositories.UserRepository;
 import aq.project.security.JPAAuthenticationProvider;
 import aq.project.security.JPAUserDetailsService;
+import aq.project.utils.AuthorityNames;
 import aq.project.utils.EndpointNameHolder;
-import aq.project.utils.UserAuthorityHolder;
+import aq.project.utils.AuthorityHolder;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -28,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 		
-	private final UserAuthorityHolder userAuthorityHolder; //It will be use when all the authorities will store in a no-mem DB 
+	private final AuthorityHolder authorityHolder; //It will be use when all the authorities will store in a no-mem DB 
 	private final EndpointNameHolder endpointNameHolder;
 	
 	@Bean
@@ -40,21 +41,21 @@ public class SecurityConfig {
 				.permitAll());
 		http.authorizeHttpRequests(cust -> cust
 				.requestMatchers(HttpMethod.GET, endpointNameHolder.getEndpoint("basic.read.user") + "/*")
-				.hasAnyAuthority("BASIC_READ_USER", "EXTENDED_READ_USER")); 
+				.hasAnyAuthority(AuthorityNames.BASIC_READ_USER, AuthorityNames.EXTENDED_READ_USER)); 
 		http.authorizeHttpRequests(cust -> cust
 				.requestMatchers(HttpMethod.PATCH, 
 						endpointNameHolder.getEndpoint("basic.update.user") + "/*", 
 						endpointNameHolder.getEndpoint("basic.update.user.login") + "/*", 
 						endpointNameHolder.getEndpoint("basic.update.user.password") + "/*")
-				.hasAnyAuthority("BASIC_UPDATE_USER", "EXTENDED_UPDATE_USER"));
+				.hasAnyAuthority(AuthorityNames.BASIC_UPDATE_USER, AuthorityNames.EXTENDED_UPDATE_USER));
 		http.authorizeHttpRequests(cust -> cust
 				.requestMatchers(HttpMethod.DELETE, 
 						endpointNameHolder.getEndpoint("basic.delete.user") + "/*")
-				.hasAnyAuthority("BASIC_DELETE_USER", "EXTENDED_DELETE_USER"));
+				.hasAnyAuthority(AuthorityNames.BASIC_DELETE_USER, AuthorityNames.EXTENDED_DELETE_USER));
 		http.authorizeHttpRequests(cust -> cust
 				.requestMatchers(HttpMethod.POST, 
 						endpointNameHolder.getEndpoint("extended.create.user"))
-				.hasAuthority("EXTENDED_CREATE_USER"));
+				.hasAuthority(AuthorityNames.EXTENDED_CREATE_USER));
 		http.authorizeHttpRequests(cust -> cust
 				.requestMatchers(HttpMethod.PATCH, 
 						endpointNameHolder.getEndpoint("extended.update.user") + "/*", 
@@ -62,16 +63,16 @@ public class SecurityConfig {
 						endpointNameHolder.getEndpoint("extended.update.user.password") + "/*", 
 						endpointNameHolder.getEndpoint("extended.update.user.block") + "/*", 
 						endpointNameHolder.getEndpoint("extended.update.user.unblock") + "/*")
-				.hasAuthority("EXTENDED_UPDATE_USER"));
+				.hasAuthority(AuthorityNames.EXTENDED_UPDATE_USER));
 		http.authorizeHttpRequests(cust -> cust
 				.requestMatchers(HttpMethod.DELETE, 
 						endpointNameHolder.getEndpoint("extended.delete.user") + "/*")
-				.hasAuthority("EXTENDED_DELETE_USER"));
+				.hasAuthority(AuthorityNames.EXTENDED_DELETE_USER));
 		http.authorizeHttpRequests(cust -> cust
 				.requestMatchers(HttpMethod.GET, 
 						endpointNameHolder.getEndpoint("extended.read.user") + "/*", 
 						endpointNameHolder.getEndpoint("extended.read.all-users"))
-				.hasAuthority("EXTENDED_READ_USER"));
+				.hasAuthority(AuthorityNames.EXTENDED_READ_USER));
 		http.authorizeHttpRequests(cust -> cust
 				.anyRequest()
 				.authenticated());
@@ -110,12 +111,17 @@ public class SecurityConfig {
 		UserDetails alice = org.springframework.security.core.userdetails.User
 				.withUsername("alice")
 				.password(passwordEncoder.encode("123"))
-				.authorities("EXTENDED_CREATE_USER", "EXTENDED_READ_USER", "EXTENDED_UPDATE_USER", "EXTENDED_DELETE_USER")
+				.authorities(AuthorityNames.EXTENDED_CREATE_USER, 
+						AuthorityNames.EXTENDED_READ_USER, 
+						AuthorityNames.EXTENDED_UPDATE_USER, 
+						AuthorityNames.EXTENDED_DELETE_USER)
 				.build();
 		UserDetails alexander = org.springframework.security.core.userdetails.User
 				.withUsername("alexander")
 				.password(passwordEncoder.encode("321"))
-				.authorities("BASIC_READ_USER", "BASIC_UPDATE_USER", "BASIC_DELETE_USER")
+				.authorities(AuthorityNames.BASIC_READ_USER, 
+						AuthorityNames.BASIC_UPDATE_USER, 
+						AuthorityNames.BASIC_DELETE_USER)
 				.build();
 		return new InMemoryUserDetailsManager(alice, alexander);
 	}

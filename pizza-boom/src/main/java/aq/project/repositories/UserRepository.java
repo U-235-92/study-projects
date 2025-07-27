@@ -19,6 +19,17 @@ public interface UserRepository extends JpaRepository<User, String> {
 	public void deleteByLogin(@Param("login") String login);
 	
 	@Modifying
-	@Query(value = "UPDATE User u SET u.password = :password WHERE u.login = :login")
-	public void updatePassword(@Param("login") String login, @Param("password") String password);
+	@Query(value = "UPDATE User u SET u.password = :password, u.updatedAt = :updatedAt WHERE u.login = :login")
+	public void updatePassword(@Param("login") String login, @Param("password") String password, @Param("updatedAt") long updatedAt);
+	
+	@Modifying
+	@Query(value = "UPDATE User u SET u.login = :newLogin, u.updatedAt = :updatedAt WHERE u.login = :oldLogin")
+	public void updateLogin(@Param("newLogin") String newLogin, @Param("oldLogin") String oldLogin, @Param("updatedAt") long updatedAt);
+	
+	@Modifying
+	@Query(value = "UPDATE User u SET u.notBanned = true, u.updatedAt = :updatedAt WHERE u.login = :login")
+	public void blockUser(@Param("login") String login, @Param("updatedAt") long updatedAt);
+	@Modifying
+	@Query(value = "UPDATE User u SET u.notBanned = false, u.updatedAt = :updatedAt WHERE u.login = :login")
+	public void unblockUser(@Param("login") String login, @Param("updatedAt") long updatedAt);
 }

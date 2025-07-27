@@ -1,5 +1,7 @@
 package aq.project.entities;
 
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,17 +15,25 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-@Table(name = "user_authorities")
-public class UserAuthority {
+@Access(AccessType.PROPERTY)
+@Table(name = "authorities")
+public class Authority {
 
-	@Id @GeneratedValue
 	private int id;
-	@NotBlank
-	@Size(max = 255)
-	@Column(name = "name", unique = true)
+	@NotBlank @Size(max = 255)
 	private String name;
 	
-	public UserAuthority(String name) {
+	public Authority(String name) {
 		this.name = name;
+	}
+	
+	@Id @GeneratedValue
+	public int getId() {
+		return id;
+	}
+	
+	@Column(name = "name", unique = true)
+	public String getName() {
+		return name;
 	}
 }

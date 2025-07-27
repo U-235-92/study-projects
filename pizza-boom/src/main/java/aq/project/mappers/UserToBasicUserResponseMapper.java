@@ -1,42 +1,47 @@
 package aq.project.mappers;
 
-import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants.ComponentModel;
 import org.mapstruct.Named;
+import org.springframework.beans.factory.annotation.Value;
 
 import aq.project.dto.BasicUserResponse;
 import aq.project.entities.User;
 
 @Mapper(componentModel = ComponentModel.SPRING)
-public interface UserToBasicUserResponseMapper {
+public abstract class UserToBasicUserResponseMapper {
 
+
+	@Value("date-format")
+	private String dateFormat;
+	
 	@Mapping(target = "login", source = "login")
 	@Mapping(target = "firstname", expression = "java(getFirstname(user))")
 	@Mapping(target = "lastname", expression = "java(getLastname(user))")
 	@Mapping(target = "email", expression = "java(getEmail(user))")
 	@Mapping(target = "birthDate", expression = "java(getBirthDate(user))")
-	BasicUserResponse toBasicUserResponse(User user);
+	public abstract BasicUserResponse toBasicUserResponse(User user);
 	
 	@Named("getFirstname")
-	default String getFirstname(User user) {
-		return user.getUserDetails().getFirstanme();
+	public String getFirstname(User user) {
+		return user.getUserDetails().getFirstname();
 	}
 	
 	@Named("getLastname")
-	default String getLastname(User user) {
+	public String getLastname(User user) {
 		return user.getUserDetails().getLastname();
 	}
 	
 	@Named("getEmail")
-	default String getEmail(User user) {
+	public String getEmail(User user) {
 		return user.getUserDetails().getEmail();
 	}
 	
 	@Named("getBirthDate")
-	default LocalDate getBirthDate(User user) {
-		return user.getUserDetails().getBirthDate();
+	public String getBirthDate(User user) {
+		return user.getUserDetails().getBirthDate().format(DateTimeFormatter.ofPattern(dateFormat));
 	}
 }

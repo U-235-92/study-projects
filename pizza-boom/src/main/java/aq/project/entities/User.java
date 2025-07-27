@@ -3,6 +3,8 @@ package aq.project.entities;
 import java.time.Instant;
 import java.util.List;
 
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,35 +27,25 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Table(name = "users")
+@Access(AccessType.PROPERTY)
 public class User {
 
 	@Transient
-	private static final long NO_ADJUSTED_CREATED_AT = -1L;
+	private static final long NO_ADJUSTED_VALUE = -1L;
 	
-	@Id
-	@NotBlank
-	@Size(max = 255)
-	@Column(unique = true)
+	@NotBlank @Size(max = 255)
 	private String login;
-	@NotBlank
-	@Size(max = 255)
+	@NotBlank @Size(max = 255)
 	private String password;
 	@NotNull
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id")
 	private UserDetails userDetails;
 	@NotNull
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "users_authorities", 	
-			joinColumns = @JoinColumn(name = "user_login"), 
-			inverseJoinColumns = @JoinColumn(name = "authority_id"),
-			uniqueConstraints = @UniqueConstraint(name = "uq_user_authority", columnNames = {"user_login", "authority_id"}))
-	private List<UserAuthority> authorities;
-	private long createdAt = NO_ADJUSTED_CREATED_AT;
-	private long updatedAt;
-	private boolean notBanned;
+	private List<Authority> authorities;
+	private boolean notBanned = true;
+	private long createdAt = NO_ADJUSTED_VALUE;
+	private long updatedAt = NO_ADJUSTED_VALUE;
 	
-	public User(String login, String password, boolean notBanned, UserDetails userDetails, List<UserAuthority> authorities) {
+	public User(String login, String password, boolean notBanned, UserDetails userDetails, List<Authority> authorities) {
 		super();
 		this.login = login;
 		this.password = password;
@@ -64,12 +56,32 @@ public class User {
 		this.updatedAt = Instant.ofEpochMilli(createdAt).toEpochMilli();
 	}
 	
-	public void setCreatedAt(long createdAt) {
-		if(this.createdAt == NO_ADJUSTED_CREATED_AT)
-			this.createdAt = createdAt;
+	@Id @Column(unique = true, updatable = true)
+	public String getLogin() {
+		return login;
+	}
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_details_id")
+	public UserDetails getUserDetails() {
+		return userDetails;
+	}
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "users_authorities", 	
+			joinColumns = @JoinColumn(name = "user_login"), 
+			inverseJoinColumns = @JoinColumn(name = "authority_id"),
+			uniqueConstraints = @UniqueConstraint(name = "uq_user_authority", columnNames = {"user_login", "authority_id"}))
+	public List<Authority> getAuthorities() {
+		return authorities;
 	}
 	
 	public long getCreatedAt() {
 		return createdAt;
+	}
+	
+	public void setCreatedAt(long createdAt) {
+		if(this.createdAt == NO_ADJUSTED_VALUE)
+			this.createdAt = createdAt;
 	}
 }

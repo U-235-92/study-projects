@@ -3,7 +3,7 @@ package aq.project.exceptions;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class UserLoginNotFoundException extends Exception {
+public class UserLoginAlreadyExistException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
@@ -11,6 +11,6 @@ public class UserLoginNotFoundException extends Exception {
 	
 	@Override
 	public String getMessage() {
-		return String.format("User with login [ %s ] wasn't found", login);
+		return String.format("User with login [ %s ] already exists", login);
 	}
 }

@@ -1,6 +1,5 @@
 package aq.project.dto;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.validation.constraints.Email;
@@ -17,25 +16,18 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ExtendedUserRequest {
 
-	@NotBlank
-	@Size(max = 255)
+	@NotBlank @Size(max = 255)
 	private String login;
-	@NotBlank
-	@Size(max = 255)
+	@NotBlank @Size(max = 255)
 	private String password;
-	@NotBlank
-	@Size(max = 255)
+	@NotBlank @Size(max = 255)
 	private String firstname;
-	@NotBlank
-	@Size(max = 255)
+	@NotBlank @Size(max = 255)
 	private String lastname;
-	@Email
-	@NotBlank
-	@Size(max = 255)
+	@Email @NotBlank @Size(max = 255)
 	private String email;
-	@NotNull
-	@Pattern(regexp = "(0[1-9]|1[0-9]|2[0-9]|3[0-1])-(0[1-9]|1[0-2])-\\d{4}")
-	private LocalDate birthDate;
+	@NotBlank @Pattern(regexp = "(0[1-9]|1[0-9]|2[0-9]|3[0-1])-(0[1-9]|1[0-2])-\\d{4}")
+	private String birthDate;
 	@NotNull
 	private List<String> authorities;
 	private boolean notBanned;

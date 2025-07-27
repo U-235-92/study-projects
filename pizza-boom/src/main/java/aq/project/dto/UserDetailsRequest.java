@@ -11,12 +11,8 @@ import lombok.Getter;
 @Getter
 @EqualsAndHashCode
 @AllArgsConstructor
-public class BasicUserRequest {
+public class UserDetailsRequest {
 
-	@NotBlank @Size(max = 255)
-	private String login;
-	@NotBlank @Size(max = 255)
-	private String password;
 	@NotBlank @Size(max = 255)
 	private String firstname;
 	@NotBlank @Size(max = 255)
@@ -24,5 +20,5 @@ public class BasicUserRequest {
 	@Email @NotBlank @Size(max = 255)
 	private String email;
 	@NotBlank @Pattern(regexp = "(0[1-9]|1[0-9]|2[0-9]|3[0-1])-(0[1-9]|1[0-2])-\\d{4}")
-	private String birthDate;
+	private String birthDate; 
 }
