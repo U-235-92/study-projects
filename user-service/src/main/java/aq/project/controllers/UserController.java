@@ -57,7 +57,7 @@ public class UserController {
 		return somh.getSuccessUpdateUserPasswordMessage(login);
 	}
 	
-	@PatchMapping("${basic.update.user.login}/{login}")
+	@PatchMapping("${basic.update.user.login}/{oldLogin}")
 	public String basicUpdateUserLogin(@PathVariable(required = true) String oldLogin, @RequestBody String newLogin, Authentication authentication) {
 		userService.basicUpdateUserLogin(oldLogin, newLogin, authentication);
 		SuccesOperationMessageHolder somh = new SuccesOperationMessageHolder();

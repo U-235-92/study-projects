@@ -2,6 +2,7 @@ package aq.project.mappers;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -12,15 +13,15 @@ import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Value;
 
 import aq.project.dto.ExtendedUserResponse;
-import aq.project.entities.User;
 import aq.project.entities.Authority;
+import aq.project.entities.User;
 
 @Mapper(componentModel = ComponentModel.SPRING)
 public abstract class UserToExtendedUserResponseMapper {
 
-	@Value("date-format")
+	@Value("${date-format}")
 	private String dateFormat;
-	@Value("date-time-format")
+	@Value("${date-time-format}")
 	private String dateTimeFormat;
 	
 	@Mapping(target = "login", source = "login")
@@ -59,13 +60,13 @@ public abstract class UserToExtendedUserResponseMapper {
 	@Named("getCreatedAt")
 	public String getCreatedAt(User user) {
 		Instant instant = Instant.ofEpochMilli(user.getCreatedAt());
-		return LocalDateTime.from(instant).format(DateTimeFormatter.ofPattern(dateTimeFormat));
+		return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern(dateTimeFormat));
 	}
 	
 	@Named("getUpdatedAt")
 	public String getUpdatedAt(User user) {
 		Instant instant = Instant.ofEpochMilli(user.getUpdatedAt());
-		return LocalDateTime.from(instant).format(DateTimeFormatter.ofPattern(dateTimeFormat));
+		return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern(dateTimeFormat));
 	}
 	
 	@Named("getAuthorities")

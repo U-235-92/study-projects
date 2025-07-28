@@ -15,7 +15,7 @@ import aq.project.entities.UserDetails;
 @Mapper(componentModel = ComponentModel.SPRING)
 public abstract class UserDetailsRequestToUserDetailsMapper {
 
-	@Value("date-format")
+	@Value("${date-format}")
 	private String dateFormat;
 	
 	@Mapping(target = "firstname", source = "firstname")

@@ -15,7 +15,7 @@ import aq.project.entities.User;
 public abstract class UserToBasicUserResponseMapper {
 
 
-	@Value("date-format")
+	@Value("${date-format}")
 	private String dateFormat;
 	
 	@Mapping(target = "login", source = "login")
