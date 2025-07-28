@@ -1,6 +1,6 @@
 spring:
   application:
-    name: pizza-boom
+    name: user-service
   profiles:
     active:
     - dev_db_h2
@@ -13,8 +13,8 @@ spring:
       on-profile: dev_db_h2
   datasource:
     generate-unique-name: false
-    name: pizza-boom
-    url: jdbc:h2:mem:pizza-boom
+    name: user-service-db
+    url: jdbc:h2:mem:user-service-db
     driver-class-name: org.h2.Driver
     username: admin 
   h2:

@@ -9,8 +9,8 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	
-	<artifactId>pizza-boom</artifactId>
-	<name>pizza-boom</name>
+	<artifactId>user-service</artifactId>
+	<name>user-service</name>
 	<description>Demo project for Spring Boot</description>
 	
 	<properties>

@@ -20,7 +20,7 @@
 	</properties>
   
   <modules>
-  	<module>pizza-boom</module>
+  	<module>user-service</module>
   </modules>
   
 	<dependencies>
