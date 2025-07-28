@@ -62,7 +62,7 @@ public class User {
 	}
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_details_id")
+	@JoinColumn(name = "email")
 	public UserDetails getUserDetails() {
 		return userDetails;
 	}

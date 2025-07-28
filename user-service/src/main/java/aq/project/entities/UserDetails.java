@@ -6,7 +6,6 @@ import jakarta.persistence.Access;
 import jakarta.persistence.AccessType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -24,7 +23,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "user_details")
 public class UserDetails {
 
-	private int id;
 	@NotBlank @Size(max = 255)
 	private String firstname;
 	@NotBlank @Size(max = 255)
@@ -40,12 +38,7 @@ public class UserDetails {
 		this.birthDate = birthDate;
 	}
 
-	@Id @GeneratedValue
-	public int getId() {
-		return id;
-	}
-
-	@Column(name = "email", unique = true)
+	@Id @Column(name = "email", unique = true)
 	public String getEmail() {
 		return email;
 	}
