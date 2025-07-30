@@ -14,7 +14,7 @@ import lombok.Getter;
 @Getter
 @EqualsAndHashCode
 @AllArgsConstructor
-public class ExtendedUserRequest {
+public class ExtendedUserCreationRequest {
 
 	@NotBlank @Size(max = 255)
 	private String login;
@@ -30,5 +30,4 @@ public class ExtendedUserRequest {
 	private String birthDate;
 	@NotNull
 	private List<String> authorities;
-	private boolean notBanned;
 }

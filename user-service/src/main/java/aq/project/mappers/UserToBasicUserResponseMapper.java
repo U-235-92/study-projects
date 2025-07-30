@@ -26,22 +26,22 @@ public abstract class UserToBasicUserResponseMapper {
 	public abstract BasicUserResponse toBasicUserResponse(User user);
 	
 	@Named("getFirstname")
-	public String getFirstname(User user) {
+	protected String getFirstname(User user) {
 		return user.getUserDetails().getFirstname();
 	}
 	
 	@Named("getLastname")
-	public String getLastname(User user) {
+	protected String getLastname(User user) {
 		return user.getUserDetails().getLastname();
 	}
 	
 	@Named("getEmail")
-	public String getEmail(User user) {
+	protected String getEmail(User user) {
 		return user.getUserDetails().getEmail();
 	}
 	
 	@Named("getBirthDate")
-	public String getBirthDate(User user) {
+	protected String getBirthDate(User user) {
 		return user.getUserDetails().getBirthDate().format(DateTimeFormatter.ofPattern(dateFormat));
 	}
 }

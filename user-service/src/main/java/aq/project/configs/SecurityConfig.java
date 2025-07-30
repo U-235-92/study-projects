@@ -34,19 +34,19 @@ public class SecurityConfig {
 	
 	@Bean
 	SecurityFilterChain appSecurityFilterChain(HttpSecurity http) throws Exception {
-		http.securityMatcher("/user/**");
+		http.securityMatcher("/user/**", "/authority/**");
 		http.sessionManagement(cust -> cust.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.authorizeHttpRequests(cust -> cust
-				.requestMatchers(HttpMethod.POST, endpointNameHolder.getEndpoint("basic.create.user"))
+				.requestMatchers(HttpMethod.POST, 
+						endpointNameHolder.getEndpoint("basic.create.user"))
 				.permitAll());
 		http.authorizeHttpRequests(cust -> cust
-				.requestMatchers(HttpMethod.GET, endpointNameHolder.getEndpoint("basic.read.user") + "/*")
+				.requestMatchers(HttpMethod.GET, 
+						endpointNameHolder.getEndpoint("basic.read.user") + "/*")
 				.hasAnyAuthority(AuthorityNames.BASIC_READ_USER, AuthorityNames.EXTENDED_READ_USER)); 
 		http.authorizeHttpRequests(cust -> cust
 				.requestMatchers(HttpMethod.PATCH, 
-						endpointNameHolder.getEndpoint("basic.update.user") + "/*", 
-						endpointNameHolder.getEndpoint("basic.update.user.login") + "/*", 
-						endpointNameHolder.getEndpoint("basic.update.user.password") + "/*")
+						endpointNameHolder.getEndpoint("basic.update.user") + "/**")
 				.hasAnyAuthority(AuthorityNames.BASIC_UPDATE_USER, AuthorityNames.EXTENDED_UPDATE_USER));
 		http.authorizeHttpRequests(cust -> cust
 				.requestMatchers(HttpMethod.DELETE, 
@@ -57,22 +57,34 @@ public class SecurityConfig {
 						endpointNameHolder.getEndpoint("extended.create.user"))
 				.hasAuthority(AuthorityNames.EXTENDED_CREATE_USER));
 		http.authorizeHttpRequests(cust -> cust
+				.requestMatchers(HttpMethod.POST, 
+						endpointNameHolder.getEndpoint("authority") + "/**")
+				.hasAuthority(AuthorityNames.CREATE_AUTHORITY));
+		http.authorizeHttpRequests(cust -> cust
 				.requestMatchers(HttpMethod.PATCH, 
-						endpointNameHolder.getEndpoint("extended.update.user") + "/*", 
-						endpointNameHolder.getEndpoint("extended.update.user.login") + "/*", 
-						endpointNameHolder.getEndpoint("extended.update.user.password") + "/*", 
-						endpointNameHolder.getEndpoint("extended.update.user.block") + "/*", 
-						endpointNameHolder.getEndpoint("extended.update.user.unblock") + "/*")
+						endpointNameHolder.getEndpoint("extended.update.user") + "/**")
 				.hasAuthority(AuthorityNames.EXTENDED_UPDATE_USER));
+		http.authorizeHttpRequests(cust -> cust
+				.requestMatchers(HttpMethod.PATCH,
+						endpointNameHolder.getEndpoint("authority") + "/**")
+				.hasAuthority(AuthorityNames.UPDATE_AUTHORITY));
 		http.authorizeHttpRequests(cust -> cust
 				.requestMatchers(HttpMethod.DELETE, 
 						endpointNameHolder.getEndpoint("extended.delete.user") + "/*")
 				.hasAuthority(AuthorityNames.EXTENDED_DELETE_USER));
 		http.authorizeHttpRequests(cust -> cust
+				.requestMatchers(HttpMethod.DELETE, 
+						endpointNameHolder.getEndpoint("authority") + "/**")
+				.hasAuthority(AuthorityNames.DELETE_AUTHORITY));
+		http.authorizeHttpRequests(cust -> cust
 				.requestMatchers(HttpMethod.GET, 
 						endpointNameHolder.getEndpoint("extended.read.user") + "/*", 
 						endpointNameHolder.getEndpoint("extended.read.all-users"))
 				.hasAuthority(AuthorityNames.EXTENDED_READ_USER));
+		http.authorizeHttpRequests(cust -> cust
+				.requestMatchers(HttpMethod.GET, 
+						endpointNameHolder.getEndpoint("authority") + "/**")
+				.hasAuthority(AuthorityNames.READ_AUTHORITY));
 		http.authorizeHttpRequests(cust -> cust
 				.anyRequest()
 				.authenticated());

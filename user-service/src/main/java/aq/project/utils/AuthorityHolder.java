@@ -1,30 +1,45 @@
 package aq.project.utils;
 
+import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import aq.project.entities.Authority;
-import aq.project.exceptions.UnknownPropertyException;
+import aq.project.exceptions.AuthorityAlreadyExistException;
+import aq.project.exceptions.AuthorityNotFoundException;
 import aq.project.repositories.AuthorityRepository;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class AuthorityHolder {
 
-	@Autowired
-	private AuthorityRepository authorityRepository;
+	private final AuthorityRepository authorityRepository;
 	
-	public String getAuthorityName(String authority) throws UnknownPropertyException {
-		Optional<Authority> optAuthority = authorityRepository.findAuthorityByName(authority);
+	public Authority getAuthority(String authority) throws AuthorityNotFoundException {
+		Optional<Authority> optAuthority = authorityRepository.findByName(authority);
 		return optAuthority
-				.map(Authority::getName)
-				.orElseThrow(() -> new UnknownPropertyException(String.format("Unknown user authority: %s", authority)));
+				.orElseThrow(() -> new AuthorityNotFoundException(authority));
 	}
 	
-	public Authority getAuthority(String authority) throws UnknownPropertyException {
-		Optional<Authority> optAuthority = authorityRepository.findAuthorityByName(authority);
+	public List<Authority> getUserAuthorities(String login) {
+		return authorityRepository.findUserAuthorities(login);
+	}
+	
+	@SuppressWarnings("unused")
+	public boolean isAuthorityExist(String name) throws AuthorityAlreadyExistException {
+		Optional<Authority> optAuthority = authorityRepository.findByName(name);
 		return optAuthority
-				.orElseThrow(() -> new UnknownPropertyException(String.format("Unknown user authority: %s", authority)));
+				.map(authority -> true)
+				.orElseThrow(() -> new AuthorityAlreadyExistException(name));
+	}
+	
+	@SuppressWarnings("unused")
+	public boolean isAuthorityNotFound(String name) throws AuthorityNotFoundException {
+		Optional<Authority> optAuthority = authorityRepository.findByName(name);
+		return optAuthority
+				.map(authority -> true)
+				.orElseThrow(() -> new AuthorityNotFoundException(name));
 	}
 }

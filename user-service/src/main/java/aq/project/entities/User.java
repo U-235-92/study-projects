@@ -9,6 +9,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -33,6 +34,7 @@ public class User {
 	@Transient
 	private static final long NO_ADJUSTED_VALUE = -1L;
 	
+	private int id;
 	@NotBlank @Size(max = 255)
 	private String login;
 	@NotBlank @Size(max = 255)
@@ -56,22 +58,27 @@ public class User {
 		this.updatedAt = Instant.ofEpochMilli(createdAt).toEpochMilli();
 	}
 	
-	@Id @Column(unique = true, updatable = true)
+	@Id @GeneratedValue
+	public int getId() {
+		return id;
+	}
+	
+	@Column(unique = true, updatable = true)
 	public String getLogin() {
 		return login;
 	}
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "email")
+	@JoinColumn(name = "user_details_id")
 	public UserDetails getUserDetails() {
 		return userDetails;
 	}
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "users_authorities", 	
-			joinColumns = @JoinColumn(name = "user_login"), 
+			joinColumns = @JoinColumn(name = "user_id"), 
 			inverseJoinColumns = @JoinColumn(name = "authority_id"),
-			uniqueConstraints = @UniqueConstraint(name = "uq_user_authority", columnNames = {"user_login", "authority_id"}))
+			uniqueConstraints = @UniqueConstraint(name = "uq_user_authority", columnNames = {"user_id", "authority_id"}))
 	public List<Authority> getAuthorities() {
 		return authorities;
 	}

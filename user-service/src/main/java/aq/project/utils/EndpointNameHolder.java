@@ -9,7 +9,7 @@ import java.util.Properties;
 
 import org.springframework.stereotype.Component;
 
-import aq.project.exceptions.UnknownPropertyException;
+import aq.project.exceptions.UnknownEndPointException;
 
 @Component
 public class EndpointNameHolder {
@@ -22,10 +22,10 @@ public class EndpointNameHolder {
 		properties.load(new BufferedInputStream(new FileInputStream(new File(file))));
 	}
 	
-	public String getEndpoint(String property) {
-		String endpoint = properties.getProperty(property);
+	public String getEndpoint(String endPoint) {
+		String endpoint = properties.getProperty(endPoint);
 		if(endpoint == null)
-			throw new UnknownPropertyException(String.format("Unknown end-point property: %s", property));
+			throw new UnknownEndPointException(endPoint);
 		return endpoint;
 	}
 }

@@ -38,39 +38,39 @@ public abstract class UserToExtendedUserResponseMapper {
 	public abstract List<ExtendedUserResponse> toExtendedUserResponseList(List<User> users);
 	
 	@Named("getFirstname")
-	public String getFirstname(User user) {
+	protected String getFirstname(User user) {
 		return user.getUserDetails().getFirstname();
 	}
 	
 	@Named("getLastname")
-	public String getLastname(User user) {
+	protected String getLastname(User user) {
 		return user.getUserDetails().getLastname();
 	}
 	
 	@Named("getEmail")
-	public String getEmail(User user) {
+	protected String getEmail(User user) {
 		return user.getUserDetails().getEmail();
 	}
 	
 	@Named("getBirthDate")
-	public String getBirthDate(User user) {
+	protected String getBirthDate(User user) {
 		return user.getUserDetails().getBirthDate().format(DateTimeFormatter.ofPattern(dateFormat));
 	}
 	
 	@Named("getCreatedAt")
-	public String getCreatedAt(User user) {
+	protected String getCreatedAt(User user) {
 		Instant instant = Instant.ofEpochMilli(user.getCreatedAt());
 		return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern(dateTimeFormat));
 	}
 	
 	@Named("getUpdatedAt")
-	public String getUpdatedAt(User user) {
+	protected String getUpdatedAt(User user) {
 		Instant instant = Instant.ofEpochMilli(user.getUpdatedAt());
 		return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern(dateTimeFormat));
 	}
 	
 	@Named("getAuthorities")
-	public List<String> getAuthorities(User user) {
+	protected List<String> getAuthorities(User user) {
 		return user.getAuthorities()
 				.stream()
 				.map(Authority::getName)

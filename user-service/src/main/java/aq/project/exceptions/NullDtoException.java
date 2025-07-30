@@ -1,6 +1,6 @@
 package aq.project.exceptions;
 
-public class EmptyDtoException extends Exception {
+public class NullDtoException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 

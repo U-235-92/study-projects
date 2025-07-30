@@ -11,34 +11,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import aq.project.dto.BasicUserRequest;
+import aq.project.dto.BasicUserCreationRequest;
 import aq.project.entities.User;
 import aq.project.entities.UserDetails;
 
 @Mapper(componentModel = ComponentModel.SPRING)
-public abstract class BasicUserRequestToUserMapper {
+public abstract class BasicUserCreationRequestToUserMapper {
 	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
 	@Value("${date-format}")
 	private String dateFormat; 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Mapping(target = "login", source = "login")
-	@Mapping(target = "password", expression = "java(toEncodedPassword(basicUserRequest.getPassword()))")
+	@Mapping(target = "password", expression = "java(toEncodedPassword(basicUserRegistrationRequest.getPassword()))")
 	@Mapping(target = "userDetails", expression = "java(toUserDetails("
-			+ "basicUserRequest.getFirstname(), "
-			+ "basicUserRequest.getLastname(), "
-			+ "basicUserRequest.getEmail(), "
-			+ "basicUserRequest.getBirthDate()))")
-	public abstract User toUser(BasicUserRequest basicUserRequest);
+			+ "basicUserRegistrationRequest.getFirstname(), "
+			+ "basicUserRegistrationRequest.getLastname(), "
+			+ "basicUserRegistrationRequest.getEmail(), "
+			+ "basicUserRegistrationRequest.getBirthDate()))")
+	public abstract User toUser(BasicUserCreationRequest basicUserRegistrationRequest);
 	
 	@Named("toEncodedPassword")
-	public String toEncodedPassword(String rawPassword) {
+	protected String toEncodedPassword(String rawPassword) {
 		return passwordEncoder.encode(rawPassword);
 	}
 	
 	@Named("toUserDetails")
-	public UserDetails toUserDetails(String firstname, String lastname, String email, String birthDate) {
+	protected UserDetails toUserDetails(String firstname, String lastname, String email, String birthDate) {
 		return new UserDetails(firstname, lastname, email, LocalDate.parse(birthDate, DateTimeFormatter.ofPattern(dateFormat)));
 	}
 }

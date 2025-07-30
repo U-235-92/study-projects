@@ -11,7 +11,7 @@ import lombok.Getter;
 @Getter
 @EqualsAndHashCode
 @AllArgsConstructor
-public class BasicUserRequest {
+public class BasicUserCreationRequest {
 
 	@NotBlank @Size(max = 255)
 	private String login;

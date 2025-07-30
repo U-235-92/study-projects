@@ -25,25 +25,6 @@ import aq.project.utils.AuthorityNames;
 @EntityScan(basePackages = {"aq.project.entities"})
 @EnableJpaRepositories(basePackages = {"aq.project.repositories"})
 public class DataConfig {
-
-//	 TODO list: (Порядок не во всех пунктах последователен)
-//	1+ Доделать DTO; 
-//	2+ Написать мапперы DTO -> Entity, Entity <- DTO; (MapStruct library);  
-//	3.1+  Реализовать сервис UserService; 
-//	3.2+ При необходимости - дополнить репозитории;
-//	4+  Написать аспекты сервиса и валидации;
-//	5+ Настроить валидацию сущностей и DTO; 
-//	6+ Написать исключения ошибок валидации DTO; 
-//	7+ Внедрить @Bean валидатора; 
-//	8+ Вывести смену пароля и бан пользователя в отдельные конечные точки 
-//	9+ Обновить DataConfig
-//	10+ Стоит ли сделать в качестве первичного ключа юзера его логин? 
-//	11+ Вынести смену имени пользователя в отдельную конечную точку (для basic и extended)
-//	12+ Добавить хранителя имен конечных точек и файл свойств к ним 
-//	13+ Добавить обработку исключений валидности запросов и ответов в контроллер UserController 
-//	14+ Следует ли включить обработку NoValidUserException в контроллер UseController?
-//	15+ Что будет если вызвать свойство без {} в MessageFormatter?
-//	16+ Создай один класс-иключение для неизвестных (Unknown) свойств
 	
 	@Value("${date-format}")
 	private String dateFormat;
@@ -67,9 +48,22 @@ public class DataConfig {
 			Authority extendedReadUserAuthority = new Authority(AuthorityNames.EXTENDED_READ_USER);
 			Authority extendedUpdateUserAuthority = new Authority(AuthorityNames.EXTENDED_UPDATE_USER);
 			Authority extendedDeleteUserAuthority = new Authority(AuthorityNames.EXTENDED_DELETE_USER);
+			Authority createAuthority = new Authority(AuthorityNames.CREATE_AUTHORITY);
+			Authority readAuthority = new Authority(AuthorityNames.READ_AUTHORITY);
+			Authority updateAuthority = new Authority(AuthorityNames.UPDATE_AUTHORITY);
+			Authority deleteAuthority = new Authority(AuthorityNames.DELETE_AUTHORITY);
 //			SAVE AUTHORITIES PROCESS
-			List<Authority> basicUserAuthorities = List.of(basicReadUserAuthority, basicUpdateUserAuthority, basicDeleteUserAuthority);
-			List<Authority> extendedUserAuthorities = List.of(extendedCreateUserAuthority, extendedReadUserAuthority, extendedUpdateUserAuthority, extendedDeleteUserAuthority);
+			List<Authority> basicUserAuthorities = List.of(basicReadUserAuthority, 
+					basicUpdateUserAuthority, 
+					basicDeleteUserAuthority);
+			List<Authority> extendedUserAuthorities = List.of(extendedCreateUserAuthority, 
+					extendedReadUserAuthority, 
+					extendedUpdateUserAuthority, 
+					extendedDeleteUserAuthority,
+					createAuthority,
+					readAuthority,
+					updateAuthority,
+					deleteAuthority);
 			authorityRepository.saveAll(basicUserAuthorities);
 			authorityRepository.saveAll(extendedUserAuthorities);
 //			USER DETAILS MANAGEMENT

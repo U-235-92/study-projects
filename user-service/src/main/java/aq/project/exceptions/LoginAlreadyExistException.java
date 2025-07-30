@@ -3,15 +3,14 @@ package aq.project.exceptions;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class AccessDeniedException extends Exception {
+public class LoginAlreadyExistException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
 	private String login;
-	private String operation;
-
+	
 	@Override
 	public String getMessage() {
-		return String.format("Access denied to user with login [ %s ] to %s ", login, operation);
+		return String.format("User with login [ %s ] already exists", login);
 	}
 }

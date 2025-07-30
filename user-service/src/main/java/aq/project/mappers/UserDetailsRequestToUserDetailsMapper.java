@@ -25,7 +25,7 @@ public abstract class UserDetailsRequestToUserDetailsMapper {
 	public abstract UserDetails toUserDetails(UserDetailsRequest userDetailsRequest);
 	
 	@Named("toDate")
-	public LocalDate toDate(UserDetailsRequest userDetailsRequest) {
+	protected LocalDate toDate(UserDetailsRequest userDetailsRequest) {
 		return LocalDate.parse(userDetailsRequest.getBirthDate(), DateTimeFormatter.ofPattern(dateFormat));
 	}
 }

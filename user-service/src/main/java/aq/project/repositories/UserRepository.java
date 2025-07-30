@@ -8,8 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import aq.project.entities.User;
+import aq.project.entities.UserDetails;
 
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UserRepository extends JpaRepository<User, Integer> {
 
 	@Query(value = "SELECT u FROM User u WHERE u.login = :login")
 	public Optional<User> findByLogin(@Param("login") String login);
@@ -27,9 +28,15 @@ public interface UserRepository extends JpaRepository<User, String> {
 	public void updateLogin(@Param("newLogin") String newLogin, @Param("oldLogin") String oldLogin, @Param("updatedAt") long updatedAt);
 	
 	@Modifying
-	@Query(value = "UPDATE User u SET u.notBanned = true, u.updatedAt = :updatedAt WHERE u.login = :login")
+	@Query(value = "UPDATE User u SET u.notBanned = false, u.updatedAt = :updatedAt WHERE u.login = :login")
 	public void blockUser(@Param("login") String login, @Param("updatedAt") long updatedAt);
 	@Modifying
-	@Query(value = "UPDATE User u SET u.notBanned = false, u.updatedAt = :updatedAt WHERE u.login = :login")
+	@Query(value = "UPDATE User u SET u.notBanned = true, u.updatedAt = :updatedAt WHERE u.login = :login")
 	public void unblockUser(@Param("login") String login, @Param("updatedAt") long updatedAt);
+	
+	@Query(value = "SELECT u.userDetails FROM User u WHERE u.login = :login")
+	public UserDetails findUserDetailsByUserLogin(@Param("login") String login);
+	
+	@Query(value = "UPDATE User u SET u.updatedAt = :updatedAt WHERE u.login = :login")
+	public UserDetails updateUpdatedAtByUserLogin(@Param("login") String login, @Param("updatedAt") long updatedAt);
 }
