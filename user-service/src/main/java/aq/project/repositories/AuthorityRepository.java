@@ -24,4 +24,11 @@ public interface AuthorityRepository extends JpaRepository<Authority, Integer> {
 	@Modifying
 	@Query("DELETE FROM Authority a WHERE a.name = :name")
 	public void deleteByName(@Param("name") String name);
+	
+	@Modifying
+	@NativeQuery("DELETE FROM users_authorities WHERE authority_id = :authority_id")
+	public void deleteAuthorityFromUsersAuthorities(@Param("authority_id") int id);
+	
+	@NativeQuery("SELECT id FROM authorities WHERE name = :name")
+	public int findIdByName(@Param("name") String name);
 }

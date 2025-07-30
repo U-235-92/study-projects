@@ -32,6 +32,8 @@ public class AuthorityService {
 	}
 	
 	public void deleteAuthority(String name) {
+		int authorityId = authorityRepository.findIdByName(name);
+		authorityRepository.deleteAuthorityFromUsersAuthorities(authorityId);
 		authorityRepository.deleteByName(name);
 	}
 	

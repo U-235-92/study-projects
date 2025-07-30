@@ -21,15 +21,13 @@ import aq.project.security.JPAAuthenticationProvider;
 import aq.project.security.JPAUserDetailsService;
 import aq.project.utils.AuthorityNames;
 import aq.project.utils.EndpointNameHolder;
-import aq.project.utils.AuthorityHolder;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity(debug = false)
 @RequiredArgsConstructor
 public class SecurityConfig {
-		
-	private final AuthorityHolder authorityHolder; //It will be use when all the authorities will store in a no-mem DB 
+	
 	private final EndpointNameHolder endpointNameHolder;
 	
 	@Bean

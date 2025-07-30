@@ -38,7 +38,7 @@ public class AuthorityController {
 	@DeleteMapping("${authority.delete}/{name}")
 	public String deleteAuthority(@PathVariable(required = true) String name) {
 		authorityService.deleteAuthority(name);
-		return String.format("Authority with id [ %d ] was deleted successfully", name);
+		return String.format("Authority with id [ %s ] was deleted successfully", name);
 	}
 	
 	@GetMapping("${authority.all-authorities}")

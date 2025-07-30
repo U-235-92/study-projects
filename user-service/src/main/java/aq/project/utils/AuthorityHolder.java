@@ -27,19 +27,17 @@ public class AuthorityHolder {
 		return authorityRepository.findUserAuthorities(login);
 	}
 	
-	@SuppressWarnings("unused")
 	public boolean isAuthorityExist(String name) throws AuthorityAlreadyExistException {
 		Optional<Authority> optAuthority = authorityRepository.findByName(name);
-		return optAuthority
-				.map(authority -> true)
-				.orElseThrow(() -> new AuthorityAlreadyExistException(name));
+		if(optAuthority.isPresent())
+			throw new AuthorityAlreadyExistException(name);
+		return false;
 	}
 	
-	@SuppressWarnings("unused")
 	public boolean isAuthorityNotFound(String name) throws AuthorityNotFoundException {
 		Optional<Authority> optAuthority = authorityRepository.findByName(name);
-		return optAuthority
-				.map(authority -> true)
-				.orElseThrow(() -> new AuthorityNotFoundException(name));
+		if(optAuthority.isEmpty())
+			throw new AuthorityNotFoundException(name);
+		return false;
 	}
 }
