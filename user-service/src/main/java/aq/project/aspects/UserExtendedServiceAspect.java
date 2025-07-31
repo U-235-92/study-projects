@@ -14,9 +14,9 @@ import aq.project.dto.ExtendedUserCreationRequest;
 import aq.project.dto.ExtendedUserResponse;
 import aq.project.dto.LoginUpdateRequest;
 import aq.project.dto.PasswordRequest;
+import aq.project.dto.SaveDuplicateAuthorityInUserException;
 import aq.project.dto.UserAuthoritiesUpdateRequest;
 import aq.project.dto.UserDetailsRequest;
-import aq.project.entities.Authority;
 import aq.project.exceptions.AuthorityAlreadyExistException;
 import aq.project.exceptions.AuthorityNotFoundException;
 import aq.project.exceptions.EmailAlreadyExistException;
@@ -24,8 +24,8 @@ import aq.project.exceptions.InvalidPropertyException;
 import aq.project.exceptions.LoginAlreadyExistException;
 import aq.project.exceptions.LoginNotFoundException;
 import aq.project.exceptions.NullDtoException;
-import aq.project.mappers.UserAuthorityRequestToAuthorityMapper;
 import aq.project.mappers.ViolationToInvalidPropertyMapper;
+import aq.project.repositories.AuthorityRepository;
 import aq.project.repositories.UserDetailsRepository;
 import aq.project.repositories.UserRepository;
 import aq.project.utils.AuthorityHolder;
@@ -41,8 +41,8 @@ public class UserExtendedServiceAspect {
 	private final Validator validator;
 	private final UserRepository userRepository;
 	private final AuthorityHolder authorityHolder;
+	private final AuthorityRepository authorityRepository;
 	private final UserDetailsRepository userDetailsRepository;
-	private final UserAuthorityRequestToAuthorityMapper userAuthorityRequestMapper;
 	
 	@Before("execution(void aq.project.services.UserExtendedService.createUser(..)) && args(extendedUserCreationRequest)")
 	private void checkExtendedCreateUser(ExtendedUserCreationRequest extendedUserCreationRequest) throws NullDtoException, InvalidPropertyException, LoginAlreadyExistException, EmailAlreadyExistException, AuthorityNotFoundException {
@@ -67,12 +67,12 @@ public class UserExtendedServiceAspect {
 		}
 	}
 	
-	@Before("execution(void aq.project.services.UserService.deleteUser(..)) && args(login)")
+	@Before("execution(void aq.project.services.UserExtendedService.deleteUser(..)) && args(login)")
 	private void checkExtendedDeleteUser(String login) throws LoginNotFoundException {
 		LoginChecker.checkUserLoginNotFound(userRepository, login);
 	}
 	
-	@Around("execution(* aq.project.services.UserService.readUser(..)) && args(login)")
+	@Around("execution(* aq.project.services.UserExtendedService.readUser(..)) && args(login)")
 	private ExtendedUserResponse checkExtededUserRead(ProceedingJoinPoint pjp, String login) throws LoginNotFoundException, InvalidPropertyException, Throwable {
 		LoginChecker.checkUserLoginNotFound(userRepository, login);
 		ExtendedUserResponse extendedUserResponse = (ExtendedUserResponse) pjp.proceed(pjp.getArgs());
@@ -80,7 +80,7 @@ public class UserExtendedServiceAspect {
 		return extendedUserResponse;
 	}
 	
-	@Around("execution(* aq.project.services.UserService.readAllUsers())")
+	@Around("execution(* aq.project.services.UserExtendedService.readAllUsers())")
 	private List<ExtendedUserResponse> checkExtededAllUserRead(ProceedingJoinPoint pjp) throws InvalidPropertyException, Throwable {
 		@SuppressWarnings("unchecked")
 		List<ExtendedUserResponse> extendedUserResponseList = (List<ExtendedUserResponse>) pjp.proceed(pjp.getArgs());
@@ -142,10 +142,6 @@ public class UserExtendedServiceAspect {
 		if(userAuthoritiesUpdateRequest == null)
 			throw new NullDtoException();
 		chechAuthoritiesUpdateRequestViolations(userAuthoritiesUpdateRequest);
-		List<Authority> authorities = userAuthorityRequestMapper.toAuthorities(userAuthoritiesUpdateRequest);
-		for(Authority authority : authorities) {
-			authorityHolder.isAuthorityExist(authority.getName());
-		}
 	}
 	
 	private void chechAuthoritiesUpdateRequestViolations(UserAuthoritiesUpdateRequest userAuthoritiesUpdateRequest) throws InvalidPropertyException {
@@ -156,16 +152,23 @@ public class UserExtendedServiceAspect {
 	}
 
 	@Before("execution(void aq.project.services.UserExtendedService.addUserAuthority(..)) && args(login, authorityRequest)")
-	public void checkAddUserAuthority(String login, AuthorityRequest authorityRequest) throws LoginNotFoundException, NullDtoException, InvalidPropertyException, AuthorityAlreadyExistException {
+	public void checkAddUserAuthority(String login, AuthorityRequest authorityRequest) throws LoginNotFoundException, NullDtoException, InvalidPropertyException, AuthorityNotFoundException, SaveDuplicateAuthorityInUserException {
 		checkUserAuthorityDetails(login, authorityRequest);
+		checkSaveDuplicateAuthorityInUser(login, authorityRequest);
 	}
 	
+	private void checkSaveDuplicateAuthorityInUser(String login, AuthorityRequest authorityRequest) throws SaveDuplicateAuthorityInUserException {
+		List<Object[]> lines = authorityRepository.findAuthorityAndUserIdentificatorsByLoginAndAuthority(login, authorityRequest.getAuthority());
+		if(!(lines == null) && !lines.isEmpty()) 
+			throw new SaveDuplicateAuthorityInUserException(authorityRequest.getAuthority(), login);
+	}
+
 	@Before("execution(void aq.project.services.UserExtendedService.revokeUserAuthority(..)) && args(login, authorityRequest)")
-	public void checkRevokeUserAuthority(String login, AuthorityRequest authorityRequest) throws LoginNotFoundException, NullDtoException, InvalidPropertyException, AuthorityAlreadyExistException {
+	public void checkRevokeUserAuthority(String login, AuthorityRequest authorityRequest) throws LoginNotFoundException, NullDtoException, InvalidPropertyException, AuthorityNotFoundException {
 		checkUserAuthorityDetails(login, authorityRequest);
 	}
 	
-	private void checkUserAuthorityDetails(String login, AuthorityRequest authorityRequest) throws LoginNotFoundException, NullDtoException, InvalidPropertyException, AuthorityAlreadyExistException {
+	private void checkUserAuthorityDetails(String login, AuthorityRequest authorityRequest) throws LoginNotFoundException, NullDtoException, InvalidPropertyException, AuthorityNotFoundException {
 		LoginChecker.checkUserLoginNotFound(userRepository, login);
 		if(authorityRequest == null)
 			throw new NullDtoException();
@@ -180,7 +183,7 @@ public class UserExtendedServiceAspect {
 					.map(ViolationToInvalidPropertyMapper::toInvalidProperty).toList());
 	}
 
-	private void checkAuthorityNotFound(AuthorityRequest authorityRequest) throws AuthorityAlreadyExistException {
-		authorityHolder.isAuthorityExist(authorityRequest.getAuthority());
+	private void checkAuthorityNotFound(AuthorityRequest authorityRequest) throws AuthorityNotFoundException {
+		authorityHolder.isAuthorityNotFound(authorityRequest.getAuthority());
 	}
 }

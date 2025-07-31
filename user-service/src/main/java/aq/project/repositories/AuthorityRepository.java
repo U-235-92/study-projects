@@ -31,4 +31,17 @@ public interface AuthorityRepository extends JpaRepository<Authority, Integer> {
 	
 	@NativeQuery("SELECT id FROM authorities WHERE name = :name")
 	public int findIdByName(@Param("name") String name);
+	
+	@Modifying
+	@NativeQuery("INSERT INTO users_authorities VALUES ("
+			+ "(SELECT id FROM authorities WHERE name = :authority), "
+			+ "(SELECT id FROM users WHERE login = :login))")
+	public void updateUsersAuthoritiesByLoginAndAuthority(@Param("login") String login, @Param("authority") String authority);
+	
+	@NativeQuery(name = "users_authorities_table_mapping", 
+			value = "SELECT user_id, authority_id FROM users_authorities WHERE "
+					+ "user_id = (SELECT id FROM users WHERE login = :login) AND "
+					+ "authority_id = (SELECT id FROM authorities WHERE name = :authority)")
+	public List<Object[]> findAuthorityAndUserIdentificatorsByLoginAndAuthority(@Param("login") String login, @Param("authority") String authority);
+	
 }

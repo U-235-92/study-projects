@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import aq.project.dto.AuthorityRequest;
 import aq.project.dto.AuthorityResponse;
+import aq.project.exceptions.AuthorityNotFoundException;
 import aq.project.services.AuthorityService;
 import lombok.RequiredArgsConstructor;
 
@@ -24,13 +25,13 @@ public class AuthorityController {
 	private final AuthorityService authorityService;
 	
 	@PostMapping("${authority.create}")
-	public String createAuthority(@RequestBody AuthorityRequest authorityRequest) {
+	public String createAuthority(@RequestBody AuthorityRequest authorityRequest) throws AuthorityNotFoundException {
 		authorityService.createAuthority(authorityRequest);
 		return String.format("Authority [ %s ] was created successfully", authorityRequest.getAuthority());
 	}
 	
 	@PatchMapping("${authority.update}/{name}")
-	public String updateAuthority(@PathVariable(required = true) String name, @RequestBody AuthorityRequest authorityRequest) {
+	public String updateAuthority(@PathVariable(required = true) String name, @RequestBody AuthorityRequest authorityRequest) throws AuthorityNotFoundException {
 		authorityService.updateAuthority(name, authorityRequest);
 		return String.format("Authority with name [ %s ] was updated successfully", name);
 	}

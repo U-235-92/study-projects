@@ -4,36 +4,32 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 
-import aq.project.repositories.UserRepository;
-import aq.project.security.JPAAuthenticationProvider;
-import aq.project.security.JPAUserDetailsService;
+import aq.project.security.BlockUserFilter;
 import aq.project.utils.AuthorityNames;
 import aq.project.utils.EndpointNameHolder;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@EnableWebSecurity(debug = false)
+@Profile("dev_db_h2")
 @RequiredArgsConstructor
-public class SecurityConfig {
-	
+public class H2SecurityConfig {
+
+	private final BlockUserFilter blockUserFilter;
 	private final EndpointNameHolder endpointNameHolder;
 	
 	@Bean
-	SecurityFilterChain appSecurityFilterChain(HttpSecurity http) throws Exception {
-		http.securityMatcher("/user/**", "/authority/**");
+	SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
+		http.securityMatcher("/user/**", "/authority/**", "/h2-console/**");
+		http.addFilterBefore(blockUserFilter, AuthorizationFilter.class);
+		http.headers(cust -> cust.frameOptions(opt -> opt.sameOrigin()));
 		http.sessionManagement(cust -> cust.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		http.authorizeHttpRequests(cust -> cust.requestMatchers("/h2-console/**").permitAll());
 		http.authorizeHttpRequests(cust -> cust
 				.requestMatchers(HttpMethod.POST, 
 						endpointNameHolder.getEndpoint("basic.create.user"))
@@ -89,50 +85,5 @@ public class SecurityConfig {
 		http.httpBasic(Customizer.withDefaults());
 		http.csrf(cust -> cust.disable());
 		return http.build();
-	}
-			
-	@Bean
-	AuthenticationProvider jpaAuthenticationProvider(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
-		return new JPAAuthenticationProvider(passwordEncoder, userDetailsService);
-	}
-	
-	@Bean
-	UserDetailsService jpaUserDetailsService(UserRepository userRepository) {
-		return new JPAUserDetailsService(userRepository);
-	}
-	
-	@Bean
-	PasswordEncoder bCryptPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-	
-	@Bean
-	@Profile("dev_db_h2")
-	SecurityFilterChain h2SecurityFilterChain(HttpSecurity http) throws Exception {
-		http.securityMatcher("/h2-console/**");
-		http.headers(cust -> cust.frameOptions(opt -> opt.sameOrigin()));
-		http.authorizeHttpRequests(cust -> cust.requestMatchers("/h2-console/**").permitAll());
-		return http.build();
-	}
-	
-	@Bean
-	@Profile("dev_db_mem_app")
-	UserDetailsService inMemoryUserDetailsService(PasswordEncoder passwordEncoder) {
-		UserDetails alice = org.springframework.security.core.userdetails.User
-				.withUsername("alice")
-				.password(passwordEncoder.encode("123"))
-				.authorities(AuthorityNames.EXTENDED_CREATE_USER, 
-						AuthorityNames.EXTENDED_READ_USER, 
-						AuthorityNames.EXTENDED_UPDATE_USER, 
-						AuthorityNames.EXTENDED_DELETE_USER)
-				.build();
-		UserDetails alexander = org.springframework.security.core.userdetails.User
-				.withUsername("alexander")
-				.password(passwordEncoder.encode("321"))
-				.authorities(AuthorityNames.BASIC_READ_USER, 
-						AuthorityNames.BASIC_UPDATE_USER, 
-						AuthorityNames.BASIC_DELETE_USER)
-				.build();
-		return new InMemoryUserDetailsManager(alice, alexander);
 	}
 }

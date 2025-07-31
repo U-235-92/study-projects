@@ -68,7 +68,7 @@ public class User {
 		return login;
 	}
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
 	@JoinColumn(name = "user_details_id")
 	public UserDetails getUserDetails() {
 		return userDetails;

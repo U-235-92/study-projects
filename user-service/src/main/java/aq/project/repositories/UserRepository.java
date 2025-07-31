@@ -37,6 +37,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query(value = "SELECT u.userDetails FROM User u WHERE u.login = :login")
 	public UserDetails findUserDetailsByUserLogin(@Param("login") String login);
 	
+	@Modifying
 	@Query(value = "UPDATE User u SET u.updatedAt = :updatedAt WHERE u.login = :login")
-	public UserDetails updateUpdatedAtByUserLogin(@Param("login") String login, @Param("updatedAt") long updatedAt);
+	public void updateUpdatedAtByUserLogin(@Param("login") String login, @Param("updatedAt") long updatedAt);
 }

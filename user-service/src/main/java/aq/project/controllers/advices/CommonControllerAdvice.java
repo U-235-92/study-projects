@@ -5,7 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import aq.project.dto.SaveDuplicateAuthorityInUserException;
 import aq.project.exceptions.AccessDeniedException;
+import aq.project.exceptions.AuthorityNotFoundException;
 import aq.project.exceptions.EmailAlreadyExistException;
 import aq.project.exceptions.InvalidPropertyException;
 import aq.project.exceptions.LoginAlreadyExistException;
@@ -42,6 +44,16 @@ public class CommonControllerAdvice {
 	
 	@ExceptionHandler(value = NullDtoException.class)
 	public ResponseEntity<String> handleNullDtoException(NullDtoException exc) {
+		return new ResponseEntity<String>(exc.getMessage(), HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(value = AuthorityNotFoundException.class)
+	public ResponseEntity<String> handleAuthorityNotFoundException(AuthorityNotFoundException exc) {
+		return new ResponseEntity<String>(exc.getMessage(), HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(value = SaveDuplicateAuthorityInUserException.class)
+	public ResponseEntity<String> handleSaveDuplicateAuthorityInUserException(SaveDuplicateAuthorityInUserException exc) {
 		return new ResponseEntity<String>(exc.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 }

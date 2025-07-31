@@ -1,15 +1,20 @@
 package aq.project.mappers;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants.ComponentModel;
+import org.springframework.stereotype.Component;
 
 import aq.project.dto.AuthorityRequest;
 import aq.project.entities.Authority;
+import aq.project.exceptions.AuthorityNotFoundException;
+import aq.project.utils.AuthorityHolder;
+import lombok.RequiredArgsConstructor;
 
-@Mapper(componentModel = ComponentModel.SPRING)
-public abstract class AuthorityRequestToAuthorityMapper {
+@Component
+@RequiredArgsConstructor
+public class AuthorityRequestToAuthorityMapper {
 
-	@Mapping(source = "authority", target = "name")
-	public abstract Authority toAuthority(AuthorityRequest authorityRequest);
+	private final AuthorityHolder authorityHolder;
+	
+	public Authority toAuthority(AuthorityRequest authorityRequest) throws AuthorityNotFoundException {
+		return authorityHolder.getAuthority(authorityRequest.getAuthority());
+	}
 }

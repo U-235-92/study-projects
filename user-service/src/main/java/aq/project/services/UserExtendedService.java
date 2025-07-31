@@ -19,6 +19,7 @@ import aq.project.mappers.AuthorityRequestToAuthorityMapper;
 import aq.project.mappers.ExtendedUserCreationRequestToUserMapper;
 import aq.project.mappers.UserAuthorityRequestToAuthorityMapper;
 import aq.project.mappers.UserToExtendedUserResponseMapper;
+import aq.project.repositories.AuthorityRepository;
 import aq.project.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -29,6 +30,7 @@ public class UserExtendedService {
 	private final UserRepository userRepository;
 	private final PasswordService passwordService;
 	private final UserDetailsService userDetailsService;
+	private final AuthorityRepository authorityRepository;
 	private final AuthorityRequestToAuthorityMapper authorityRequestMapper;
 	private final UserAuthorityRequestToAuthorityMapper userAuthorityRequestMapper;
 	private final UserToExtendedUserResponseMapper userToExtendedUserResponseMapper;
@@ -43,7 +45,8 @@ public class UserExtendedService {
 	}
 
 	public void deleteUser(String login) {
-		userRepository.deleteByLogin(login);
+		User user = userRepository.findByLogin(login).get();
+		userRepository.delete(user);
 	}
 
 	public ExtendedUserResponse readUser(String login) {
@@ -83,13 +86,11 @@ public class UserExtendedService {
 		userRepository.save(user);
 	}
 	
-	public void addUserAuthority(String login, AuthorityRequest authorityRequest) {
-		User user = userRepository.findByLogin(login).get();
-		user.getAuthorities().add(authorityRequestMapper.toAuthority(authorityRequest));
-		userRepository.save(user);
+	public void addUserAuthority(String login, AuthorityRequest authorityRequest) throws AuthorityNotFoundException {
+		authorityRepository.updateUsersAuthoritiesByLoginAndAuthority(login, authorityRequest.getAuthority());
 	}
 	
-	public void revokeUserAuthority(String login, AuthorityRequest authorityRequest) {
+	public void revokeUserAuthority(String login, AuthorityRequest authorityRequest) throws AuthorityNotFoundException {
 		User user = userRepository.findByLogin(login).get();
 		user.getAuthorities().remove(authorityRequestMapper.toAuthority(authorityRequest));
 		userRepository.save(user);

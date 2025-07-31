@@ -49,7 +49,8 @@ public class UserBasicService {
 	}
 	
 	public void deleteUser(String login, Authentication authentication) {
-		userRepository.deleteByLogin(login);
+		User user = userRepository.findByLogin(login).get();
+		userRepository.delete(user);
 	}
 	
 	public void updateUserPassword(String login, PasswordRequest passwordRequest, Authentication authentication) {

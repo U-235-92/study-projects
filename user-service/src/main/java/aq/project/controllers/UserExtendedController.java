@@ -89,13 +89,13 @@ public class UserExtendedController {
 	}
 	
 	@PatchMapping("${extended.update.user.authorities.add}/{login}")
-	public String addUserAuthority(@PathVariable(required = true) String login, @RequestBody AuthorityRequest authorityRequest) {
+	public String addUserAuthority(@PathVariable(required = true) String login, @RequestBody AuthorityRequest authorityRequest) throws AuthorityNotFoundException {
 		userExtendedService.addUserAuthority(login, authorityRequest);
 		return String.format("Authority [ %s ] was added to user with login [ %s ]", authorityRequest.getAuthority(), login);
 	}
 	
 	@PatchMapping("${extended.update.user.authorities.revoke}/{login}")
-	public String revokeUserAuthority(@PathVariable(required = true) String login, @RequestBody AuthorityRequest authorityRequest) {
+	public String revokeUserAuthority(@PathVariable(required = true) String login, @RequestBody AuthorityRequest authorityRequest) throws AuthorityNotFoundException {
 		userExtendedService.revokeUserAuthority(login, authorityRequest);
 		return String.format("Authority [ %s ] was revoked from user with login [ %s ]", authorityRequest.getAuthority(), login);
 	}
