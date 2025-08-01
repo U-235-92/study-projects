@@ -46,8 +46,7 @@ public class UserExtendedServiceAspect {
 	
 	@Before("execution(void aq.project.services.UserExtendedService.createUser(..)) && args(extendedUserCreationRequest)")
 	private void checkExtendedCreateUser(ExtendedUserCreationRequest extendedUserCreationRequest) throws NullDtoException, InvalidPropertyException, LoginAlreadyExistException, EmailAlreadyExistException, AuthorityNotFoundException {
-		if(extendedUserCreationRequest == null)
-			throw new NullDtoException();
+		NullDtoChecker.checkNullDto(extendedUserCreationRequest);
 		checkExtendedUserRequestViolations(extendedUserCreationRequest);
 		LoginChecker.checkLoginAlreadyExist(userRepository, extendedUserCreationRequest.getLogin());
 		UserDetailsChecker.checkEmailAlreadyInUse(userDetailsRepository, extendedUserCreationRequest.getEmail());
@@ -103,16 +102,14 @@ public class UserExtendedServiceAspect {
 
 	@Before("execution(void aq.project.services.UserExtendedService.updateUserPassword(..)) && args(login, passwordRequest)")
 	private void checkUpdateUserPassword(String login, PasswordRequest passwordRequest) throws LoginNotFoundException, InvalidPropertyException, NullDtoException {
+		NullDtoChecker.checkNullDto(passwordRequest);
 		LoginChecker.checkUserLoginNotFound(userRepository, login);
-		if(passwordRequest == null)
-			throw new NullDtoException();
 		PasswordChecker.checkPasswordRequest(passwordRequest, validator);
 	}
 	
 	@Before("execution(void aq.project.services.UserExtendedService.updateUserLogin(..)) && args(loginUpdateRequest)")
 	private void checkUpdateUserLogin(LoginUpdateRequest loginUpdateRequest) throws LoginNotFoundException, InvalidPropertyException, LoginAlreadyExistException, NullDtoException {
-		if(loginUpdateRequest == null)
-			throw new NullDtoException();
+		NullDtoChecker.checkNullDto(loginUpdateRequest);
 		LoginChecker.checkLoginUpdateRequest(loginUpdateRequest, validator);
 		LoginChecker.checkUserLoginNotFound(userRepository, loginUpdateRequest.getOldLogin());
 		LoginChecker.checkLoginAlreadyExist(userRepository, loginUpdateRequest.getNewLogin());
@@ -130,17 +127,15 @@ public class UserExtendedServiceAspect {
 	
 	@Before("execution(void aq.project.services.UserExtendedService.updateUserDetails(..)) && args(login, userDetailsRequest)")
 	public void checkUpdateUserDetails(String login, UserDetailsRequest userDetailsRequest) throws LoginNotFoundException, InvalidPropertyException, NullDtoException {
+		NullDtoChecker.checkNullDto(userDetailsRequest);
 		LoginChecker.checkUserLoginNotFound(userRepository, login);
-		if(userDetailsRequest == null)
-			throw new NullDtoException();
 		UserDetailsChecker.chechUserDetailsRequestViolations(userDetailsRequest, validator);
 	}
 	
 	@Before("execution(void aq.project.services.UserExtendedService.updateUserAuthorities(..)) && args(login, userAuthoritiesUpdateRequest)")
 	public void checkUpdateUserAuthorities(String login, UserAuthoritiesUpdateRequest userAuthoritiesUpdateRequest) throws LoginNotFoundException, NullDtoException, InvalidPropertyException, AuthorityAlreadyExistException, AuthorityNotFoundException {
+		NullDtoChecker.checkNullDto(userAuthoritiesUpdateRequest);
 		LoginChecker.checkUserLoginNotFound(userRepository, login);
-		if(userAuthoritiesUpdateRequest == null)
-			throw new NullDtoException();
 		chechAuthoritiesUpdateRequestViolations(userAuthoritiesUpdateRequest);
 	}
 	
@@ -170,8 +165,7 @@ public class UserExtendedServiceAspect {
 	
 	private void checkUserAuthorityDetails(String login, AuthorityRequest authorityRequest) throws LoginNotFoundException, NullDtoException, InvalidPropertyException, AuthorityNotFoundException {
 		LoginChecker.checkUserLoginNotFound(userRepository, login);
-		if(authorityRequest == null)
-			throw new NullDtoException();
+		NullDtoChecker.checkNullDto(authorityRequest);
 		checkAuthorityRequestViolations(authorityRequest);
 		checkAuthorityNotFound(authorityRequest);
 	}

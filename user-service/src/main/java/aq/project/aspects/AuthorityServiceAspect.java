@@ -27,14 +27,14 @@ public class AuthorityServiceAspect {
 	
 	@Before("execution(void aq.project.services.AuthorityService.createAuthority(..)) && args(authorityRequest)")
 	public void checkCreateAuthority(AuthorityRequest authorityRequest) throws NullDtoException, AuthorityAlreadyExistException, InvalidPropertyException {
-		checkNullRequest(authorityRequest);
+		NullDtoChecker.checkNullDto(authorityRequest);
 		checkAuthorityRequestViolations(authorityRequest);
 		checkAuthorityAlreadyExist(authorityRequest);
 	}
 	
 	@Before("execution(void aq.project.services.AuthorityService.updateAuthority(..)) && args(name, authorityRequest)")
 	public void checkUpdateAuthority(String name, AuthorityRequest authorityRequest) throws NullDtoException, InvalidPropertyException, AuthorityAlreadyExistException {
-		checkNullRequest(authorityRequest);
+		NullDtoChecker.checkNullDto(authorityRequest);
 		checkAuthorityRequestViolations(authorityRequest);
 		checkAuthorityAlreadyExist(authorityRequest);
 	}
@@ -42,11 +42,6 @@ public class AuthorityServiceAspect {
 	@Before("execution(void aq.project.services.AuthorityService.deleteAuthority(..)) && args(name)")
 	public void checkDeleteAuthority(String name) throws AuthorityNotFoundException {
 		checkAuthorityNotFound(name);
-	}
-	
-	private void checkNullRequest(AuthorityRequest authorityRequest) throws NullDtoException {
-		if(authorityRequest == null)
-			throw new NullDtoException();
 	}
 	
 	private void checkAuthorityRequestViolations(AuthorityRequest authorityRequest) throws InvalidPropertyException {

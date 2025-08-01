@@ -37,7 +37,7 @@ public class UserBasicServiceAspect {
 	
 	@Before("execution(void aq.project.services.UserBasicService.createUser(..)) && args(basicUserRequest)")
 	public void checkCreateUser(BasicUserCreationRequest basicUserRequest) throws NullDtoException, InvalidPropertyException, LoginAlreadyExistException, EmailAlreadyExistException {
-		checkNullUserRequest(basicUserRequest);
+		NullDtoChecker.checkNullDto(basicUserRequest);
 		checkUserRequestViolations(basicUserRequest);
 		LoginChecker.checkLoginAlreadyExist(userRepository, basicUserRequest.getLogin());
 		UserDetailsChecker.checkEmailAlreadyInUse(userDetailsRepository, basicUserRequest.getEmail());
@@ -59,22 +59,19 @@ public class UserBasicServiceAspect {
 	}
 	
 	@Before("execution(void aq.project.services.UserBasicService.updateUserPassword(..)) && args(login, passwordRequest, authentication)")
-	public void checkUpdateUserPassword(String login, PasswordRequest passwordRequest, Authentication authentication) throws LoginNotFoundException, AccessDeniedException, InvalidPropertyException {
+	public void checkUpdateUserPassword(String login, PasswordRequest passwordRequest, Authentication authentication) throws LoginNotFoundException, AccessDeniedException, InvalidPropertyException, NullDtoException {
+		NullDtoChecker.checkNullDto(passwordRequest);
 		LoginChecker.checkUserLoginNotFound(userRepository, login);
 		checkSameLoginUserOperationAccess(login, authentication, "update password");
 		PasswordChecker.checkPasswordRequest(passwordRequest, validator);
 	}
 	
 	@Before("execution(void aq.project.services.UserBasicService.updateUserDetails(..)) && args(login, userDetailsRequest, authentication)")
-	public void checkUpdateUserDetails(String login, UserDetailsRequest userDetailsRequest, Authentication authentication) throws LoginNotFoundException, AccessDeniedException, InvalidPropertyException {
+	public void checkUpdateUserDetails(String login, UserDetailsRequest userDetailsRequest, Authentication authentication) throws LoginNotFoundException, AccessDeniedException, InvalidPropertyException, NullDtoException {
+		NullDtoChecker.checkNullDto(userDetailsRequest);
 		LoginChecker.checkUserLoginNotFound(userRepository, login);
 		checkSameLoginUserOperationAccess(login, authentication, "update user details");
 		UserDetailsChecker.chechUserDetailsRequestViolations(userDetailsRequest, validator);
-	}
-	
-	private void checkNullUserRequest(BasicUserCreationRequest basicUserRequest) throws NullDtoException {
-		if(basicUserRequest == null)
-			throw new NullDtoException();
 	}
 	
 	private void checkUserRequestViolations(BasicUserCreationRequest basicUserRequest) throws InvalidPropertyException {
