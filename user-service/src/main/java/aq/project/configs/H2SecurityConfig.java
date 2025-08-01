@@ -10,6 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
 
+import aq.project.security.AuthenticationExceptionEntryPoint;
 import aq.project.security.BlockUserFilter;
 import aq.project.utils.AuthorityNames;
 import aq.project.utils.EndpointNameHolder;
@@ -29,6 +30,7 @@ public class H2SecurityConfig {
 		http.addFilterBefore(blockUserFilter, AuthorizationFilter.class);
 		http.headers(cust -> cust.frameOptions(opt -> opt.sameOrigin()));
 		http.sessionManagement(cust -> cust.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		http.httpBasic(cust -> cust.authenticationEntryPoint(new AuthenticationExceptionEntryPoint()));
 		http.authorizeHttpRequests(cust -> cust.requestMatchers("/h2-console/**").permitAll());
 		http.authorizeHttpRequests(cust -> cust
 				.requestMatchers(HttpMethod.POST, 
