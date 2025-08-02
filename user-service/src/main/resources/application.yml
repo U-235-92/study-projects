@@ -1,14 +1,12 @@
-logging:
-  level:
-    org.springframework.security: DEBUG
+server:
+  port: 8558
 spring:
   application:
     name: user-service
   profiles:
     active:
     - dev_db_h2
-server:
-  port: 8558
+#    - dev_db_my_sql
 ---
 spring:
   config:
@@ -27,6 +25,24 @@ spring:
   jpa:
     show-sql: true
     database-platform: org.hibernate.dialect.H2Dialect
+logging:
+  level:
+    org.springframework.security: DEBUG
+---
+spring:
+ config:
+  activate:
+   on-profile: dev_db_my_sql
+ datasource:
+  name: user-service-db
+  url: jdbc:mysql://localhost/user-service-db?createDatabaseIfNotExist=true
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  username: root
+  password: root
+ jpa:
+    generate-ddl: true
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect 
 ---
 spring:
   config:
