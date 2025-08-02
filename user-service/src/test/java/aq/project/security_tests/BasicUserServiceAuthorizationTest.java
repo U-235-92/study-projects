@@ -1,4 +1,4 @@
-package aq.project;
+package aq.project.security_tests;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,16 +10,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import aq.project.utils.AuthorityNames;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Profile("dev_db_h2")
 class BasicUserServiceAuthorizationTest {
 
 	@Autowired
@@ -40,6 +43,13 @@ class BasicUserServiceAuthorizationTest {
 				.build();
 		mvc.perform(get("http://localhost:8558/user/basic/read/alexander")
 				.with(user(user)))
+			.andExpect(status().isOk());
+	}
+	
+	@Test
+	@WithUserDetails(value = "alexander")
+	void testAllowToReadBasicUserDataWhenSameLoginPassedAlternativeWay() throws Exception {
+		mvc.perform(get("http://localhost:8558/user/basic/read/alexander"))
 			.andExpect(status().isOk());
 	}
 }

@@ -1,4 +1,4 @@
-package aq.project;
+package aq.project.integration_tests;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;

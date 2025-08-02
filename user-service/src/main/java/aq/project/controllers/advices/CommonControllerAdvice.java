@@ -39,7 +39,7 @@ public class CommonControllerAdvice {
 	
 	@ExceptionHandler(value = LoginNotFoundException.class)
 	public ResponseEntity<String> handleLoginNotFoundException(LoginNotFoundException exc) {
-		return new ResponseEntity<String>(exc.getMessage(), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<String>(exc.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(value = NullDtoException.class)
