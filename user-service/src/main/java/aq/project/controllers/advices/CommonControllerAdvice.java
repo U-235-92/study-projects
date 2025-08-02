@@ -19,7 +19,7 @@ public class CommonControllerAdvice {
 
 	@ExceptionHandler(value = AccessDeniedException.class)
 	public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException exc) {
-		return new ResponseEntity<String>(exc.getMessage(), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<String>(exc.getMessage(), HttpStatus.FORBIDDEN);
 	}
 	
 	@ExceptionHandler(value = EmailAlreadyExistException.class)
