@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="insert-into-authorities-table" author="U-235-92">
+        <sql dbms="mysql">
+            INSERT INTO authorities (name) VALUES ('BASIC_READ_USER');
+            INSERT INTO authorities (name) VALUES ('BASIC_UPDATE_USER');
+            INSERT INTO authorities (name) VALUES ('BASIC_DELETE_USER');
+            INSERT INTO authorities (name) VALUES ('EXTENDED_CREATE_USER');
+            INSERT INTO authorities (name) VALUES ('EXTENDED_READ_USER');
+            INSERT INTO authorities (name) VALUES ('EXTENDED_UPDATE_USER');
+            INSERT INTO authorities (name) VALUES ('EXTENDED_DELETE_USER');
+            INSERT INTO authorities (name) VALUES ('CREATE_AUTHORITY');
+            INSERT INTO authorities (name) VALUES ('READ_AUTHORITY');
+            INSERT INTO authorities (name) VALUES ('UPDATE_AUTHORITY');
+            INSERT INTO authorities (name) VALUES ('DELETE_AUTHORITY');
+        </sql>
+    </changeSet>
+    <changeSet id="insert-into-user-details-table" author="U-235-92">
+        <sql dbms="mysql">
+            INSERT INTO user_details (firstname, lastname, email, birth_date) 
+                VALUES ('Alice', 'K', 'alice@mail.aq', '2028-11-15');
+            INSERT INTO user_details (firstname, lastname, email, birth_date) 
+                VALUES ('Alexander', 'K', 'alexander@mail.aq', '2030-05-15');
+        </sql>
+    </changeSet>
+    <changeSet id="insert-into-users-table" author="U-235-92">
+        <sql dbms="mysql">
+            INSERT INTO users (login, password, created_at, updated_at, not_banned, user_details_id) 
+                VALUES ('alice', '$2a$10$b1r634FNpcV2IoqGfMkHf.jhWSPVr713CE/sbsrU7SGOZ3cjKV6pK', 1754224897918, 1754224897918, TRUE, 1);
+            INSERT INTO users (login, password, created_at, updated_at, not_banned, user_details_id) 
+                VALUES ('alexander', '$2a$10$suic7sQ2JUpoxqsLcIx1BuwOqElpYw1sDUA2TWbU.49RYb7Z3DQwW', 1754225066864, 1754225066864, TRUE, 2);
+        </sql>
+    </changeSet>
+    <changeSet id="insert-into-users-authorities-table" author="U-235-92">
+        <sql dbms="mysql">
+            INSERT INTO users_authorities (user_id, authority_id) VALUES (1, 4);
+            INSERT INTO users_authorities (user_id, authority_id) VALUES (1, 5);
+            INSERT INTO users_authorities (user_id, authority_id) VALUES (1, 6);
+            INSERT INTO users_authorities (user_id, authority_id) VALUES (1, 7);
+            INSERT INTO users_authorities (user_id, authority_id) VALUES (1, 8);
+            INSERT INTO users_authorities (user_id, authority_id) VALUES (1, 9);
+            INSERT INTO users_authorities (user_id, authority_id) VALUES (1, 10);
+            INSERT INTO users_authorities (user_id, authority_id) VALUES (1, 11);
+            INSERT INTO users_authorities (user_id, authority_id) VALUES (2, 1);
+            INSERT INTO users_authorities (user_id, authority_id) VALUES (2, 2);
+            INSERT INTO users_authorities (user_id, authority_id) VALUES (2, 3);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

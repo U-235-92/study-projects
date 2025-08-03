@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="create-users-authorities-table" author="U-235-92">
+        <createTable tableName="users_authorities">
+            <column name="user_id" type="int">
+                <constraints foreignKeyName="fk_user_id"
+                    referencedTableName="users" 
+                    referencedColumnNames="id"/>
+            </column>
+            <column name="authority_id" type="int">
+                <constraints foreignKeyName="fk_authority_id"
+                    referencedTableName="authorities" 
+                    referencedColumnNames="id"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="add_unique_constraint_user_id_authority_id" author="U-235-92">
+        <addUniqueConstraint tableName="users_authorities" 
+            columnNames="user_id, authority_id"
+            constraintName="unique_constraint_user_id_authority_id"/>
+    </changeSet>
+</databaseChangeLog>
+
