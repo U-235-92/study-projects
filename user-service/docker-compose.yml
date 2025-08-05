@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+ user_service:
+  image: u23592/user-service:1.0.0
+  ports:
+   - 8558:8558
+  build: 
+   context: .
+   dockerfile: Dockerfile
+  depends_on:
+   - db_service
+  networks:
+   - user_service_network
+   
+ db_service:
+  image: mysql
+  restart: always
+  environment:
+   MYSQL_ROOT_PASSWORD: root
+   MYSQL_DATABASE: user_service_db  
+  volumes:
+   - user_service_vol:/data/db
+  networks:
+   - user_service_network
+
+volumes:
+ user_service_vol:
+ 
+networks:
+ user_service_network:
+  driver: bridge
