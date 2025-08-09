@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    
+    <changeSet id="08.08.25-delete-from-accounts" author="U-235-92" runAlways="false" runOnChange="false">
+        <sql>
+            DELETE FROM accounts;
+        </sql>
+    </changeSet>
+    
+    <changeSet id="08.08.25-insert-into-accounts" author="U-235-92" runAlways="false" runOnChange="false">
+        <sql>
+            INSERT INTO accounts (login, password, role) VALUES ('john', '$2a$12$CtjExXcFNVOdZaEoQhNd6eS.cDhBsLLRqwC464Ds1Wrj4i4Iv5LPq', 'ADMIN');
+            INSERT INTO accounts (login, password, role) VALUES ('sarah', '$2a$12$yl59SMx19a0SHOmGi.VjeebbqZa62XVLy1/1b4F0lrkH3OL9xXLbW', 'EDITOR');
+            INSERT INTO accounts (login, password, role) VALUES ('junko', '$2a$12$hsa9wM9nVUR82GocapFPN.i9VqkgCAr0hAbDkv8pCWtiAuNUNcEzW', 'READER');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

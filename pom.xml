@@ -9,5 +9,6 @@
   
   <modules>
   	<module>user-service</module>
+  	<module>jwt-account-service</module>
   </modules>
 </project>
