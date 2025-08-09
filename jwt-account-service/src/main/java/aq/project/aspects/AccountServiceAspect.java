@@ -73,7 +73,7 @@ public class AccountServiceAspect {
 	}
 	
 	private void validAccountAlreadyExist(String login) {
-		if(!accountRepository.findByLogin(login).isPresent())
+		if(accountRepository.findByLogin(login).isPresent())
 			throw new AccountAlreadyExistException(login);
 	}
 	
