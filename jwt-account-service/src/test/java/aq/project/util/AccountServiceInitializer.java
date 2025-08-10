@@ -36,9 +36,9 @@ public class AccountServiceInitializer {
 	}
 	
 	private Map<String, Account> initAccountMap() {
-		Account johnAcc = new Account(JOHN, "1", Role.ADMIN); johnAcc.setId(1);
-		Account sarahAcc = new Account(SARAH, "2", Role.EDITOR); sarahAcc.setId(2);
-		Account junkoAcc = new Account(JUNKO, "3", Role.READER); junkoAcc.setId(3);
+		Account johnAcc = new Account(JOHN, "1", true, Role.ADMIN); johnAcc.setId(1);
+		Account sarahAcc = new Account(SARAH, "2", true, Role.EDITOR); sarahAcc.setId(2);
+		Account junkoAcc = new Account(JUNKO, "3", true, Role.READER); junkoAcc.setId(3);
 		accountMap.put(JOHN, johnAcc);
 		accountMap.put(SARAH, sarahAcc);
 		accountMap.put(JUNKO, junkoAcc);
@@ -67,15 +67,18 @@ public class AccountServiceInitializer {
 		AccountResponse johnResponse = new AccountResponse(
 				accountMap.get(JOHN).getId(), 
 				accountMap.get(JOHN).getLogin(), 
-				accountMap.get(JOHN).getRole().name());
+				accountMap.get(JOHN).getRole().name(),
+				accountMap.get(JOHN).isNotBlocked());
 		AccountResponse sarahResponse = new AccountResponse(
 				accountMap.get(SARAH).getId(), 
 				accountMap.get(SARAH).getLogin(), 
-				accountMap.get(SARAH).getRole().name());
+				accountMap.get(SARAH).getRole().name(),
+				accountMap.get(SARAH).isNotBlocked());
 		AccountResponse junkoResponse = new AccountResponse(
 				accountMap.get(JUNKO).getId(), 
 				accountMap.get(JUNKO).getLogin(), 
-				accountMap.get(JUNKO).getRole().name());
+				accountMap.get(JUNKO).getRole().name(),
+				accountMap.get(JUNKO).isNotBlocked());
 		accountMapper = Mockito.mock(AccountMapper.class);
 		doReturn(johnResponse).when(accountMapper).toAccountResponse(accountMap.get(JOHN));
 		doReturn(sarahResponse).when(accountMapper).toAccountResponse(accountMap.get(SARAH));

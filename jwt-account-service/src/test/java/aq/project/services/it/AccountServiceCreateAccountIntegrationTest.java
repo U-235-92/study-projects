@@ -50,7 +50,7 @@ class AccountServiceCreateAccountIntegrationTest {
 	@Test
 	@DisplayName("exist-account-request-fail-create-test")
 	void test3() {
-		when(accountRepository.findByLogin("alice")).thenReturn(Optional.of(new Account("alice", "5", Role.ADMIN)));
+		when(accountRepository.findByLogin("alice")).thenReturn(Optional.of(new Account("alice", "5", true, Role.ADMIN)));
 		AccountRequest request = new AccountRequest("alice", "8", Role.READER.name());
 		assertThrows(AccountAlreadyExistException.class, () -> accountService.createAccount(request));
 		verify(accountRepository, never()).save(accountMapper.toAccount(request));

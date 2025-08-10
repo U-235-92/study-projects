@@ -39,9 +39,9 @@ class AccountServiceReadAccountIntegrationTest {
 
 	@BeforeAll
 	private void initRepository() {
-		Account johnAcc = new Account(JOHN, "1", Role.ADMIN); johnAcc.setId(1);
-		Account sarahAcc = new Account(SARAH, "2", Role.EDITOR); sarahAcc.setId(2);
-		Account junkoAcc = new Account(JUNKO, "3", Role.READER); junkoAcc.setId(3);
+		Account johnAcc = new Account(JOHN, "1", true, Role.ADMIN); johnAcc.setId(1);
+		Account sarahAcc = new Account(SARAH, "2", true, Role.EDITOR); sarahAcc.setId(2);
+		Account junkoAcc = new Account(JUNKO, "3", true, Role.READER); junkoAcc.setId(3);
 		when(accountRepository.findByLogin(null)).thenThrow(NullPointerException.class);
 		doReturn(Optional.of(johnAcc)).when(accountRepository).findByLogin(JOHN);
 		doReturn(Optional.of(sarahAcc)).when(accountRepository).findByLogin(SARAH);

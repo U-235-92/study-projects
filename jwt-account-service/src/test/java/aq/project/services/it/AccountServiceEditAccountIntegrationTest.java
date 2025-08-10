@@ -32,8 +32,8 @@ class AccountServiceEditAccountIntegrationTest {
 	@Test
 	@DisplayName("success-account-edition-test")
 	void test1() {
-		Account oldJunkoAccount = new Account(JUNKO, "3", Role.READER);
-		Account editJunkoAccount = new Account(JUNKO, "58", Role.ADMIN);
+		Account oldJunkoAccount = new Account(JUNKO, "3", true, Role.READER);
+		Account editJunkoAccount = new Account(JUNKO, "58", true, Role.ADMIN);
 		when(accountRepository.findByLogin(JUNKO)).thenReturn(Optional.of(oldJunkoAccount));
 		EditRequest accountRequest = new EditRequest("58", Role.ADMIN.name());
 		accountService.editAccount(JUNKO, accountRequest);
@@ -43,8 +43,8 @@ class AccountServiceEditAccountIntegrationTest {
 	@Test
 	@DisplayName("not-found-login-account-edition-test")
 	void test2() {
-		Account oldJunkoAccount = new Account(JUNKO, "3", Role.READER);
-		Account editJunkoAccount = new Account(JUNKO, "58", Role.ADMIN);
+		Account oldJunkoAccount = new Account(JUNKO, "3", true, Role.READER);
+		Account editJunkoAccount = new Account(JUNKO, "58", true, Role.ADMIN);
 		when(accountRepository.findByLogin(JUNKO)).thenReturn(Optional.of(oldJunkoAccount));
 		EditRequest accountRequest = new EditRequest("58", Role.ADMIN.name());
 		assertThrows(AccountNotFoundException.class, () -> accountService.editAccount(NOT_FOUND_LOGIN, accountRequest));
@@ -54,8 +54,8 @@ class AccountServiceEditAccountIntegrationTest {
 	@Test
 	@DisplayName("null-login-account-edition-test")
 	void test3() {
-		Account oldJunkoAccount = new Account(JUNKO, "3", Role.READER);
-		Account editJunkoAccount = new Account(JUNKO, "58", Role.ADMIN);
+		Account oldJunkoAccount = new Account(JUNKO, "3", true, Role.READER);
+		Account editJunkoAccount = new Account(JUNKO, "58", true, Role.ADMIN);
 		when(accountRepository.findByLogin(JUNKO)).thenReturn(Optional.of(oldJunkoAccount));
 		EditRequest accountRequest = new EditRequest("58", Role.ADMIN.name());
 		assertThrows(NullPointerException.class, () -> accountService.editAccount(null, accountRequest));
@@ -65,8 +65,8 @@ class AccountServiceEditAccountIntegrationTest {
 	@Test
 	@DisplayName("null-account-edit-request-account-edition-test")
 	void test4() {
-		Account oldJunkoAccount = new Account(JUNKO, "3", Role.READER);
-		Account editJunkoAccount = new Account(JUNKO, "58", Role.ADMIN);
+		Account oldJunkoAccount = new Account(JUNKO, "3", true, Role.READER);
+		Account editJunkoAccount = new Account(JUNKO, "58", true, Role.ADMIN);
 		when(accountRepository.findByLogin(JUNKO)).thenReturn(Optional.of(oldJunkoAccount));
 		assertThrows(NullPointerException.class, () -> accountService.editAccount(JUNKO, null));
 		verify(accountRepository, never()).save(editJunkoAccount);
@@ -75,8 +75,8 @@ class AccountServiceEditAccountIntegrationTest {
 	@Test
 	@DisplayName("wrong-account-request-data-edition-test")
 	void test5() {
-		Account oldJunkoAccount = new Account(JUNKO, "3", Role.READER);
-		Account editJunkoAccount = new Account(JUNKO, "58", Role.ADMIN);
+		Account oldJunkoAccount = new Account(JUNKO, "3", true, Role.READER);
+		Account editJunkoAccount = new Account(JUNKO, "58", true, Role.ADMIN);
 		when(accountRepository.findByLogin(JUNKO)).thenReturn(Optional.of(oldJunkoAccount));
 		EditRequest accountRequest = new EditRequest("", Role.ADMIN.name());
 		assertThrows(EditAccountRequestException.class, () -> accountService.editAccount(JUNKO, accountRequest));
