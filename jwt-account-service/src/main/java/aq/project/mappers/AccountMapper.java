@@ -26,7 +26,7 @@ public abstract class AccountMapper {
 	@Mapping(source = "id", target = "id")
 	@Mapping(source = "login", target = "login")
 	@Mapping(target = "role", expression = "java(toStringRole(account.getRole()))")
-	@Mapping(target = "isNotBlocked", expression = "java(isNotBlocked(account)))")
+	@Mapping(target = "isNotBlocked", expression = "java(isNotBlocked(account))")
 	public abstract AccountResponse toAccountResponse(Account account);
 	
 	@Named("toStringRole")
