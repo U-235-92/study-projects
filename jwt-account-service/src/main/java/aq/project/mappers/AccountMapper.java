@@ -26,10 +26,16 @@ public abstract class AccountMapper {
 	@Mapping(source = "id", target = "id")
 	@Mapping(source = "login", target = "login")
 	@Mapping(target = "role", expression = "java(toStringRole(account.getRole()))")
+	@Mapping(target = "isNotBlocked", expression = "java(isNotBlocked(account)))")
 	public abstract AccountResponse toAccountResponse(Account account);
 	
 	@Named("toStringRole")
 	protected String toStringRole(Role role) {
 		return role.name().toUpperCase();
+	}
+	
+	@Named("isNotBlocked")
+	protected boolean isNotBlocked(Account account) {
+		return account.isNotBlocked();
 	}
 }

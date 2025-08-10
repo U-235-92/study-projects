@@ -27,6 +27,7 @@ public class AccountService {
 
 	public void createAccount(AccountRequest accountRequest) {
 		Account account = accountMapper.toAccount(accountRequest);
+		account.setNotBlocked(true);
 		accountRepository.save(account);
 	}
 

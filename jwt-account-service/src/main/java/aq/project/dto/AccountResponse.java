@@ -18,4 +18,5 @@ public class AccountResponse {
 	private String login;
 	@NotBlank @Pattern(regexp = "ADMIN|EDITOR|READER")
 	private String role;
+	private boolean isNotBlocked;
 }
