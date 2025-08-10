@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import aq.project.dto.EditAccountRequest;
+import aq.project.dto.EditRequest;
 import aq.project.entities.Account;
 import aq.project.entities.Role;
 import aq.project.exceptions.AccountNotFoundException;
@@ -35,7 +35,7 @@ class AccountServiceEditAccountIntegrationTest {
 		Account oldJunkoAccount = new Account(JUNKO, "3", Role.READER);
 		Account editJunkoAccount = new Account(JUNKO, "58", Role.ADMIN);
 		when(accountRepository.findByLogin(JUNKO)).thenReturn(Optional.of(oldJunkoAccount));
-		EditAccountRequest accountRequest = new EditAccountRequest("58", Role.ADMIN.name());
+		EditRequest accountRequest = new EditRequest("58", Role.ADMIN.name());
 		accountService.editAccount(JUNKO, accountRequest);
 		verify(accountRepository).save(editJunkoAccount);
 	}
@@ -46,7 +46,7 @@ class AccountServiceEditAccountIntegrationTest {
 		Account oldJunkoAccount = new Account(JUNKO, "3", Role.READER);
 		Account editJunkoAccount = new Account(JUNKO, "58", Role.ADMIN);
 		when(accountRepository.findByLogin(JUNKO)).thenReturn(Optional.of(oldJunkoAccount));
-		EditAccountRequest accountRequest = new EditAccountRequest("58", Role.ADMIN.name());
+		EditRequest accountRequest = new EditRequest("58", Role.ADMIN.name());
 		assertThrows(AccountNotFoundException.class, () -> accountService.editAccount(NOT_FOUND_LOGIN, accountRequest));
 		verify(accountRepository, never()).save(editJunkoAccount);
 	}
@@ -57,7 +57,7 @@ class AccountServiceEditAccountIntegrationTest {
 		Account oldJunkoAccount = new Account(JUNKO, "3", Role.READER);
 		Account editJunkoAccount = new Account(JUNKO, "58", Role.ADMIN);
 		when(accountRepository.findByLogin(JUNKO)).thenReturn(Optional.of(oldJunkoAccount));
-		EditAccountRequest accountRequest = new EditAccountRequest("58", Role.ADMIN.name());
+		EditRequest accountRequest = new EditRequest("58", Role.ADMIN.name());
 		assertThrows(NullPointerException.class, () -> accountService.editAccount(null, accountRequest));
 		verify(accountRepository, never()).save(editJunkoAccount);
 	}
@@ -78,7 +78,7 @@ class AccountServiceEditAccountIntegrationTest {
 		Account oldJunkoAccount = new Account(JUNKO, "3", Role.READER);
 		Account editJunkoAccount = new Account(JUNKO, "58", Role.ADMIN);
 		when(accountRepository.findByLogin(JUNKO)).thenReturn(Optional.of(oldJunkoAccount));
-		EditAccountRequest accountRequest = new EditAccountRequest("", Role.ADMIN.name());
+		EditRequest accountRequest = new EditRequest("", Role.ADMIN.name());
 		assertThrows(EditAccountRequestException.class, () -> accountService.editAccount(JUNKO, accountRequest));
 		verify(accountRepository, never()).save(editJunkoAccount);
 	}

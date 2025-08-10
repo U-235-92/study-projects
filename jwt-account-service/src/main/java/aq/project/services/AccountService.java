@@ -3,8 +3,8 @@ package aq.project.services;
 import org.springframework.stereotype.Service;
 
 import aq.project.dto.AccountResponse;
-import aq.project.dto.CreateAccountRequest;
-import aq.project.dto.EditAccountRequest;
+import aq.project.dto.AccountRequest;
+import aq.project.dto.EditRequest;
 import aq.project.entities.Account;
 import aq.project.entities.Role;
 import aq.project.mappers.AccountMapper;
@@ -25,15 +25,15 @@ public class AccountService {
 		return accountMapper.toAccountResponse(account);
 	}
 
-	public void createAccount(CreateAccountRequest accountRequest) {
+	public void createAccount(AccountRequest accountRequest) {
 		Account account = accountMapper.toAccount(accountRequest);
 		accountRepository.save(account);
 	}
 
-	public void editAccount(String login, EditAccountRequest accountRequest) {
+	public void editAccount(String login, EditRequest editRequest) {
 		Account account = accountRepository.findByLogin(login).get();
-		account.setPassword(accountRequest.getPassword());
-		account.setRole(Role.valueOf(accountRequest.getRole()));
+		account.setPassword(editRequest.getPassword());
+		account.setRole(Role.valueOf(editRequest.getRole()));
 		accountRepository.save(account);
 	}
 

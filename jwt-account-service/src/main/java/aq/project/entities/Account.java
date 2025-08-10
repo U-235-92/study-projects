@@ -21,13 +21,15 @@ import lombok.NoArgsConstructor;
 public class Account {
 
 	private int id;
+	private Role role;
 	private String login;
 	private String password;
-	private Role role;
+	private boolean isNotBlocked;
 	
-	public Account(String login, String password, Role role) {
+	public Account(String login, String password, boolean isNotBlocked, Role role) {
 		this.login = login;
 		this.password = password;
+		this.isNotBlocked = isNotBlocked;
 		this.role = role;
 	}
 	
@@ -43,6 +45,11 @@ public class Account {
 	
 	public String getPassword() {
 		return password;
+	}
+	
+	@Column(name = "is_not_blocked")
+	public boolean isNotBlocked() {
+		return isNotBlocked;
 	}
 	
 	@Enumerated(EnumType.STRING)

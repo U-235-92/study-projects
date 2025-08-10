@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import org.mockito.Mockito;
 
-import aq.project.dto.CreateAccountRequest;
+import aq.project.dto.AccountRequest;
 import aq.project.dto.AccountResponse;
 import aq.project.entities.Account;
 import aq.project.entities.Role;
@@ -24,7 +24,7 @@ public class AccountServiceInitializer {
 	private AccountService accountService;
 	private AccountRepository accountRepository;
 	private Map<String, Account> accountMap = new HashMap<>();
-	private Map<String, CreateAccountRequest> accountRequestMap = new HashMap<>();
+	private Map<String, AccountRequest> accountRequestMap = new HashMap<>();
 	
 	public AccountServiceInitializer() {
 		super();
@@ -45,10 +45,10 @@ public class AccountServiceInitializer {
 		return accountMap;
 	}
 	
-	private Map<String, CreateAccountRequest> initAccountRequestMap() {
-		CreateAccountRequest johnRequest = new CreateAccountRequest(JOHN, "1", Role.ADMIN.name());
-		CreateAccountRequest sarahRequest = new CreateAccountRequest(SARAH, "2", Role.EDITOR.name());
-		CreateAccountRequest junkoRequest = new CreateAccountRequest(JUNKO, "3", Role.READER.name());
+	private Map<String, AccountRequest> initAccountRequestMap() {
+		AccountRequest johnRequest = new AccountRequest(JOHN, "1", Role.ADMIN.name());
+		AccountRequest sarahRequest = new AccountRequest(SARAH, "2", Role.EDITOR.name());
+		AccountRequest junkoRequest = new AccountRequest(JUNKO, "3", Role.READER.name());
 		accountRequestMap.put(JOHN, johnRequest);
 		accountRequestMap.put(SARAH, sarahRequest);
 		accountRequestMap.put(JUNKO, junkoRequest);
@@ -106,7 +106,7 @@ public class AccountServiceInitializer {
 		return accountMap.get(login);
 	}
 	
-	public CreateAccountRequest getAccountRequest(String login) {
+	public AccountRequest getAccountRequest(String login) {
 		return accountRequestMap.get(login);
 	}
 }

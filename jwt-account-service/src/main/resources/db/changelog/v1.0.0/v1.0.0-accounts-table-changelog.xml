@@ -22,4 +22,12 @@
       </column>
     </createTable>
   </changeSet>
+  
+  <changeSet id="10.08.25-add-column-is_not_blocked" author="U-235-92">
+    <addColumn tableName="accounts">
+      <column name="is_not_blocked" type="boolean">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

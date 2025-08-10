@@ -9,8 +9,8 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 import aq.project.dto.AccountResponse;
-import aq.project.dto.CreateAccountRequest;
-import aq.project.dto.EditAccountRequest;
+import aq.project.dto.AccountRequest;
+import aq.project.dto.EditRequest;
 import aq.project.exceptions.AccountAlreadyExistException;
 import aq.project.exceptions.AccountNotFoundException;
 import aq.project.exceptions.AccountResponseException;
@@ -41,18 +41,18 @@ public class AccountServiceAspect {
 	}
 	
 	@Before("execution(* aq.project.services.AccountService.createAccount(..)) && args(accountRequest)")
-	public void validateCreateAccount(CreateAccountRequest accountRequest) {
+	public void validateCreateAccount(AccountRequest accountRequest) {
 		validateNull(accountRequest);
-		Set<ConstraintViolation<CreateAccountRequest>> violations = validator.validate(accountRequest);
+		Set<ConstraintViolation<AccountRequest>> violations = validator.validate(accountRequest);
 		if(!violations.isEmpty())
 			throw new CreateAccountRequestException(violations);
 		validAccountAlreadyExist(accountRequest.getLogin());
 	}
 	
-	@Before("execution(* aq.project.services.AccountService.editAccount(..)) && args(login, accountRequest)")
-	public void validateEditAccount(String login, EditAccountRequest accountRequest) {
-		validateNull(login, accountRequest);
-		Set<ConstraintViolation<EditAccountRequest>> violations = validator.validate(accountRequest);
+	@Before("execution(* aq.project.services.AccountService.editAccount(..)) && args(login, editRequest)")
+	public void validateEditAccount(String login, EditRequest editRequest) {
+		validateNull(login, editRequest);
+		Set<ConstraintViolation<EditRequest>> violations = validator.validate(editRequest);
 		if(!violations.isEmpty())
 			throw new EditAccountRequestException(violations);
 		validAccountNotFound(login);

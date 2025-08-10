@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import aq.project.dto.CreateAccountRequest;
-import aq.project.dto.EditAccountRequest;
+import aq.project.dto.AccountRequest;
+import aq.project.dto.EditRequest;
 import aq.project.dto.AccountResponse;
 import aq.project.services.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -30,14 +30,14 @@ public class AccountController {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<String> createAccount(@RequestBody CreateAccountRequest accountRequest) {
+	public ResponseEntity<String> createAccount(@RequestBody AccountRequest accountRequest) {
 		accountService.createAccount(accountRequest);
 		String message = String.format("Account with id [ %s ] was created successfully", accountRequest.getLogin());
 		return new ResponseEntity<String>(message, HttpStatus.CREATED);
 	}
 	
 	@PatchMapping("/edit/{login}")
-	public ResponseEntity<String> editAccount(@RequestBody EditAccountRequest accountRequest, @PathVariable(required = true) String login) {
+	public ResponseEntity<String> editAccount(@RequestBody EditRequest accountRequest, @PathVariable(required = true) String login) {
 		accountService.editAccount(login, accountRequest);
 		String message = String.format("Account with id [ %s ] was edited successfully", login);
 		return new ResponseEntity<String>(message, HttpStatus.OK);

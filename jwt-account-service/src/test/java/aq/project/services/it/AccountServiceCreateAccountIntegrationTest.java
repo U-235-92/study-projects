@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import aq.project.dto.CreateAccountRequest;
+import aq.project.dto.AccountRequest;
 import aq.project.entities.Account;
 import aq.project.entities.Role;
 import aq.project.exceptions.AccountAlreadyExistException;
@@ -34,7 +34,7 @@ class AccountServiceCreateAccountIntegrationTest {
 	@Test
 	@DisplayName("success-account-create-test")
 	void test1() {
-		CreateAccountRequest request = new CreateAccountRequest("smith", "8", Role.EDITOR.name());
+		AccountRequest request = new AccountRequest("smith", "8", Role.EDITOR.name());
 		accountService.createAccount(request);
 		verify(accountRepository).save(accountMapper.toAccount(request));
 	}
@@ -42,7 +42,7 @@ class AccountServiceCreateAccountIntegrationTest {
 	@Test
 	@DisplayName("wrong-account-request-fail-create-test")
 	void test2() {
-		CreateAccountRequest request = new CreateAccountRequest("smith", "8", "WRONG_ROLE");
+		AccountRequest request = new AccountRequest("smith", "8", "WRONG_ROLE");
 		assertThrows(CreateAccountRequestException.class, () -> accountService.createAccount(request));
 		verify(accountRepository, never()).save(any());
 	}
@@ -51,7 +51,7 @@ class AccountServiceCreateAccountIntegrationTest {
 	@DisplayName("exist-account-request-fail-create-test")
 	void test3() {
 		when(accountRepository.findByLogin("alice")).thenReturn(Optional.of(new Account("alice", "5", Role.ADMIN)));
-		CreateAccountRequest request = new CreateAccountRequest("alice", "8", Role.READER.name());
+		AccountRequest request = new AccountRequest("alice", "8", Role.READER.name());
 		assertThrows(AccountAlreadyExistException.class, () -> accountService.createAccount(request));
 		verify(accountRepository, never()).save(accountMapper.toAccount(request));
 	}

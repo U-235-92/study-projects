@@ -9,8 +9,10 @@ import lombok.Getter;
 @Getter
 @EqualsAndHashCode
 @AllArgsConstructor
-public class EditAccountRequest {
+public class AccountRequest {
 
+	@NotBlank
+	private String login;
 	@NotBlank
 	private String password;
 	@NotBlank @Pattern(regexp = "ADMIN|EDITOR|READER")

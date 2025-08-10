@@ -2,7 +2,7 @@ package aq.project.exceptions;
 
 import java.util.Set;
 
-import aq.project.dto.EditAccountRequest;
+import aq.project.dto.EditRequest;
 import jakarta.validation.ConstraintViolation;
 import lombok.AllArgsConstructor;
 
@@ -11,7 +11,7 @@ public class EditAccountRequestException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Set<ConstraintViolation<EditAccountRequest>> violations;
+	private Set<ConstraintViolation<EditRequest>> violations;
 	
 	@Override
 	public String getMessage() {

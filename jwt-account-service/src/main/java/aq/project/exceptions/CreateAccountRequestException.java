@@ -2,7 +2,7 @@ package aq.project.exceptions;
 
 import java.util.Set;
 
-import aq.project.dto.CreateAccountRequest;
+import aq.project.dto.AccountRequest;
 import jakarta.validation.ConstraintViolation;
 import lombok.AllArgsConstructor;
 
@@ -11,7 +11,7 @@ public class CreateAccountRequestException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Set<ConstraintViolation<CreateAccountRequest>> violations;
+	private Set<ConstraintViolation<AccountRequest>> violations;
 	
 	@Override
 	public String getMessage() {
