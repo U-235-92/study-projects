@@ -27,11 +27,7 @@
             onDelete="CASCADE" onUpdate="CASCADE"/>
     </changeSet>
     
-    <changeSet id="11.08.25-update-jwt-column" author="U-235-92">
-        <update tableName="access_tokens">
-            <column name="jwt" type="varchar(1024)">
-                <constraints nullable="false"/>
-            </column>
-        </update>
+    <changeSet id="11.08.25-modify-jwt-column-type" author="U-235-92">
+        <modifyDataType tableName="access_tokens" columnName="jwt" newDataType="varchar(1024)"/>
     </changeSet>
 </databaseChangeLog>
