@@ -52,12 +52,16 @@ public class JwtUtil {
 	
 	public String revokeAccessToken(String accessToken) {
 		Claims claims = getAccessTokenClaims(accessToken);
-		claims.put("revoked", true);
 		return Jwts.builder()
 				.header().add("typ", "JWT")
 				.and()
 				.signWith(secretKey)
-				.claims(claims)
+				.issuer(claims.getIssuer())
+				.subject(claims.getSubject())
+				.issuedAt(claims.getIssuedAt())
+				.expiration(claims.getExpiration())
+				.claim("role", claims.get("role"))
+				.claim("revoked", true)
 				.compact();
 	}
 	
