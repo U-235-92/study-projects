@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import aq.project.entities.Account;
-import aq.project.repository.AccountRepository;
+import aq.project.repositories.AccountRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

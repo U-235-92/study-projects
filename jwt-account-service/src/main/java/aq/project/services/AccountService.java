@@ -8,7 +8,7 @@ import aq.project.dto.EditRequest;
 import aq.project.entities.Account;
 import aq.project.entities.Role;
 import aq.project.mappers.AccountMapper;
-import aq.project.repository.AccountRepository;
+import aq.project.repositories.AccountRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -27,7 +27,6 @@ public class AccountService {
 
 	public void createAccount(AccountRequest accountRequest) {
 		Account account = accountMapper.toAccount(accountRequest);
-		account.setNotBlocked(true);
 		accountRepository.save(account);
 	}
 

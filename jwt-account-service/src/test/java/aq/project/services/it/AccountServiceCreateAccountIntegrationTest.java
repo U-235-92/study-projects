@@ -18,7 +18,7 @@ import aq.project.entities.Role;
 import aq.project.exceptions.AccountAlreadyExistException;
 import aq.project.exceptions.CreateAccountRequestException;
 import aq.project.mappers.AccountMapper;
-import aq.project.repository.AccountRepository;
+import aq.project.repositories.AccountRepository;
 import aq.project.services.AccountService;
 
 @SpringBootTest

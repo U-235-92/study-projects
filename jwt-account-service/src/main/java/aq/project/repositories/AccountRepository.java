@@ -1,4 +1,4 @@
-package aq.project.repository;
+package aq.project.repositories;
 
 import java.util.Optional;
 

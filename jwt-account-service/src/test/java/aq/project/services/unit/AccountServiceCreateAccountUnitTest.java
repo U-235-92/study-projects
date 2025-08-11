@@ -12,7 +12,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import aq.project.dto.AccountRequest;
 import aq.project.entities.Account;
 import aq.project.mappers.AccountMapper;
-import aq.project.repository.AccountRepository;
+import aq.project.repositories.AccountRepository;
 import aq.project.services.AccountService;
 import aq.project.util.AccountServiceInitializer;
 

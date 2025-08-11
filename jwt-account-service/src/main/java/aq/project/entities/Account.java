@@ -24,7 +24,7 @@ public class Account {
 	private Role role;
 	private String login;
 	private String password;
-	private boolean isNotBlocked;
+	private boolean isNotBlocked = true;
 	
 	public Account(String login, String password, boolean isNotBlocked, Role role) {
 		this.login = login;

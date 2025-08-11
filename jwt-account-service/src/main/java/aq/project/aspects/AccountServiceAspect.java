@@ -16,7 +16,7 @@ import aq.project.exceptions.AccountNotFoundException;
 import aq.project.exceptions.AccountResponseException;
 import aq.project.exceptions.CreateAccountRequestException;
 import aq.project.exceptions.EditAccountRequestException;
-import aq.project.repository.AccountRepository;
+import aq.project.repositories.AccountRepository;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;

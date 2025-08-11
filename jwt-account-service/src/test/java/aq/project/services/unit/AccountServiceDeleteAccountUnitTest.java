@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import aq.project.repository.AccountRepository;
+import aq.project.repositories.AccountRepository;
 import aq.project.services.AccountService;
 import aq.project.util.AccountServiceInitializer;
 

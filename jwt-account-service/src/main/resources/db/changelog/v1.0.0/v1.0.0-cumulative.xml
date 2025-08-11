@@ -8,5 +8,5 @@
   
   <include file="v1.0.0-accounts-table-changelog.xml" relativeToChangelogFile="true"/>
   <include file="v1.0.0-insert-init-data.xml" relativeToChangelogFile="true"/>
-  <include file="v1.0.0-jwts-table-changelog.xml" relativeToChangelogFile="true"/>
+  <include file="v1.0.0-access_tokens-table-changelog.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

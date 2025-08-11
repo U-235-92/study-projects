@@ -15,7 +15,7 @@ import aq.project.dto.AccountResponse;
 import aq.project.entities.Account;
 import aq.project.entities.Role;
 import aq.project.mappers.AccountMapper;
-import aq.project.repository.AccountRepository;
+import aq.project.repositories.AccountRepository;
 import aq.project.services.AccountService;
 
 public class AccountServiceInitializer {

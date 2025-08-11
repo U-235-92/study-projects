@@ -24,7 +24,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import aq.project.entities.Account;
 import aq.project.entities.Role;
-import aq.project.repository.AccountRepository;
+import aq.project.repositories.AccountRepository;
 import aq.project.services.AccountService;
 
 @SpringBootTest

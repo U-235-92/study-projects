@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    
+    <changeSet id="11.08.25-create-table-access_tokens" author="U-235-92">
+        <createTable tableName="access_tokens">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="account_id" type="int">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="jwt" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+       </createTable>
+   </changeSet>
+    
+    <changeSet id="11.08.25-add-fk_access_token_account_id" author="U-235-92">
+        <addForeignKeyConstraint 
+            baseTableName="access_tokens" baseColumnNames="account_id" 
+            constraintName="fk_access_token_account_id" 
+            referencedTableName="accounts" referencedColumnNames="id" 
+            onDelete="CASCADE" onUpdate="CASCADE"/>
+    </changeSet>
+</databaseChangeLog>

@@ -17,7 +17,7 @@ import aq.project.entities.Account;
 import aq.project.entities.Role;
 import aq.project.exceptions.AccountNotFoundException;
 import aq.project.exceptions.EditAccountRequestException;
-import aq.project.repository.AccountRepository;
+import aq.project.repositories.AccountRepository;
 import aq.project.services.AccountService;
 
 

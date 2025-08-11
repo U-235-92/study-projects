@@ -3,8 +3,11 @@ package aq.project.services;
 import org.springframework.stereotype.Service;
 
 import aq.project.dto.AccountRequest;
+import aq.project.entities.AccessToken;
+import aq.project.entities.Account;
 import aq.project.mappers.AccountMapper;
-import aq.project.repository.JwtRepository;
+import aq.project.repositories.AccessTokenRepository;
+import aq.project.repositories.AccountRepository;
 import aq.project.utils.JwtUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,18 +18,22 @@ import lombok.RequiredArgsConstructor;
 public class JwtService {
 	
 	private final JwtUtil jwtUtil;
-	private final JwtRepository jwtRepository;
 	private final AccountMapper accountMapper;
+	private final AccountRepository accountRepository;
+	private final AccessTokenRepository accessTokenRepository;
 	
 	public String generateAccessToken(AccountRequest accountRequest) {
-		String accessToken = jwtUtil.generateAccessToken(accountMapper.toAccount(accountRequest));
-		jwtRepository.saveAccessToken(accountRequest.getLogin(), accessToken);
-		return accessToken;
+		Account account = accountRepository.findByLogin(accountRequest.getLogin()).get();
+		AccessToken accessToken = new AccessToken(account, jwtUtil.generateAccessToken(accountMapper.toAccount(accountRequest)));
+		accessTokenRepository.deleteByLogin(accountRequest.getLogin());
+		accessTokenRepository.save(accessToken);
+		return accessToken.getJwt();
 	}
 	
 	public void revokeAccessToken(String login) {
-		String accessToken = jwtRepository.findAccessTokenById(login);
-		accessToken = jwtUtil.revokeAccessToken(accessToken);
-		jwtRepository.updateAccessToken(login, accessToken);
+		AccessToken accessToken = accessTokenRepository.findByLogin(login);
+		String jwt = jwtUtil.revokeAccessToken(accessToken.getJwt());
+		accessToken.setJwt(jwt);
+		accessTokenRepository.save(accessToken);
 	}
 }
