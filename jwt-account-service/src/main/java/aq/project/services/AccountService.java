@@ -40,4 +40,12 @@ public class AccountService {
 	public void deleteAccount(String login) {
 		accountRepository.deleteByLogin(login);
 	}
+
+	public void blockAccount(String login) {
+		accountRepository.blockAccount(login);
+	}
+
+	public void unblockAccount(String login) {
+		accountRepository.unblockAccount(login);
+	}
 }

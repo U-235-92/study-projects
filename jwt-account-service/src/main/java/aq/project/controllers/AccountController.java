@@ -49,4 +49,18 @@ public class AccountController {
 		String message = String.format("Account with id [ %s ] was deleted successfully", login);
 		return new ResponseEntity<String>(message, HttpStatus.OK);
 	}
+	
+	@PatchMapping("/block/{login}")
+	public ResponseEntity<String> blockAccount(@PathVariable(required = true) String login) {
+		accountService.blockAccount(login);
+		String message = String.format("Account with id [ %s ] was blocked", login);
+		return new ResponseEntity<String>(message, HttpStatus.OK);
+	}
+	
+	@PatchMapping("/unblock/{login}")
+	public ResponseEntity<String> unblockAccount(@PathVariable(required = true) String login) {
+		accountService.unblockAccount(login);
+		String message = String.format("Account with id [ %s ] was unblocked", login);
+		return new ResponseEntity<String>(message, HttpStatus.OK);
+	}
 }
