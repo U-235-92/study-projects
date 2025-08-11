@@ -26,4 +26,12 @@
             referencedTableName="accounts" referencedColumnNames="id" 
             onDelete="CASCADE" onUpdate="CASCADE"/>
     </changeSet>
+    
+    <changeSet id="11.08.25-update-jwt-column" author="U-235-92">
+        <update tableName="access_tokens">
+            <column name="jwt" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+        </update>
+    </changeSet>
 </databaseChangeLog>

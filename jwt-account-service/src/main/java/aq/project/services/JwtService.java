@@ -33,7 +33,21 @@ public class JwtService {
 	public void revokeAccessToken(String login) {
 		AccessToken accessToken = accessTokenRepository.findByLogin(login);
 		String jwt = jwtUtil.revokeAccessToken(accessToken.getJwt());
-		accessToken.setJwt(jwt);
-		accessTokenRepository.save(accessToken);
+		if(jwt != null) {			
+			accessToken.setJwt(jwt);
+			accessTokenRepository.save(accessToken);
+		}
+	}
+	
+	public boolean isValidAccessToken(String login, String accessToken) {
+		String storedAccessToken = accessTokenRepository.findByLogin(login).getJwt();
+		if(storedAccessToken == null) {
+			return jwtUtil.isValidToken(accessToken);
+		} else {
+			if(accessToken.equals(storedAccessToken)) {				
+				return jwtUtil.isValidToken(accessToken);
+			}
+			return false;
+		}
 	}
 }
