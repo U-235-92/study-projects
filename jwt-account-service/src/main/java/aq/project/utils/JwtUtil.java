@@ -78,7 +78,7 @@ public class JwtUtil {
 		}
 	}
 	
-	private Claims getAccessTokenClaims(String accessToken) {
+	public Claims getAccessTokenClaims(String accessToken) {
 		try {			
 			return Jwts.parser()
 					.verifyWith(secretKey)
