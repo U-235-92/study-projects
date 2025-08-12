@@ -7,7 +7,7 @@ import jakarta.validation.ConstraintViolation;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class CreateAccountRequestException extends RuntimeException {
+public class AccountRequestException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	

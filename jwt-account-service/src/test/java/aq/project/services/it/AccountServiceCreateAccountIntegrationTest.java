@@ -16,7 +16,7 @@ import aq.project.dto.AccountRequest;
 import aq.project.entities.Account;
 import aq.project.entities.Role;
 import aq.project.exceptions.AccountAlreadyExistException;
-import aq.project.exceptions.CreateAccountRequestException;
+import aq.project.exceptions.AccountRequestException;
 import aq.project.mappers.AccountMapper;
 import aq.project.repositories.AccountRepository;
 import aq.project.services.AccountService;
@@ -43,7 +43,7 @@ class AccountServiceCreateAccountIntegrationTest {
 	@DisplayName("wrong-account-request-fail-create-test")
 	void test2() {
 		AccountRequest request = new AccountRequest("smith", "8", "WRONG_ROLE");
-		assertThrows(CreateAccountRequestException.class, () -> accountService.createAccount(request));
+		assertThrows(AccountRequestException.class, () -> accountService.createAccount(request));
 		verify(accountRepository, never()).save(any());
 	}
 	

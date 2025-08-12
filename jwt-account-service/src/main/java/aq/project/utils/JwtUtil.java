@@ -66,7 +66,9 @@ public class JwtUtil {
 	}
 	
 	public boolean isValidToken(String accessToken) {
-		try {			
+		try {	
+			if(accessToken == null)
+				return false;
 			Claims claims = getAccessTokenClaims(accessToken);
 			if(claims.get("revoked").equals(true))
 				return false;

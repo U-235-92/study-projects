@@ -37,8 +37,8 @@ public class AccountController {
 	}
 	
 	@PatchMapping("/edit/{login}")
-	public ResponseEntity<String> editAccount(@RequestBody EditRequest accountRequest, @PathVariable(required = true) String login) {
-		accountService.editAccount(login, accountRequest);
+	public ResponseEntity<String> editAccount(@RequestBody EditRequest editRequest, @PathVariable(required = true) String login) {
+		accountService.editAccount(login, editRequest);
 		String message = String.format("Account with id [ %s ] was edited successfully", login);
 		return new ResponseEntity<String>(message, HttpStatus.OK);
 	}

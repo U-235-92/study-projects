@@ -6,10 +6,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import aq.project.exceptions.AccessTokenNotFoundException;
 import aq.project.exceptions.AccountAlreadyExistException;
 import aq.project.exceptions.AccountNotFoundException;
 import aq.project.exceptions.AccountResponseException;
-import aq.project.exceptions.CreateAccountRequestException;
+import aq.project.exceptions.AccountRequestException;
 import aq.project.exceptions.EditAccountRequestException;
 
 @RestControllerAdvice
@@ -35,8 +36,8 @@ public class AccountControllerAdvice {
 		return new ResponseEntity<String>(exc.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@ExceptionHandler(exception = CreateAccountRequestException.class)
-	public ResponseEntity<String> handleAccountRequestException(CreateAccountRequestException exc) {
+	@ExceptionHandler(exception = AccountRequestException.class)
+	public ResponseEntity<String> handleAccountRequestException(AccountRequestException exc) {
 		return new ResponseEntity<String>(exc.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 	
@@ -47,6 +48,11 @@ public class AccountControllerAdvice {
 	
 	@ExceptionHandler(exception = NullPointerException.class)
 	public ResponseEntity<String> handleNullPointerException(NullPointerException exc) {
+		return new ResponseEntity<String>(exc.getMessage(), HttpStatus.BAD_REQUEST);
+	} 
+	
+	@ExceptionHandler(exception = AccessTokenNotFoundException.class)
+	public ResponseEntity<String> handleAccessTokenNotFoundException(AccessTokenNotFoundException exc) {
 		return new ResponseEntity<String>(exc.getMessage(), HttpStatus.BAD_REQUEST);
 	} 
 }

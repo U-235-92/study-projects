@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class JwtService {
+public class AccessTokenService {
 	
 	private final JwtUtil jwtUtil;
 	private final AccountMapper accountMapper;
@@ -40,14 +40,11 @@ public class JwtService {
 	}
 	
 	public boolean isValidAccessToken(String login, String accessToken) {
-		String storedAccessToken = accessTokenRepository.findByLogin(login).getJwt();
-		if(storedAccessToken == null) {
+		AccessToken storedAccessToken = accessTokenRepository.findByLogin(login); 
+		String storedJwt = storedAccessToken.getJwt();
+		if(accessToken.equals(storedJwt)) {				
 			return jwtUtil.isValidToken(accessToken);
-		} else {
-			if(accessToken.equals(storedAccessToken)) {				
-				return jwtUtil.isValidToken(accessToken);
-			}
-			return false;
 		}
+		return false;
 	}
 }
