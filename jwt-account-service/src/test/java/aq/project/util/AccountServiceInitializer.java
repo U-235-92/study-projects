@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.mockito.Mockito;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import aq.project.dto.AccountRequest;
 import aq.project.dto.AccountResponse;
@@ -22,6 +24,7 @@ public class AccountServiceInitializer {
 
 	private AccountMapper accountMapper;
 	private AccountService accountService;
+	private PasswordEncoder passwordEncoder;
 	private AccountRepository accountRepository;
 	private Map<String, Account> accountMap = new HashMap<>();
 	private Map<String, AccountRequest> accountRequestMap = new HashMap<>();
@@ -32,9 +35,10 @@ public class AccountServiceInitializer {
 		initAccountRequestMap();
 		initAccountRepositoryData();
 		initAccountMapper();
+		initPasswordEncoder();
 		initAccountService();
 	}
-	
+
 	private Map<String, Account> initAccountMap() {
 		Account johnAcc = new Account(JOHN, "1", true, Role.ADMIN); johnAcc.setId(1);
 		Account sarahAcc = new Account(SARAH, "2", true, Role.EDITOR); sarahAcc.setId(2);
@@ -89,8 +93,12 @@ public class AccountServiceInitializer {
 		return accountMapper;
 	}
 	
+	private void initPasswordEncoder() {
+		passwordEncoder = new BCryptPasswordEncoder();
+	}
+	
 	private void initAccountService() {
-		accountService = new AccountService(accountMapper, accountRepository);
+		accountService = new AccountService(accountMapper, passwordEncoder, accountRepository);
 	}
 	
 	public AccountService getAccountService() {
