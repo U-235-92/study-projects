@@ -1,5 +1,6 @@
 package aq.project.services;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import aq.project.dto.AccountRequest;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class AccountService {
 
 	private final AccountMapper accountMapper;
+	private final PasswordEncoder passwordEncoder;
 	private final AccountRepository accountRepository;
 
 	public AccountResponse readAccount(String login) {
@@ -27,6 +29,7 @@ public class AccountService {
 
 	public void createAccount(AccountRequest accountRequest) {
 		Account account = accountMapper.toAccount(accountRequest);
+		account.setPassword(passwordEncoder.encode(account.getPassword()));
 		accountRepository.save(account);
 	}
 
