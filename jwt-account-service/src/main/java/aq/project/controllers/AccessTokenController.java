@@ -36,8 +36,17 @@ public class AccessTokenController {
 	
 	@GetMapping("/check-valid-access-token/{login}")
 	public ResponseEntity<String> checkValidAccessToken(@PathVariable(required = true) String login, 
-			@RequestHeader(required = true, name = "X-access-token") String accessToken) {
-		String msg = accessTokenService.isValidAccessToken(login, accessToken) ? "Access token is valid" : "Access token is invalid";
-		return new ResponseEntity<>(msg, HttpStatus.OK);	
+			@RequestHeader(required = true, name = "Authorization") String accessToken) {
+		final String BEARER = "Bearer ";
+		if(accessToken.startsWith(BEARER)) {
+			accessToken = accessToken.substring(BEARER.length());
+			if(accessTokenService.isValidAccessToken(login, accessToken)) {
+				return new ResponseEntity<String>("Access token is valid", HttpStatus.OK);
+			} else {
+				return new ResponseEntity<String>("Access token is invalid", HttpStatus.OK);
+			}
+		} else {
+			return new ResponseEntity<String>("Authorization header must contains Bearer token", HttpStatus.BAD_REQUEST);
+		}	
 	}
 }
