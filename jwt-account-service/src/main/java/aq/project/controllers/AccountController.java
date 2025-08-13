@@ -32,35 +32,35 @@ public class AccountController {
 	@PostMapping("/create")
 	public ResponseEntity<String> createAccount(@RequestBody AccountRequest accountRequest) {
 		accountService.createAccount(accountRequest);
-		String message = String.format("Account with id [ %s ] was created successfully", accountRequest.getLogin());
+		String message = String.format("Account with login [ %s ] was created successfully", accountRequest.getLogin());
 		return new ResponseEntity<String>(message, HttpStatus.CREATED);
 	}
 	
 	@PatchMapping("/edit/{login}")
-	public ResponseEntity<String> editAccount(@RequestBody EditRequest editRequest, @PathVariable(required = true) String login) {
+	public ResponseEntity<String> editAccount(@PathVariable(required = true) String login, @RequestBody(required = true) EditRequest editRequest) {
 		accountService.editAccount(login, editRequest);
-		String message = String.format("Account with id [ %s ] was edited successfully", login);
+		String message = String.format("Account with login [ %s ] was edited successfully", login);
 		return new ResponseEntity<String>(message, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/delete/{login}")
 	public ResponseEntity<String> deleteAccount(@PathVariable(required = true) String login) {
 		accountService.deleteAccount(login);
-		String message = String.format("Account with id [ %s ] was deleted successfully", login);
+		String message = String.format("Account with login [ %s ] was deleted successfully", login);
 		return new ResponseEntity<String>(message, HttpStatus.OK);
 	}
 	
 	@PatchMapping("/block/{login}")
 	public ResponseEntity<String> blockAccount(@PathVariable(required = true) String login) {
 		accountService.blockAccount(login);
-		String message = String.format("Account with id [ %s ] was blocked", login);
+		String message = String.format("Account with login [ %s ] was blocked", login);
 		return new ResponseEntity<String>(message, HttpStatus.OK);
 	}
 	
 	@PatchMapping("/unblock/{login}")
 	public ResponseEntity<String> unblockAccount(@PathVariable(required = true) String login) {
 		accountService.unblockAccount(login);
-		String message = String.format("Account with id [ %s ] was unblocked", login);
+		String message = String.format("Account with login [ %s ] was unblocked", login);
 		return new ResponseEntity<String>(message, HttpStatus.OK);
 	}
 }
