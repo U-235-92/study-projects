@@ -20,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AccessTokenServiceAspect {
 
+	private static final String NULL_LOGIN_MESSAGE = "Login is null";
+	
 	private final Validator validator;
 	private final AccountRepository accountRepository;
 	
@@ -33,13 +35,13 @@ public class AccessTokenServiceAspect {
 	
 	@Before("execution(* aq.project.services.AccessTokenService.revokeAccessToken(..)) && args(login)")
 	public void validateRevokeAccessToken(String login) {
-		NullParameterHandler.handleNullParameter(login, "Login is null");
+		NullParameterHandler.handleNullParameter(login, NULL_LOGIN_MESSAGE);
 		checkAccountNotFound(login);
 	}
 	
 	@Before("execution(* aq.project.services.AccessTokenService.isValidAccessToken(..)) && args(login,accessToken)")
 	public void validateAccessToken(String login, String accessToken) {
-		NullParameterHandler.handleNullParameter(login, "Login is null");
+		NullParameterHandler.handleNullParameter(login, NULL_LOGIN_MESSAGE);
 		NullParameterHandler.handleNullParameter(accessToken, "Access token is null");
 		checkAccountNotFound(login);
 	}

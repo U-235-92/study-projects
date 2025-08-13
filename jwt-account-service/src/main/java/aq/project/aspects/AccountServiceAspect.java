@@ -63,17 +63,17 @@ public class AccountServiceAspect {
 			throw new AccountAlreadyExistException(login);
 	}
 	
-	@Before("execution(* aq.project.controllers.AccountService.deleteAccount(..)) && args(login)")
+	@Before("execution(* aq.project.services.AccountService.deleteAccount(..)) && args(login)")
 	public void verifyDeleteAccount(String login) {
 		NullParameterHandler.handleNullParameter(login, NULL_LOGIN_MESSAGE);
 	}
 	
-	@Before("execution(* aq.project.controllers.AccountService.blockAccount(..)) && args(login)")
+	@Before("execution(* aq.project.services.AccountService.blockAccount(..)) && args(login)")
 	public void verifyBlockAccount(String login) {
 		NullParameterHandler.handleNullParameter(login, NULL_LOGIN_MESSAGE);
 	}
 	
-	@Before("execution(* aq.project.controllers.AccountService.unblockAccount(..)) && args(login)")
+	@Before("execution(* aq.project.services.AccountService.unblockAccount(..)) && args(login)")
 	public void verifyUnblockAccount(String login) {
 		NullParameterHandler.handleNullParameter(login, NULL_LOGIN_MESSAGE);
 	}
