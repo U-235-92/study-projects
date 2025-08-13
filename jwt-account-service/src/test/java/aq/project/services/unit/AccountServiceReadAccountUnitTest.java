@@ -1,10 +1,11 @@
 package aq.project.services.unit;
 
-import static aq.project.util.AccountLogins.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-import java.util.NoSuchElementException;
+import static aq.project.util.AccountLogins.JUNKO;
+import static aq.project.util.AccountLogins.NOT_FOUND_LOGIN;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import aq.project.dto.AccountResponse;
+import aq.project.exceptions.AccountNotFoundException;
 import aq.project.repositories.AccountRepository;
 import aq.project.services.AccountService;
 import aq.project.util.AccountServiceInitializer;
@@ -40,9 +42,9 @@ class AccountServiceReadAccountUnitTest {
 	}
 	
 	@Test
-	@DisplayName("test-not-exist-read-account")
+	@DisplayName("test-fail-not-found-read-account")
 	void test2() {
 		AccountService accountService = accountServiceInitializer.getAccountService();
-		assertThrows(NoSuchElementException.class, () -> accountService.readAccount(WRONG_LOGIN));
+		assertThrows(AccountNotFoundException.class, () -> accountService.readAccount(NOT_FOUND_LOGIN));
 	}
  }

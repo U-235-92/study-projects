@@ -4,6 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants.ComponentModel;
 import org.mapstruct.Named;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import aq.project.dto.AccountResponse;
 import aq.project.dto.AccountRequest;
@@ -13,10 +15,18 @@ import aq.project.entities.Role;
 @Mapper(componentModel = ComponentModel.SPRING)
 public abstract class AccountMapper {
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Mapping(source = "login", target = "login")
-	@Mapping(source = "password", target = "password")
+	@Mapping(target = "password", expression = "java(toEncodedPassword(accountRequest.getPassword()))")
 	@Mapping(target = "role", expression = "java(toRole(accountRequest.getRole()))")
 	public abstract Account toAccount(AccountRequest accountRequest);
+	
+	@Named("toEncodedPassword")
+	protected String toEncodedPassword(String password) {
+		return passwordEncoder.encode(password);
+	}
 	
 	@Named("toRole")
 	protected Role toRole(String role) {

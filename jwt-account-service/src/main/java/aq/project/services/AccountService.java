@@ -30,13 +30,12 @@ public class AccountService {
 	
 	public void createAccount(AccountRequest accountRequest) {
 		Account account = accountMapper.toAccount(accountRequest);
-		account.setPassword(passwordEncoder.encode(account.getPassword()));
 		accountRepository.save(account);
 	}
 
 	public void editAccount(String login, EditRequest editRequest) {
 		Account account = findAccountOrThrow(login);
-		account.setPassword(editRequest.getPassword());
+		account.setPassword(passwordEncoder.encode(editRequest.getPassword()));
 		account.setRole(Role.valueOf(editRequest.getRole()));
 		accountRepository.save(account);
 	}

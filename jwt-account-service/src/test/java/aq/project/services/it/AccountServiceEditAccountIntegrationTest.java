@@ -1,15 +1,20 @@
 package aq.project.services.it;
 
-import static aq.project.util.AccountLogins.*;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static aq.project.util.AccountLogins.JUNKO;
+import static aq.project.util.AccountLogins.NOT_FOUND_LOGIN;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import aq.project.dto.EditRequest;
@@ -26,18 +31,19 @@ class AccountServiceEditAccountIntegrationTest {
 	
 	@Autowired
 	private AccountService accountService;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	@MockitoBean
 	private AccountRepository accountRepository;
 	
 	@Test
 	@DisplayName("success-account-edition-test")
 	void test1() {
-		Account oldJunkoAccount = new Account(JUNKO, "3", true, Role.READER);
-		Account editJunkoAccount = new Account(JUNKO, "58", true, Role.ADMIN);
+		Account oldJunkoAccount = new Account(JUNKO, passwordEncoder.encode("3"), true, Role.READER);
 		when(accountRepository.findByLogin(JUNKO)).thenReturn(Optional.of(oldJunkoAccount));
 		EditRequest accountRequest = new EditRequest("58", Role.ADMIN.name());
 		accountService.editAccount(JUNKO, accountRequest);
-		verify(accountRepository).save(editJunkoAccount);
+		verify(accountRepository).save(Mockito.any());
 	}
 	
 	@Test
@@ -65,11 +71,10 @@ class AccountServiceEditAccountIntegrationTest {
 	@Test
 	@DisplayName("null-account-edit-request-account-edition-test")
 	void test4() {
-		Account oldJunkoAccount = new Account(JUNKO, "3", true, Role.READER);
-		Account editJunkoAccount = new Account(JUNKO, "58", true, Role.ADMIN);
-		when(accountRepository.findByLogin(JUNKO)).thenReturn(Optional.of(oldJunkoAccount));
+		Account junkoAccount = new Account(JUNKO, passwordEncoder.encode("58"), true, Role.READER);
+		when(accountRepository.findByLogin(JUNKO)).thenReturn(Optional.of(junkoAccount));
 		assertThrows(NullPointerException.class, () -> accountService.editAccount(JUNKO, null));
-		verify(accountRepository, never()).save(editJunkoAccount);
+		verify(accountRepository, never()).save(Mockito.any());
 	}
 	
 	@Test

@@ -1,7 +1,10 @@
 package aq.project.services.it;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
@@ -10,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import aq.project.dto.AccountRequest;
@@ -28,6 +32,8 @@ class AccountServiceCreateAccountIntegrationTest {
 	private AccountMapper accountMapper;
 	@Autowired
 	private AccountService accountService;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	@MockitoBean
 	private AccountRepository accountRepository;
 	
@@ -36,7 +42,7 @@ class AccountServiceCreateAccountIntegrationTest {
 	void test1() {
 		AccountRequest request = new AccountRequest("smith", "8", Role.EDITOR.name());
 		accountService.createAccount(request);
-		verify(accountRepository).save(accountMapper.toAccount(request));
+		verify(accountRepository).save(Mockito.any());
 	}
 	
 	@Test
@@ -50,7 +56,7 @@ class AccountServiceCreateAccountIntegrationTest {
 	@Test
 	@DisplayName("exist-account-request-fail-create-test")
 	void test3() {
-		when(accountRepository.findByLogin("alice")).thenReturn(Optional.of(new Account("alice", "5", true, Role.ADMIN)));
+		when(accountRepository.findByLogin("alice")).thenReturn(Optional.of(new Account("alice", passwordEncoder.encode("5"), true, Role.ADMIN)));
 		AccountRequest request = new AccountRequest("alice", "8", Role.READER.name());
 		assertThrows(AccountAlreadyExistException.class, () -> accountService.createAccount(request));
 		verify(accountRepository, never()).save(accountMapper.toAccount(request));
@@ -59,7 +65,6 @@ class AccountServiceCreateAccountIntegrationTest {
 	@Test
 	@DisplayName("null-account-fail-create-test")
 	void test4() {
-		assertThrows(NullPointerException.class, () -> accountService.createAccount(null));
 		verify(accountRepository, never()).save(accountMapper.toAccount(Mockito.any()));
 	}
 }

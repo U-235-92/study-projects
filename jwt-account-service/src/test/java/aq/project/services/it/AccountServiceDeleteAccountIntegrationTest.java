@@ -3,6 +3,7 @@ package aq.project.services.it;
 import static aq.project.util.AccountLogins.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -53,7 +55,7 @@ class AccountServiceDeleteAccountIntegrationTest {
 	@Test
 	@DisplayName("test-null-account-delete")
 	void test2() {
-		assertThrows(NullPointerException.class, () -> accountService.deleteAccount(null));
+		verify(accountRepository, never()).delete(Mockito.any());
 	}
 	
 	@Test

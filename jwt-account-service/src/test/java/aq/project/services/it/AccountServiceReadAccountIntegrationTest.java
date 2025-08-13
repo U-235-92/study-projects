@@ -2,14 +2,13 @@ package aq.project.services.it;
 
 import static aq.project.util.AccountLogins.JOHN;
 import static aq.project.util.AccountLogins.JUNKO;
+import static aq.project.util.AccountLogins.NOT_FOUND_LOGIN;
 import static aq.project.util.AccountLogins.SARAH;
-import static aq.project.util.AccountLogins.WRONG_LOGIN;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -24,6 +23,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import aq.project.entities.Account;
 import aq.project.entities.Role;
+import aq.project.exceptions.AccountNotFoundException;
 import aq.project.repositories.AccountRepository;
 import aq.project.services.AccountService;
 
@@ -55,9 +55,9 @@ class AccountServiceReadAccountIntegrationTest {
 	}
 	
 	@Test
-	@DisplayName("wrong-login-fail-read-account-test")
+	@DisplayName("not-found-login-fail-read-account-test")
 	void test2() {
-		assertThrows(NoSuchElementException.class, () -> accountService.readAccount(WRONG_LOGIN));
+		assertThrows(AccountNotFoundException.class, () -> accountService.readAccount(NOT_FOUND_LOGIN));
 	}
 	
 	@Test

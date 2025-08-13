@@ -25,6 +25,7 @@ public class AccessTokenServiceAspect {
 	
 	@Before("execution(* aq.project.services.AccessTokenService.generateAccessToken(..)) && args(authenticationRequest)")
 	public void validateGenerateAccessToken(AuthenticationRequest authenticationRequest) {
+		NullParameterHandler.handleNullParameter(authenticationRequest, "Authentication request is null");
 		Set<ConstraintViolation<AuthenticationRequest>> violations = validator.validate(authenticationRequest);
 		if(!violations.isEmpty())
 			throw new AuthenticationRequestException(violations);
@@ -32,11 +33,14 @@ public class AccessTokenServiceAspect {
 	
 	@Before("execution(* aq.project.services.AccessTokenService.revokeAccessToken(..)) && args(login)")
 	public void validateRevokeAccessToken(String login) {
+		NullParameterHandler.handleNullParameter(login, "Login is null");
 		checkAccountNotFound(login);
 	}
 	
 	@Before("execution(* aq.project.services.AccessTokenService.isValidAccessToken(..)) && args(login,accessToken)")
 	public void validateAccessToken(String login, String accessToken) {
+		NullParameterHandler.handleNullParameter(login, "Login is null");
+		NullParameterHandler.handleNullParameter(accessToken, "Access token is null");
 		checkAccountNotFound(login);
 	}
 	
