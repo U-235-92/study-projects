@@ -33,8 +33,8 @@ public class SecurityConfig {
 		http.addFilterBefore(accessTokenFilter, UsernamePasswordAuthenticationFilter.class);
 		http.sessionManagement(cust -> cust.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.DELETE, "/account/delete/*").hasRole(Role.ADMIN.name()));
-		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.PATCH, "/account/unbock/*").hasRole(Role.ADMIN.name()));
-		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.PATCH, "/account/bock/*").hasRole(Role.ADMIN.name()));
+		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.PATCH, "/account/unblock/*").hasRole(Role.ADMIN.name()));
+		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.PATCH, "/account/block/*").hasRole(Role.ADMIN.name()));
 		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.PATCH, "/account/edit/*").hasAnyRole(Role.ADMIN.name(), Role.EDITOR.name()));
 		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/account/read/*").hasAnyRole(Role.ADMIN.name(), Role.EDITOR.name(), Role.READER.name()));
 		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.POST, "/account/create").permitAll());

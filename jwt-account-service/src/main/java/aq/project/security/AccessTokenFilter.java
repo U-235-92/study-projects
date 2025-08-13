@@ -33,9 +33,11 @@ public class AccessTokenFilter extends OncePerRequestFilter {
 			boolean isNotBlockedAccount = isAccountNotBlockedInJwt(accessToken) && isAccountNotBlockedInDatabase(login);
 			if(isNotBlockedAccount == false) {
 				response.sendError(HttpStatus.FORBIDDEN.value(), String.format("Account with login [ %s ] is blocked", login));
+				return;
+			} else {				
+				JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(jwtUtil.getAccessTokenClaims(accessToken));
+				SecurityContextHolder.getContext().setAuthentication(jwtAuthenticationToken);
 			}
-			JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(jwtUtil.getAccessTokenClaims(accessToken));
-			SecurityContextHolder.getContext().setAuthentication(jwtAuthenticationToken);
 		}
 		doFilter(request, response, filterChain);
 	}
