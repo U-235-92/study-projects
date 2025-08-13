@@ -12,7 +12,6 @@ import aq.project.dto.AccountRequest;
 import aq.project.dto.AccountResponse;
 import aq.project.dto.EditRequest;
 import aq.project.exceptions.AccountAlreadyExistException;
-import aq.project.exceptions.AccountNotFoundException;
 import aq.project.exceptions.AccountRequestException;
 import aq.project.exceptions.AccountResponseException;
 import aq.project.exceptions.EditAccountRequestException;
@@ -43,7 +42,7 @@ public class AccountServiceAspect {
 		Set<ConstraintViolation<AccountRequest>> violations = validator.validate(accountRequest);
 		if(!violations.isEmpty())
 			throw new AccountRequestException(violations);
-		validAccountAlreadyExist(accountRequest.getLogin());
+		checkAccountAlreadyExist(accountRequest.getLogin());
 	}
 	
 	@Before("execution(* aq.project.services.AccountService.editAccount(..)) && args(login, editRequest)")
@@ -51,21 +50,10 @@ public class AccountServiceAspect {
 		Set<ConstraintViolation<EditRequest>> violations = validator.validate(editRequest);
 		if(!violations.isEmpty())
 			throw new EditAccountRequestException(violations);
-		validAccountNotFound(login);
 	}
 	
-	@Before("execution(* aq.project.services.AccountService.deleteAccount(..)) && args(login)")
-	public void validateDeleteAccount(String login) {
-		validAccountNotFound(login);
-	}
-	
-	private void validAccountAlreadyExist(String login) {
+	private void checkAccountAlreadyExist(String login) {
 		if(accountRepository.findByLogin(login).isPresent())
 			throw new AccountAlreadyExistException(login);
-	}
-	
-	private void validAccountNotFound(String login) {
-		if(accountRepository.findByLogin(login).isEmpty())
-			throw new AccountNotFoundException(login);
 	}
 }

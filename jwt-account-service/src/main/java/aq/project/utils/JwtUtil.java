@@ -45,8 +45,9 @@ public class JwtUtil {
 				.subject(account.getLogin())
 				.issuedAt(issuedAt)
 				.expiration(expiration)
-				.claim("role", account.getRole().name())
-				.claim("revoked", false)
+				.claim("acc-role", account.getRole().name())
+				.claim("acc-not-blocked", account.isNotBlocked())
+				.claim("token-revoked", false)
 				.compact();
 	}
 	
@@ -60,8 +61,9 @@ public class JwtUtil {
 				.subject(claims.getSubject())
 				.issuedAt(claims.getIssuedAt())
 				.expiration(claims.getExpiration())
-				.claim("role", claims.get("role"))
-				.claim("revoked", true)
+				.claim("acc-role", claims.get("acc-role"))
+				.claim("acc-not-blocked", claims.get("acc-not-blocked"))
+				.claim("token-revoked", true)
 				.compact();
 	}
 	
@@ -70,7 +72,7 @@ public class JwtUtil {
 			if(accessToken == null)
 				return false;
 			Claims claims = getAccessTokenClaims(accessToken);
-			if(claims.get("revoked").equals(true))
+			if(claims.get("token-revoked").equals(true))
 				return false;
 			return true;
 		} catch(Exception exc) {

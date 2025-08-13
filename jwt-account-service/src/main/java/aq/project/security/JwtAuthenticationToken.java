@@ -14,12 +14,14 @@ public class JwtAuthenticationToken implements Authentication {
 	private static final long serialVersionUID = 1L;
 	
 	private String login;
-	private boolean isBlocked;
+	private boolean isRevoked;
 	private List<? extends GrantedAuthority> roles;
 	
 	public JwtAuthenticationToken(Claims claims) {
-		roles = List.of(new SimpleGrantedAuthority(claims.get("role").toString()));
 		login = claims.getSubject();
+		isRevoked = (boolean) claims.get("token-revoked"); 
+		String role = "ROLE_" + claims.get("acc-role").toString();
+		roles = List.of(new SimpleGrantedAuthority(role));
 	}
 	
 	@Override
@@ -49,11 +51,9 @@ public class JwtAuthenticationToken implements Authentication {
 
 	@Override
 	public boolean isAuthenticated() {
-		return isBlocked;
+		return isRevoked;
 	}
 
 	@Override
-	public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-		isBlocked = isAuthenticated;
-	}
+	public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {}
 }

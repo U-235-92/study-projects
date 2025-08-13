@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import aq.project.dto.AccountRequest;
+import aq.project.dto.AuthenticationRequest;
 import aq.project.services.AccessTokenService;
 import lombok.RequiredArgsConstructor;
 
@@ -22,8 +22,8 @@ public class AccessTokenController {
 	private final AccessTokenService accessTokenService;
 	
 	@GetMapping("/generate-access-token")
-	public ResponseEntity<String> generateAccessToken(@RequestBody(required = true) AccountRequest accountRequest) {
-		String accessToken = accessTokenService.generateAccessToken(accountRequest);
+	public ResponseEntity<String> generateAccessToken(@RequestBody(required = true) AuthenticationRequest authenticationRequest) {
+		String accessToken = accessTokenService.generateAccessToken(authenticationRequest);
 		return new ResponseEntity<String>(accessToken.trim(), HttpStatus.OK);
 	}
 	
@@ -37,16 +37,8 @@ public class AccessTokenController {
 	@GetMapping("/check-valid-access-token/{login}")
 	public ResponseEntity<String> checkValidAccessToken(@PathVariable(required = true) String login, 
 			@RequestHeader(required = true, name = "Authorization") String accessToken) {
-		final String BEARER = "Bearer ";
-		if(accessToken.startsWith(BEARER)) {
-			accessToken = accessToken.substring(BEARER.length());
-			if(accessTokenService.isValidAccessToken(login, accessToken)) {
-				return new ResponseEntity<String>("Access token is valid", HttpStatus.OK);
-			} else {
-				return new ResponseEntity<String>("Access token is invalid", HttpStatus.OK);
-			}
-		} else {
-			return new ResponseEntity<String>("Authorization header must contains Bearer token", HttpStatus.BAD_REQUEST);
-		}	
+		String msg = accessTokenService.isValidAccessToken(login, accessToken.substring(7)) ? 
+																	"Access token is valid" : "Access token is invalid";
+		return new ResponseEntity<String>(msg, HttpStatus.OK);	
 	}
 }
