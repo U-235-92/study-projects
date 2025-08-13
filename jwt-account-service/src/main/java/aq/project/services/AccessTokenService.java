@@ -1,7 +1,6 @@
 package aq.project.services;
 
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +8,7 @@ import aq.project.dto.AuthenticationRequest;
 import aq.project.entities.AccessToken;
 import aq.project.entities.Account;
 import aq.project.exceptions.AccessTokenNotFoundException;
+import aq.project.exceptions.AccountNotFoundException;
 import aq.project.exceptions.BlockedAccountException;
 import aq.project.repositories.AccessTokenRepository;
 import aq.project.repositories.AccountRepository;
@@ -40,7 +40,7 @@ public class AccessTokenService {
 	
 	private Account findAccountOrThrow(String login) {
 		return accountRepository.findByLogin(login)
-				.orElseThrow(() -> new UsernameNotFoundException(String.format("Account with login [ %s ] wasn't found", login)));
+				.orElseThrow(() -> new AccountNotFoundException(String.format("Account with login [ %s ] wasn't found", login)));
 	}
 	
 	private boolean isAccountBlocked(Account account) {
