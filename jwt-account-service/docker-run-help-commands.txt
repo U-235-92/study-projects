@@ -1,0 +1,16 @@
+<<<RUN MYSQL CONTAINER INSTRUCTION>>> [CHANGE ^ TO \ FOR LINUX]
+docker run --network jwt-account-service-network ^
+--name jwt-account-mysql-db-service ^
+--env MYSQL_ROOT_PASSWORD=root ^
+--env MYSQL_DATABASE=jwt_account_service_db ^
+-d mysql
+
+<<<RUN SERVICE CONTAINER INSTRUCTION>>> [CHANGE ^ TO \ FOR LINUX]
+docker run --network jwt-account-service-network ^
+--name jwt-account-backend-service ^
+-p 5082:5082 ^
+-e SPRING_DATASOURCE_URL=jdbc:mysql://jwt-account-mysql-db-service:3306/jwt_account_service_db?createDatabaseIfNotExist=true ^
+-d u23592/jwt-account-service:1.0.0
+
+<<<RUN MYSQL CLI INSIDE MYSQL CONTAINER>>>
+docker exec -it jwt-account-mysql-db-service /bin/bash -c "-uroot -proot"
