@@ -1,0 +1,30 @@
+services:
+ jwt-account-backend-service:
+  image: u23592/jwt-account-service:1.0.0
+  ports:
+   - 5082:5082
+  build: 
+   context: .
+   dockerfile: Dockerfile
+  depends_on:
+   - jwt-account-mysql-db-service
+  networks:
+   - jwt-account-service-network
+   
+ jwt-account-mysql-db-service:
+  image: mysql
+  restart: always
+  environment:
+   MYSQL_ROOT_PASSWORD: root
+   MYSQL_DATABASE: jwt_account_service_db  
+  volumes:
+   - jwt-account-mysql-db-service-vol:/var/lib/mysql
+  networks:
+   - jwt-account-service-network
+
+volumes:
+ jwt-account-mysql-db-service-vol:
+ 
+networks:
+ jwt-account-service-network:
+  driver: bridge
