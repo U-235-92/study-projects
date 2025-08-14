@@ -12,5 +12,17 @@ docker run --network jwt-account-service-network ^
 -e SPRING_DATASOURCE_URL=jdbc:mysql://jwt-account-mysql-db-service:3306/jwt_account_service_db?createDatabaseIfNotExist=true ^
 -d u23592/jwt-account-service:1.0.0
 
+<<<RUN SERVICE CONTAINER ALTERNATIVE INSTRUCTION IF ENV VARIABLE WAS ASSIGNED>>> [CHANGE ^ TO \ FOR LINUX]
+docker run --network jwt-account-service-network ^
+--name jwt-account-backend-service ^
+-p 5082:5082 ^
+-d u23592/jwt-account-service:1.0.0
+
 <<<RUN MYSQL CLI INSIDE MYSQL CONTAINER>>>
 docker exec -it jwt-account-mysql-db-service /bin/bash -c "-uroot -proot"
+
+<<<NETOWRK CREATION COMMAND>>>
+docker network create jwt-account-service-network
+
+<<<BUILD SERVICE IMAGE>>>
+docker build --tag u23592/jwt-account-service:1.0.0 .
