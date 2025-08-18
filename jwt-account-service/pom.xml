@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	
-	<groupId>aq.koptev.projects</groupId>
+	<groupId>aq.study.projects</groupId>
 	<artifactId>jwt-account-service</artifactId>
 	<version>1.0.0</version>
 	<name>jwt-account-service</name>

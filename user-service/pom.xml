@@ -11,7 +11,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>aq.koptev.projects</groupId>
+	<groupId>aq.study.projects</groupId>
 	<artifactId>user-service</artifactId>
 	<version>1.0.0</version>
 	<name>user-service</name>
