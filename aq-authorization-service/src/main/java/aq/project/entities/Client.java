@@ -18,6 +18,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -28,15 +31,19 @@ import lombok.NoArgsConstructor;
 @Access(AccessType.PROPERTY)
 public class Client {
 
+	@Positive
 	private int id;
+	@NotBlank
 	private String name;
+	@NotBlank
 	private String secret;
+	@NotEmpty
 	private List<Scope> scopes;
 	
 	private final String authenticationMethod = ClientAuthenticationMethod.CLIENT_SECRET_BASIC.getValue();
 	private final String authorizationGrantType = AuthorizationGrantType.CLIENT_CREDENTIALS.getValue();
 	
-	public Client(String name, String secret, List<Scope> scopes) {
+	public Client(@NotBlank String name, @NotBlank String secret, @NotEmpty List<Scope> scopes) {
 		super();
 		this.name = name;
 		this.secret = secret;
@@ -60,7 +67,7 @@ public class Client {
 		return scopes;
 	}
 	
-	public void setSecret(String secret) {
+	public void setSecret(@NotBlank String secret) {
 		if(this.secret == null)
 			this.secret = secret;
 	}

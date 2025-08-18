@@ -4,12 +4,15 @@ import jakarta.persistence.Access;
 import jakarta.persistence.AccessType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,12 +32,15 @@ public class User {
 	private String password;
 	@Email
 	private String email;
+	@NotNull
+	private Role role;
 
-	public User(@NotBlank String login, @NotBlank String password, @Email String email) {
+	public User(@NotBlank String login, @NotBlank String password, @Email String email, @NotNull Role role) {
 		super();
 		this.login = login;
 		this.password = password;
 		this.email = email;
+		this.role = role;
 	}
 	
 	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -47,7 +53,7 @@ public class User {
 		return login;
 	}
 	
-	public void setPassword(String password) {
+	public void setPassword(@NotBlank String password) {
 		if(this.password == null)
 			this.password = password;
 	}
@@ -55,5 +61,10 @@ public class User {
 	@Column(unique = true)
 	public String getEmail() {
 		return email;
+	}
+	
+	@Enumerated(EnumType.STRING)
+	public Role getRole() {
+		return role;
 	}
 }
