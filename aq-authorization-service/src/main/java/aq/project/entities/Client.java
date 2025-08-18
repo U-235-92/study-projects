@@ -21,6 +21,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -39,7 +40,9 @@ public class Client {
 	@NotEmpty
 	private List<String> scopes;
 	
+	@Getter
 	private final String authenticationMethod = ClientAuthenticationMethod.CLIENT_SECRET_BASIC.getValue();
+	@Getter
 	private final String authorizationGrantType = AuthorizationGrantType.CLIENT_CREDENTIALS.getValue();
 	
 	public Client(@NotBlank String name, @NotBlank String secret, @NotEmpty List<String> scopes) {
@@ -59,8 +62,8 @@ public class Client {
 		return name;
 	}
 	
-	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "scope")
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "client_scopes", joinColumns = @JoinColumn(name = "client_id"))
 	public List<String> getScopes() {
 		return scopes;
