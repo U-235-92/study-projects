@@ -8,5 +8,7 @@ import aq.project.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-	public Optional<User> findUserByLogin(String login);
+	void deleteByLogin(String login);
+	
+	Optional<User> findByLogin(String login);
 }

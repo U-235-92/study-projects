@@ -35,7 +35,7 @@ public class User {
 	@NotNull
 	private Role role;
 
-	public User(@NotBlank String login, @NotBlank String password, @Email String email, @NotNull Role role) {
+	public User(String login, String password, String email, Role role) {
 		super();
 		this.login = login;
 		this.password = password;
@@ -53,18 +53,17 @@ public class User {
 		return login;
 	}
 	
-	public void setPassword(@NotBlank String password) {
-		if(this.password == null)
-			this.password = password;
+	public String getPassword() {
+		return password;
 	}
 
-	@Column(unique = true)
 	public String getEmail() {
 		return email;
 	}
-	
+
 	@Enumerated(EnumType.STRING)
 	public Role getRole() {
 		return role;
 	}
+
 }
