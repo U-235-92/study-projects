@@ -23,11 +23,15 @@ public class CommonSecurityConfig {
 	
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.securityMatcher("/user/**", "/service/**");
+		http.securityMatcher("/user/**", "/client/**");
 		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.POST, "/user/create").permitAll());
 		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.DELETE, "/user/delete/*").hasRole(Role.ADMIN.name()));
 		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/user/get/*").hasAnyRole(Role.ADMIN.name(), Role.USER.name()));
 		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/user/get-all").hasAnyRole(Role.ADMIN.name(), Role.USER.name()));
+		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.POST, "/client/create").hasRole(Role.ADMIN.name()));
+		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.DELETE, "/client/delete/*").hasRole(Role.ADMIN.name()));
+		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/client/get/*").hasRole(Role.ADMIN.name()));
+		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/client/get-all").hasRole(Role.ADMIN.name()));
 		http.authorizeHttpRequests(cust -> cust.anyRequest().authenticated());
 		http.sessionManagement(cust -> cust.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.csrf(cust -> cust.disable());
