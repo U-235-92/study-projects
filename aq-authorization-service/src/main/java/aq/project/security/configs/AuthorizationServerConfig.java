@@ -2,12 +2,23 @@ package aq.project.security.configs;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.KeyStore;
+import java.security.KeyStore.PasswordProtection;
+import java.security.KeyStore.PrivateKeyEntry;
+import java.security.KeyStore.ProtectionParameter;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
+import java.security.UnrecoverableEntryException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,15 +36,23 @@ import com.nimbusds.jose.proc.SecurityContext;
 import aq.project.mappers.ClientMapper;
 import aq.project.repositories.ClientRepository;
 import aq.project.security.utils.JpaRegistredClientService;
+import ch.qos.logback.core.net.ssl.KeyStoreFactoryBean;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
 public class AuthorizationServerConfig {
-
+	
 	private final ClientMapper clientMapper;
 	private final PasswordEncoder passwordEncoder;
 	private final ClientRepository clientRepository;
+	
+	@Value("${aq.authorization-service.key-store.alias}")
+	private String keyStoreAlias;
+	@Value("${aq.authorization-service.key-store.password}")
+	private String keyStorePassword;
+	@Value("${aq.authorization-service.key-store.file}")
+	private String keyStoreFile;
 	
 	@Bean
 	SecurityFilterChain authorizationServiceSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -53,8 +72,41 @@ public class AuthorizationServerConfig {
 		return AuthorizationServerSettings.builder().build();
 	}
 	
+	@Bean
+	JWKSource<SecurityContext> jwkSourceInKeyStore() throws KeyStoreException, NoSuchAlgorithmException, UnrecoverableEntryException, NoSuchProviderException {
+		KeyStore keyStore = getKeyStore();
+		RSAPublicKey publicKey = getPublicKey(keyStore);
+		RSAPrivateKey privateKey = getPrivateKey(keyStore);
+		RSAKey rsaKey = new RSAKey.Builder(publicKey)
+				.privateKey(privateKey)
+				.keyID(UUID.randomUUID().toString())
+				.build();
+		JWKSet jwkSet = new JWKSet(rsaKey);
+		return new ImmutableJWKSet<>(jwkSet);
+	}
+	
+	private KeyStore getKeyStore() throws NoSuchProviderException, NoSuchAlgorithmException, KeyStoreException {
+		KeyStoreFactoryBean keyStoreFactoryBean = new KeyStoreFactoryBean();
+		keyStoreFactoryBean.setType(KeyStore.getDefaultType());
+		keyStoreFactoryBean.setLocation("file:" + keyStoreFile);
+		keyStoreFactoryBean.setPassword(keyStorePassword);
+		return keyStoreFactoryBean.createKeyStore();
+	}
+	
+	private RSAPublicKey getPublicKey(KeyStore keyStore) throws KeyStoreException {
+		return (RSAPublicKey) keyStore.getCertificate(keyStoreAlias).getPublicKey();
+	}
+	
+	private RSAPrivateKey getPrivateKey(KeyStore keyStore) throws KeyStoreException, NoSuchAlgorithmException, UnrecoverableEntryException {
+		ProtectionParameter protectionParameter = new PasswordProtection(keyStorePassword.toCharArray());
+		PrivateKeyEntry privateKeyEntry = (PrivateKeyEntry) keyStore.getEntry(keyStoreAlias, protectionParameter);
+		PrivateKey privateKey = privateKeyEntry.getPrivateKey();
+		return (RSAPrivateKey) privateKey;
+	}
+	
 	@Bean 
-	JWKSource<SecurityContext> jwkSource() {
+	@Profile("dev-mem-key-store")
+	JWKSource<SecurityContext> jwkSourceInMemeory() {
 		KeyPair keyPair = generateRsaKey();
 		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
 		RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
