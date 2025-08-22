@@ -43,7 +43,7 @@ public class User {
 		this.role = role;
 	}
 	
-	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	public int getId() {
 		return id;
 	}

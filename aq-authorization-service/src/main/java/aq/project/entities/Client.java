@@ -64,4 +64,14 @@ public class Client {
 	public List<String> getScopes() {
 		return scopes;
 	}
+
+	@Column(name = "authentication_method")
+	public String getAuthenticationMethod() {
+		return authenticationMethod;
+	}
+
+	@Column(name = "authorization_grant_type")
+	public String getAuthorizationGrantType() {
+		return authorizationGrantType;
+	}
 }

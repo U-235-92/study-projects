@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+  <changeSet id="22-08-25-insert-into-users" author="U-235-92" runAlways="true" runOnChange="true">
+    <sql dbms="mysql">
+      DELETE FROM users;
+    </sql>
+    <sql dbms="mysql">
+      INSERT INTO users (login, password, email, role) VALUES ('alice', '$2a$12$4bxGkiTtL3E3zpvszveDJ.z5rVHz4teYbCbY0TKUO6bE944G4uTNu', 'alice@mail.aq', 'ADMIN');
+      INSERT INTO users (login, password, email, role) VALUES ('alexander', '$2a$12$w65AMzlE7j06Qqs/x8wWpecTF.3n7g8Fw05SJ3IwpZ8hUH.bt3rqS', 'alexander@mail.aq', 'USER');
+    </sql>
+  </changeSet>
+  <changeSet id="22-08-25-insert-into-clients" author="U-235-92" runAlways="true" runOnChange="true">
+    <sql dbms="mysql">
+      DELETE FROM clients;
+    </sql>
+    <sql dbms="mysql">
+      INSERT INTO clients (id, name, secret, authentication_method, authorization_grant_type) VALUES ('351481f5-cd86-45fc-8a9c-a5225c0035b8', 'aq_client_service', '$2a$12$IgDPKrKUhc6VFLAPGOTvKeQEQqQnfoMf3jOpzrmOD06sNS8L8OYA.', 'client_secret_basic', 'client_credentials');
+    </sql>
+  </changeSet>
+  <changeSet id="22-08-25-insert-into-client-scopes" author="U-235-92" runAlways="true" runOnChange="true">
+    <sql dbms="mysql">
+      DELETE FROM client_scopes;
+    </sql>    
+    <sql dbms="mysql">
+      INSERT INTO client_scopes (client_id, scope) VALUES('351481f5-cd86-45fc-8a9c-a5225c0035b8', 'read_msg');
+      INSERT INTO client_scopes (client_id, scope) VALUES('351481f5-cd86-45fc-8a9c-a5225c0035b8', 'write_msg');
+      INSERT INTO client_scopes (client_id, scope) VALUES('351481f5-cd86-45fc-8a9c-a5225c0035b8', 'edit_msg');
+      INSERT INTO client_scopes (client_id, scope) VALUES('351481f5-cd86-45fc-8a9c-a5225c0035b8', 'delete_msg');
+    </sql>
+  </changeSet>
+</databaseChangeLog>

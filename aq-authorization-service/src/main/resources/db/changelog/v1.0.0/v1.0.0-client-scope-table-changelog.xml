@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+  <changeSet id="22-08-25-create-client-scopes-table" author="U-235-92">
+    <createTable tableName="client_scopes">
+      <column name="client_id" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="scope" type="varchar(255)">
+        <constraints nullable="false" />
+      </column>      
+    </createTable>
+  </changeSet>
+  <changeSet id="22-08-25-create-fk-client-scope-constraint" author="U-235-92">
+    <addForeignKeyConstraint 
+      baseTableName="client_scopes" baseColumnNames="client_id" 
+      constraintName="fk_client_scope" 
+      referencedTableName="clients" referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
+  </changeSet>
+</databaseChangeLog>

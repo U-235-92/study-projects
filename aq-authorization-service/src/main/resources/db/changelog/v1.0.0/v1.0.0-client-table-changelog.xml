@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+  <changeSet id="22-08-25-create-clients-table" author="U-235-92">
+    <createTable tableName="clients">
+      <column name="id" type="varchar(255)">
+        <constraints primaryKey="true" unique="true" nullable="false"/>
+      </column>
+      <column name="name" type="varchar(255)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="secret" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="authentication_method" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="authorization_grant_type" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>      
+    </createTable>
+  </changeSet>
+</databaseChangeLog>
