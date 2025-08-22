@@ -1,9 +1,11 @@
 package aq.project.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import aq.project.dtos.ClientRequest;
@@ -19,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @Validated
+@Transactional
 @RequiredArgsConstructor
 public class ClientService {
 
@@ -29,6 +32,7 @@ public class ClientService {
 	public void createService(@NotNull @Valid ClientRequest clientRequest) {
 		Client client = clientMapper.toClient(clientRequest);
 		client.setSecret(passwordEncoder.encode(client.getSecret()));
+		client.setId(UUID.randomUUID().toString());
 		clientRepository.save(client);
 	}
 	
