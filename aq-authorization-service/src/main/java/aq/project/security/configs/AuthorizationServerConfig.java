@@ -47,16 +47,16 @@ public class AuthorizationServerConfig {
 	private final PasswordEncoder passwordEncoder;
 	private final ClientRepository clientRepository;
 	
+	@Value("${aq.authorization-service.key-store.file}")
+	private String keyStoreFile;
 	@Value("${aq.authorization-service.key-store.alias}")
 	private String keyStoreAlias;
 	@Value("${aq.authorization-service.key-store.password}")
 	private String keyStorePassword;
-	@Value("${aq.authorization-service.key-store.file}")
-	private String keyStoreFile;
 	
 	@Bean
 	SecurityFilterChain authorizationServiceSecurityFilterChain(HttpSecurity http) throws Exception {
-		http.securityMatcher("/oauth2/**");
+		http.securityMatcher("/oauth2/**", "/.well-known/**");
 		http.with(OAuth2AuthorizationServerConfigurer.authorizationServer(), Customizer.withDefaults());
 		http.getConfigurer(OAuth2AuthorizationServerConfigurer.class);
 		return http.build();
