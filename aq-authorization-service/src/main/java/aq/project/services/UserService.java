@@ -2,6 +2,7 @@ package aq.project.services;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -26,11 +27,14 @@ public class UserService {
 
 	private final UserMapper userMapper;
 	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 	
 	public void createUser(@Valid @NotNull UserRequest userRequest) {
 		if(userRepository.findByLogin(userRequest.getLogin()).isPresent())
 			throw new UserAlreadyExistException(userRequest.getLogin());
-		userRepository.save(userMapper.toUser(userRequest));
+		User user = userMapper.toUser(userRequest);
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		userRepository.save(user);
 		
 	}
 	
