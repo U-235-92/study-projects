@@ -10,5 +10,6 @@
   <modules>
   	<module>user-service</module>
   	<module>jwt-account-service</module>
+  	<module>aq-authorization-service</module>
   </modules>
 </project>
