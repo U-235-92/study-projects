@@ -13,7 +13,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,7 +23,6 @@ import lombok.NoArgsConstructor;
 @Access(AccessType.PROPERTY)
 public class User {
 
-	@Positive
 	private int id;
 	@NotBlank
 	private String login;
@@ -43,7 +41,7 @@ public class User {
 		this.role = role;
 	}
 	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}

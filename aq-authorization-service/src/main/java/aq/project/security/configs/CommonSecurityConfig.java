@@ -3,6 +3,7 @@ package aq.project.security.configs;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -34,6 +35,7 @@ public class CommonSecurityConfig {
 		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/client/get-all").hasRole(Role.ADMIN.name()));
 		http.authorizeHttpRequests(cust -> cust.anyRequest().authenticated());
 		http.sessionManagement(cust -> cust.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		http.httpBasic(Customizer.withDefaults());
 		http.csrf(cust -> cust.disable());
 		return http.build();
 	} 
