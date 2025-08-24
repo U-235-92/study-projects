@@ -2,6 +2,7 @@ package aq.project.mapper;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import org.mapstruct.Mapper;
@@ -25,8 +26,8 @@ public abstract class MessageMapper {
 	@Named("millsToFormattedString")
 	protected String millsToFormattedString(long mills) {
 		Instant instant = Instant.ofEpochMilli(mills);
-		LocalDateTime ldt = LocalDateTime.from(instant);
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
+		LocalDateTime ldt = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 		return ldt.format(dtf);
 	}
 }
