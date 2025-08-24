@@ -13,6 +13,7 @@ import java.security.PrivateKey;
 import java.security.UnrecoverableEntryException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.time.Instant;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -76,9 +77,12 @@ public class AuthorizationServerConfig {
 	OAuth2TokenCustomizer<JwtEncodingContext> auth2TokenCustomizer() {
 		return context -> {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			Instant now = Instant.now();
+			Instant exp = now.plusMillis(10 * 60 * 1000); //ten minutes (minutes * seconds * mills)
 			JwtClaimsSet claimsSet = JwtClaimsSet.builder()
 				.issuer("aq-authorization-service")
 				.subject(authentication.getPrincipal().toString())
+				.expiresAt(exp)
 				.build();
 			context.getClaims()
 				.claims(claims -> claimsSet.getClaims().forEach((k, v) -> claims.put(k, v)))
