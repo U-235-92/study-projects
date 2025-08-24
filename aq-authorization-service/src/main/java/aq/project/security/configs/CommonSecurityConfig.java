@@ -25,6 +25,13 @@ public class CommonSecurityConfig {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.securityMatcher("/user/**", "/client/**");
+		
+		http.sessionManagement(cust -> cust.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		
+		http.httpBasic(Customizer.withDefaults());
+		
+		http.csrf(cust -> cust.disable());
+		
 		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.POST, "/user/create").permitAll());
 		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.DELETE, "/user/delete/*").hasRole(Role.ADMIN.name()));
 		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/user/get/*").hasAnyRole(Role.ADMIN.name(), Role.USER.name()));
@@ -34,9 +41,7 @@ public class CommonSecurityConfig {
 		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/client/get/*").hasRole(Role.ADMIN.name()));
 		http.authorizeHttpRequests(cust -> cust.requestMatchers(HttpMethod.GET, "/client/get-all").hasRole(Role.ADMIN.name()));
 		http.authorizeHttpRequests(cust -> cust.anyRequest().authenticated());
-		http.sessionManagement(cust -> cust.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-		http.httpBasic(Customizer.withDefaults());
-		http.csrf(cust -> cust.disable());
+		
 		return http.build();
 	} 
 	

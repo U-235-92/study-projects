@@ -21,10 +21,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.nimbusds.jose.jwk.JWKSet;
@@ -57,9 +62,28 @@ public class AuthorizationServerConfig {
 	@Bean
 	SecurityFilterChain authorizationServiceSecurityFilterChain(HttpSecurity http) throws Exception {
 		http.securityMatcher("/oauth2/**", "/.well-known/**");
+		
 		http.with(OAuth2AuthorizationServerConfigurer.authorizationServer(), Customizer.withDefaults());
+		
 		http.getConfigurer(OAuth2AuthorizationServerConfigurer.class);
+		
+		http.authorizeHttpRequests(cust -> cust.anyRequest().authenticated());
+		
 		return http.build();
+	}
+	
+	@Bean
+	OAuth2TokenCustomizer<JwtEncodingContext> auth2TokenCustomizer() {
+		return context -> {
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			JwtClaimsSet claimsSet = JwtClaimsSet.builder()
+				.issuer("aq-authorization-service")
+				.subject(authentication.getPrincipal().toString())
+				.build();
+			context.getClaims()
+				.claims(claims -> claimsSet.getClaims().forEach((k, v) -> claims.put(k, v)))
+				.build();
+		};
 	}
 	
 	@Bean 
