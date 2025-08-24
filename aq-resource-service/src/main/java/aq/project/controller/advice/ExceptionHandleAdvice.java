@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import aq.project.exception.DeleteMessageViolationException;
 import aq.project.exception.EditMessageViolationException;
 import aq.project.exception.MessageNotFoundException;
+import aq.project.exception.UnknownAuthorException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +37,13 @@ public class ExceptionHandleAdvice {
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(exception = DeleteMessageViolationException.class)
 	public String onDeleteMessageViolationException(DeleteMessageViolationException exc) {
+		return exc.getMessage();
+	}
+	
+	@ResponseBody
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(exception = UnknownAuthorException.class)
+	public String onUnknownAuthorException(UnknownAuthorException exc) {
 		return exc.getMessage();
 	}
 	

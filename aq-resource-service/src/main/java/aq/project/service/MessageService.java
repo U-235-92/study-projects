@@ -11,6 +11,7 @@ import aq.project.entity.Message;
 import aq.project.exception.DeleteMessageViolationException;
 import aq.project.exception.EditMessageViolationException;
 import aq.project.exception.MessageNotFoundException;
+import aq.project.exception.UnknownAuthorException;
 import aq.project.mapper.MessageMapper;
 import aq.project.repository.MessageRepository;
 import aq.project.security.ResourceServiceAuthenticationToken;
@@ -30,10 +31,17 @@ public class MessageService {
 	
 	public void writeMessage(@NotNull @Valid MessageRequest messageRequest) {
 		Message message = messageMapper.toMessage(messageRequest);
-		long postedAt = System.currentTimeMillis();
-		message.setPostedAt(postedAt);
-		message.setUpdatedAt(postedAt);
-		messageRepository.save(message);
+		ResourceServiceAuthenticationToken authentication = getAuthentication();
+		String authorInMessage = message.getAuthor();
+		String authorInContext = authentication.getAuthor();
+		if(isSameAuthor(authorInMessage, authorInContext)) {
+			long postedAt = System.currentTimeMillis();
+			message.setPostedAt(postedAt);
+			message.setUpdatedAt(postedAt);
+			messageRepository.save(message);
+		} else {
+			throw new UnknownAuthorException(authorInMessage);
+		}
 	}
 	
 	public MessageResponse readMessage(@Positive int id) {
