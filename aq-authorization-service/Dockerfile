@@ -10,4 +10,5 @@ WORKDIR /app
 COPY --from=builder /app/build/target/*.jar ./aq-authorization-service.jar
 COPY ./aq-auth-service.jks ./aq-auth-service.jks
 ENV SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db-service:3306/aq_authorization_service_db?createDatabaseIfNotExist=true
+ENV SPRING_SECURITY_OAUTH2_AUTHORIZATIONSERVER_ISSUER=http://aq-authorization-service:5082
 CMD [ "java", "-jar", "aq-authorization-service.jar", "--spring.profiles.active=prod" ]

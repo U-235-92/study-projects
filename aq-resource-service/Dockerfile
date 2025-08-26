@@ -9,4 +9,5 @@ EXPOSE 5085
 WORKDIR /app
 COPY --from=builder /build/target/*.jar ./application.jar
 ENV SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db-service:3306/aq_resource_service_db?createDatabaseIfNotExist=true
+ENV SPRING_SECURITY_OAUTH2_AUTHORIZATIONSERVER_ISSUER=http://aq-authorization-service:5082
 CMD [ "java", "-jar", "application.jar" ]
