@@ -16,7 +16,7 @@ import jakarta.validation.constraints.Positive;
 public class ClientService {
 
 	@Autowired
-	@Qualifier("restTemplateProxy")
+	@Qualifier("restClientProxy")
 	private ClientProxy clientProxy;
 	
 	public MessageResponse readMessage(@Positive int id) {
