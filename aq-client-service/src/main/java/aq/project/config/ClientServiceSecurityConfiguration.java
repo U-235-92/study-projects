@@ -1,5 +1,7 @@
 package aq.project.config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,12 +47,11 @@ public class ClientServiceSecurityConfiguration {
 	
 	@Bean
 	ClientRegistrationRepository clientRegistrationRepository() {
-		ClientRegistration client = ClientRegistration.withRegistrationId("1")
+		ClientRegistration client = ClientRegistration.withRegistrationId(clientId)
 				.tokenUri(tokenUri)
 				.clientId(clientId)
 				.clientSecret(passwordEncoder().encode(clientSecret))
-//				.clientSecret(clientSecret)
-				.scope("read_msg", "write_msg", "edit_msg", "delete_msg")
+				.scope(List.of("read_msg", "write_msg", "edit_msg", "delete_msg"))
 				.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
 				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
 				.build();
