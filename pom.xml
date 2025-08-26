@@ -12,5 +12,6 @@
   	<module>jwt-account-service</module>
   	<module>aq-authorization-service</module>
   	<module>aq-resource-service</module>
+  	<module>aq-client-service</module>
   </modules>
 </project>
