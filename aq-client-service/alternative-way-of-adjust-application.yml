@@ -1,0 +1,33 @@
+server:
+  port: 5058
+spring:
+  application:
+    name: aq-client-service
+  security:
+   oauth2:
+    client:
+     registration:
+      aq-client-service:
+       provider: aq-client-service-provider
+       client-id: aq-client-service
+       client-secret: secret
+       authorization-grant-type: client_credentials
+       scope: read_msg
+     provider:
+      aq-client-service-provider:
+       token-uri: http://localhost:5082/oauth2/token
+aq:
+  client-service:
+    token-uri: http://localhost:5082/oauth2/token
+    client-id: aq-client-service
+    client-secret: secret
+  uri:
+    request:
+      get:
+        read-message: http://localhost:5085/resource/read-message/
+      post:
+        write-message: http://localhost:5085/resource/write-message
+      patch:
+        edit-message: http://localhost:5085/resource/edit-message/
+      delete:
+        read-message: http://localhost:5085/resource/delete-message/
