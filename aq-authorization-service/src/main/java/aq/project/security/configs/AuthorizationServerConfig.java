@@ -13,7 +13,9 @@ import java.security.PrivateKey;
 import java.security.UnrecoverableEntryException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.time.Duration;
 import java.time.Instant;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -59,6 +61,10 @@ public class AuthorizationServerConfig {
 	private String keyStoreAlias;
 	@Value("${aq.authorization-service.key-store.password}")
 	private String keyStorePassword;
+	@Value("${aq.jwt.issuer}")
+	private String tokenIss;
+	@Value("${aq.jwt.exp}")
+	private Duration tokenExp;
 	
 	@Bean
 	SecurityFilterChain authorizationServiceSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -78,11 +84,13 @@ public class AuthorizationServerConfig {
 		return context -> {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			Instant now = Instant.now();
-			Instant exp = now.plusMillis(10 * 60 * 1000); //ten minutes (minutes * seconds * mills)
+			Instant exp = now.plus(tokenExp);
+			Set<String> scopes = registeredClientRepository().findByClientId(authentication.getPrincipal().toString()).getScopes();
 			JwtClaimsSet claimsSet = JwtClaimsSet.builder()
-				.issuer("aq-authorization-service")
+				.issuer(tokenIss)
 				.subject(authentication.getPrincipal().toString())
 				.expiresAt(exp)
+				.claim("scope", scopes)
 				.build();
 			context.getClaims()
 				.claims(claims -> claimsSet.getClaims().forEach((k, v) -> claims.put(k, v)))
