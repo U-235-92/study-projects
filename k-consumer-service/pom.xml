@@ -9,4 +9,19 @@
   	<maven.compiler.target>21</maven.compiler.target>
     <maven.compiler.source>21</maven.compiler.source>
   </properties>
+  
+  <dependencies>
+  <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
+	<dependency>
+	    <groupId>org.apache.kafka</groupId>
+	    <artifactId>kafka-clients</artifactId>
+	    <version>4.1.0</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+	<dependency>
+	    <groupId>org.projectlombok</groupId>
+	    <artifactId>lombok</artifactId>
+	    <version>1.18.40</version>
+	</dependency>
+  </dependencies>
 </project>
