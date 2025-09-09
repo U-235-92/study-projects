@@ -1,0 +1,11 @@
+aq\project\util\serialize\JsonSerializer.class
+aq\project\dto\ProduceRequestDto.class
+aq\project\mapper\ProductRequestMapper.class
+aq\project\mapper\ProductMapper.class
+aq\project\Main.class
+aq\project\model\ProduceRequest.class
+aq\project\service\ConsumerService.class
+aq\project\config\BeanConfiguration.class
+aq\project\util\serialize\JsonDeserializer.class
+aq\project\dto\ProductDto.class
+aq\project\model\Product.class

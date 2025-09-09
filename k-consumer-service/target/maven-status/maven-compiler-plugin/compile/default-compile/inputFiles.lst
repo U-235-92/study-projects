@@ -1,0 +1,11 @@
+M:\Development\Code\Java\eclipse-workspace\study-projects\k-consumer-service\src\main\java\aq\project\config\BeanConfiguration.java
+M:\Development\Code\Java\eclipse-workspace\study-projects\k-consumer-service\src\main\java\aq\project\dto\ProduceRequestDto.java
+M:\Development\Code\Java\eclipse-workspace\study-projects\k-consumer-service\src\main\java\aq\project\dto\ProductDto.java
+M:\Development\Code\Java\eclipse-workspace\study-projects\k-consumer-service\src\main\java\aq\project\Main.java
+M:\Development\Code\Java\eclipse-workspace\study-projects\k-consumer-service\src\main\java\aq\project\mapper\ProductMapper.java
+M:\Development\Code\Java\eclipse-workspace\study-projects\k-consumer-service\src\main\java\aq\project\mapper\ProductRequestMapper.java
+M:\Development\Code\Java\eclipse-workspace\study-projects\k-consumer-service\src\main\java\aq\project\model\ProduceRequest.java
+M:\Development\Code\Java\eclipse-workspace\study-projects\k-consumer-service\src\main\java\aq\project\model\Product.java
+M:\Development\Code\Java\eclipse-workspace\study-projects\k-consumer-service\src\main\java\aq\project\service\ConsumerService.java
+M:\Development\Code\Java\eclipse-workspace\study-projects\k-consumer-service\src\main\java\aq\project\util\serialize\JsonDeserializer.java
+M:\Development\Code\Java\eclipse-workspace\study-projects\k-consumer-service\src\main\java\aq\project\util\serialize\JsonSerializer.java
