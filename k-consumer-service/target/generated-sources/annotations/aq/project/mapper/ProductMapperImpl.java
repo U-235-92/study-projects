@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-09-09T17:48:04+0400",
+    date = "2025-09-09T18:45:11+0400",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.43.0.v20250814-1944, environment: Java 23.0.1 (Oracle Corporation)"
 )
 @Component
@@ -24,6 +24,7 @@ public class ProductMapperImpl extends ProductMapper {
         product.setColor( productDto.getColor() );
         product.setId( productDto.getId() );
         product.setName( productDto.getName() );
+        product.setParty( productDto.getParty() );
 
         product.setCreatedAt( toLocalDateTime(productDto.getCreatedAt()) );
 
@@ -41,6 +42,7 @@ public class ProductMapperImpl extends ProductMapper {
         productDto.setColor( product.getColor() );
         productDto.setId( product.getId() );
         productDto.setName( product.getName() );
+        productDto.setParty( product.getParty() );
 
         productDto.setCreatedAt( toMills(product.getCreatedAt()) );
 

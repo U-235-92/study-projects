@@ -16,6 +16,8 @@ public class Product {
 	@NotEmpty
 	private String id;
 	@NotEmpty
+	private String party;
+	@NotEmpty
 	private String color;
 	@NotEmpty
 	private String name;
