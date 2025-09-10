@@ -24,7 +24,7 @@ import jakarta.validation.ValidatorFactory;
 @Configuration
 public class BeanConfiguration {
 
-	private static final String BOOTSTRAP_SERVERS = "localhost:5050,localhost:5051,localhost:5052";
+	private static final String BOOTSTRAP_SERVERS = "localhost:5050";
 	
 	@Bean
 	public Consumer<String, ProductDto> consumer() {

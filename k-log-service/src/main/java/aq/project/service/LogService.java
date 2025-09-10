@@ -19,7 +19,7 @@ public class LogService {
 		properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
 		properties.put(ConsumerConfig.GROUP_ID_CONFIG, "log_consumers");
 		properties.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "3000");
-		properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:5050,localhost:5051,localhost:5052");
+		properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:5050");
 		properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 		properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 		properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);

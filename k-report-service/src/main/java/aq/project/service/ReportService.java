@@ -22,7 +22,7 @@ public class ReportService {
 	
 	public ReportService() {
 		properties = new Properties();
-		properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:5050,localhost:5051,localhost:5052");
+		properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:5050");
 		properties.put(StreamsConfig.APPLICATION_ID_CONFIG, "report-service");
 		executor = Executors.newFixedThreadPool(3);
 	}
