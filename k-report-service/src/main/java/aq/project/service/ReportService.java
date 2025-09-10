@@ -27,11 +27,11 @@ public class ReportService {
 		executor = Executors.newFixedThreadPool(3);
 	}
 	
-	public void printTotalProductNumber(String id) {
+	public void printTotalProductNumber(String name) {
 		executor.execute(() -> {
 			StreamsBuilder streamsBuilder = new StreamsBuilder();
 			streamsBuilder.stream("complete-products", Consumed.with(Serdes.String(), Serdes.serdeFrom(new JsonSerializer(), new JsonDeserializer())))
-				.filter((k, v) -> k.equals(id))
+				.filter((k, v) -> v.getName().equals(name))
 				.groupByKey()
 				.count()
 				.toStream()
