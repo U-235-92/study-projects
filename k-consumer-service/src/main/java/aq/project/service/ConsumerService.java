@@ -72,7 +72,7 @@ public class ConsumerService {
 	public void recieveProducts() {
 		ExecutorService executor = Executors.newSingleThreadExecutor();
 		executor.submit(() -> {
-			consumer.subscribe(Collections.singletonList("complete-productes"));
+			consumer.subscribe(Collections.singletonList("complete-products"));
 			while(true) {
 				ConsumerRecords<String, ProductDto> records = consumer.poll(Duration.ofMillis(250));
 				records.forEach(record -> {
