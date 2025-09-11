@@ -64,7 +64,7 @@ public class BuildService {
 			ProductDto productDto = new ProductDto(id, party, color, name, createdAt);
 			String outJson = objectMapper.writeValueAsString(productDto);
 			randomSleep();
-			kafkaTemplate.send("complete-products", outJson);
+			kafkaTemplate.send("complete-products", name, outJson);
 		}
 	}
 	
