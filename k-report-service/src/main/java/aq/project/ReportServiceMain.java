@@ -10,19 +10,18 @@ public class ReportServiceMain {
 
 	public static void main(String[] args) {
 		ReportService reportService = new ReportService();
-//		reportService.printProductsAsStream();
-//		allocateProductsByColor(reportService);
-//		reportService.printCountProductNumberByPeriod(getFromMills(), getDuration());
-		reportService.printTotalProductNumber("BOW-5588");
-//		reportService.printTotalProductNumber("RDE-8085");
-//		reportService.printTotalProductNumber("BHJ-5050");
+		reportService.printProductsAsStream();
+//		allocateProductsByColor(reportService, "BLACK");
+//		reportService.calculateCountProductNumberByPeriod(getFromMills(), getDuration());
+//		reportService.calculateTotalProductNumber("BOW-5588");
+//		reportService.calculateTotalProductNumber("RDE-8085");
+//		reportService.calculateTotalProductNumber("BHJ-5050");
+//		reportService.calculateTotalProductNumber("YLW-5008");
 	}
 	
 	@SuppressWarnings("unused")
-	private static void allocateProductsByColor(ReportService reportService) {
-		reportService.allocateByColor("RED");
-		reportService.allocateByColor("BLUE");
-		reportService.allocateByColor("BLACK");
+	private static void allocateProductsByColor(ReportService reportService, String color) {
+		reportService.allocateByColor(color.toUpperCase());
 	}
 	
 	@SuppressWarnings("unused")
