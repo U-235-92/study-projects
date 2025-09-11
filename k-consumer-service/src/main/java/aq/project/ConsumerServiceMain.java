@@ -17,8 +17,10 @@ public class ConsumerServiceMain {
 			"aq.project.service"
 		});
 		ConsumerService consumerService = applicationContext.getBean(ConsumerService.class);
-//		sendManufactureRequest(consumerService, new ManufactureRequest(4, 5, "YELLOW", "YLW-2582", LocalDateTime.now()));
-		consumerService.recieveProductsFromBeginning();
+//		sendManufactureRequest(consumerService);
+//		consumerService.recieveProductsFromBeginning();
+//		consumerService.recieveColorProductsByPartition(0);
+		sendManufactureRequest(consumerService, new ManufactureRequest(1, 10, "YELLOW", "YLW-5008", LocalDateTime.now()));
 	}
 	
 	@SuppressWarnings("unused")

@@ -38,6 +38,7 @@ import jakarta.validation.Validator;
 @Service
 public class ConsumerService {
 
+	private static final String COLOR_PRODUCTS_TOPIC = "color-products";
 	private static final String COMPLETE_PRODUCTS_TOPIC = "complete-products";
 	private static final String MANUFACTURE_REQUESTS_TOPIC = "manufacture-requests";
 	
@@ -90,6 +91,39 @@ public class ConsumerService {
 				WARN_LOGGER.warning(exc.getMessage());
 		});
 		INFO_LOGGER.info("Consumer sent manufacture request: " + dto.toString());
+	}
+	
+	public void recieveColorProductsByPartition(int partitionNumber) {
+		List<Integer> partitions = consumer.partitionsFor(COLOR_PRODUCTS_TOPIC)
+				.stream()
+				.map(info -> info.partition())
+				.toList();
+		if(!partitions.contains(partitionNumber))
+			throw new IllegalArgumentException(String.format("Illegal partition number: [ %d ]. Check current partitions for topic: [ %s ]", partitionNumber, COLOR_PRODUCTS_TOPIC));
+		executor.execute(() -> {
+			ObjectMapper objectMapper = new ObjectMapper();
+			TopicPartition partition = new TopicPartition(COLOR_PRODUCTS_TOPIC, partitionNumber);
+			consumer.assign(Collections.singleton(partition));
+			consumer.seek(partition, 0);
+			while(true) {
+				ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(250));
+				records.forEach(record -> {
+					try {						
+						ProductDto dto = objectMapper.readValue(record.value(), ProductDto.class);
+						checkViolations(validator.validate(dto));
+						Product product = productMapper.toProduct(dto);
+						INFO_LOGGER.info(String.format("Recieved product: [id: %s, name: %s, color: %s, created_at: %s ] #%d", 
+								product.getId(), 
+								product.getName(), 
+								product.getColor(), 
+								product.getCreatedAt().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")), 
+								record.offset()));
+					} catch(IOException ex) {
+						ex.printStackTrace();
+					}
+				});
+			}
+		});
 	}
 	
 	public void recieveProducts() {
