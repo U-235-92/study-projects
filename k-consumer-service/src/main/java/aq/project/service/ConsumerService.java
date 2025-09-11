@@ -96,11 +96,6 @@ public class ConsumerService {
 		executor.execute(() -> {
 			ObjectMapper objectMapper = new ObjectMapper();
 			consumer.subscribe(Collections.singletonList(COMPLETE_PRODUCTS_TOPIC));
-			List<TopicPartition> topicPartitions = consumer.partitionsFor(COMPLETE_PRODUCTS_TOPIC)
-					.stream()
-					.map(partition -> new TopicPartition(COMPLETE_PRODUCTS_TOPIC, partition.partition()))
-					.toList();
-			consumer.seekToBeginning(topicPartitions);
 			while(true) {
 				ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(250));
 				records.forEach(record -> {
