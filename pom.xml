@@ -13,5 +13,8 @@
   	<module>aq-authorization-service</module>
   	<module>aq-resource-service</module>
   	<module>aq-client-service</module>
+  	<module>k-build-service</module>
+  	<module>k-consumer-service</module>
+  	<module>k-report-service</module>
   </modules>
 </project>
