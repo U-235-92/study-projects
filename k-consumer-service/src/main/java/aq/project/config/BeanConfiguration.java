@@ -14,8 +14,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import aq.project.dto.ManufactureRequestDto;
-import aq.project.dto.ProductDto;
-import aq.project.util.serialize.JsonDeserializer;
 import aq.project.util.serialize.JsonSerializer;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -27,7 +25,7 @@ public class BeanConfiguration {
 	private static final String BOOTSTRAP_SERVERS = "localhost:5050";
 	
 	@Bean
-	public Consumer<String, ProductDto> consumer() {
+	public Consumer<String, String> consumer() {
 		Properties properties = new Properties();
 		properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
 		properties.put(ConsumerConfig.GROUP_ID_CONFIG, "product_consumers");
@@ -35,8 +33,11 @@ public class BeanConfiguration {
 		properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
 		properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
 		properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-		properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-		Consumer<String, ProductDto> consumer = new KafkaConsumer<>(properties);
+		properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+		properties.put(ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG, "5000");
+		properties.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, "10000");
+		properties.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "20000");
+		Consumer<String, String> consumer = new KafkaConsumer<>(properties);
 		return consumer;
 	}
 	
