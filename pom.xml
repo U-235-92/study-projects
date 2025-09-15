@@ -16,5 +16,6 @@
   	<module>k-build-service</module>
   	<module>k-consumer-service</module>
   	<module>k-report-service</module>
+  	<module>jwt-spring-service</module>
   </modules>
 </project>
