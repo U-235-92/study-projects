@@ -17,5 +17,8 @@
   	<module>k-consumer-service</module>
   	<module>k-report-service</module>
   	<module>jwt-spring-service</module>
+  	<module>i-chat-client</module>
+  	<module>i-chat-server</module>
+  	<module>calculator</module>
   </modules>
 </project>
