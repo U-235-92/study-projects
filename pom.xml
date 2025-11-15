@@ -1,25 +1,24 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
- 
   <groupId>aq.study.projects</groupId>
   <artifactId>study-projects</artifactId>
   <version>1.0.0</version>
   <packaging>pom</packaging>
   <name>study-projects</name>
-  
   <modules>
-  	<module>user-service</module>
-  	<module>jwt-account-service</module>
-  	<module>aq-authorization-service</module>
-  	<module>aq-resource-service</module>
-  	<module>aq-client-service</module>
-  	<module>k-build-service</module>
-  	<module>k-consumer-service</module>
-  	<module>k-report-service</module>
-  	<module>jwt-spring-service</module>
-  	<module>i-chat-client</module>
-  	<module>i-chat-server</module>
-  	<module>calculator</module>
-  	<module>tamagochi</module>
+    <module>user-service</module>
+    <module>jwt-account-service</module>
+    <module>aq-authorization-service</module>
+    <module>aq-resource-service</module>
+    <module>aq-client-service</module>
+    <module>k-build-service</module>
+    <module>k-consumer-service</module>
+    <module>k-report-service</module>
+    <module>jwt-spring-service</module>
+    <module>i-chat-client</module>
+    <module>i-chat-server</module>
+    <module>calculator</module>
+    <module>tamagochi</module>
+    <module>snake</module>
   </modules>
 </project>
