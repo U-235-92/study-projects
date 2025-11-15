@@ -31,3 +31,5 @@ INFO	23-08-2022 23:35:32	[category: infoLogger]	[Thread-0]	[message: Польз�
 INFO	23-08-2022 23:35:32	[category: infoLogger]	[Thread-0]	[message: Пользователь w подключился к чату]	[method: infoFile]	[at line: 22]
 INFO	23-08-2022 23:35:34	[category: infoLogger]	[Thread-0]	[message: Пользователь w отключился от чата]	[method: infoFile]	[at line: 22]
 INFO	23-08-2022 23:35:34	[category: infoLogger]	[Thread-0]	[message: Пользователь w отключился от чата]	[method: infoFile]	[at line: 22]
+INFO	14-11-2025 16:40:21	[category: aq.koptev.i.models.Server]	[main]	[message: Запуск работы сервера!]	[method: infoFile]	[at line: 27]
+INFO	14-11-2025 16:40:34	[category: aq.koptev.i.models.Server]	[main]	[message: Новое соединенние с сервером!]	[method: infoFile]	[at line: 27]
