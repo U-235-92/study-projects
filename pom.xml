@@ -20,5 +20,6 @@
     <module>calculator</module>
     <module>tamagochi</module>
     <module>snake</module>
+    <module>cockroach-run</module>
   </modules>
 </project>
