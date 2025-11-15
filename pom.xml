@@ -20,5 +20,6 @@
   	<module>i-chat-client</module>
   	<module>i-chat-server</module>
   	<module>calculator</module>
+  	<module>tamagochi</module>
   </modules>
 </project>
